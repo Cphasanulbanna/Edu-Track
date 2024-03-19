@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import RedirectPage from "./RedirectPage";
 import axios from "axios";
 import ResetPassword from "./ResetPassword";
+import PaymentPage from "./PaymentPage";
 
 const App: React.FC = () => {
   const googleLogin = () => {
@@ -20,6 +21,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/auth/google/callback" element={<RedirectPage />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/payment" element={<PaymentPage />} />
       </Routes>
       <div>
         <button onClick={sendmail} type="button">send password reset mail</button>
