@@ -12,7 +12,7 @@ import {
 import Batch from "../models/batch.model.js";
 import { FULL_DAY_ATTENDANCE_TIME, HALF_DAY_ATTENDANCE_TIME } from "../constant/constant.js";
 import Holiday from "../models/holiday.model.js";
-import mongoose, {ObjectId} from "mongoose"
+import mongoose from "mongoose"
 
 export const checkIn = async (req, res) => {
   const { batchId, studentId } = req.params;
