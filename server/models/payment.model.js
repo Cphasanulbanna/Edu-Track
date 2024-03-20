@@ -15,7 +15,7 @@ const paymentSchema = new mongoose.Schema(
     feeType: {
       type: String,
       enum: [
-        "Semester Fee",
+        "SEMESTER_FEES",
         "Exam Fee",
         "Event Fee",
         "Library Fee",
