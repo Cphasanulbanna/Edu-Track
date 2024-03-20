@@ -17,6 +17,7 @@ import holidayRoutes from "./routes/holiday.routes.js";
 import questionBankRoutes from "./routes/questionBank.routes.js";
 import fileRoutes from "./routes/file.routes.js";
 import semesterRoutes from "./routes/semester.route.js";
+import paymentRoutes from "./routes/payment.route.js";
 
 import { connectDb } from "./config/db.js";
 import passport from "./middleware/googleOauth.middleware.js";
@@ -63,6 +64,8 @@ app.use("/api/holiday", holidayRoutes);
 app.use("/api/question-bank", questionBankRoutes);
 app.use("/api/file", fileRoutes);
 app.use("/api/semester", semesterRoutes);
+app.use("/api/payment", paymentRoutes)
+
 
 connectDb();
 app.listen(PORT, () => {
