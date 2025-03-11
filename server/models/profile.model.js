@@ -17,6 +17,9 @@ const profileSchema = new mongoose.Schema({
         type: Number,
         min: 10,
         max: 10
+    },
+    avatar: {
+        type: String
     }
 })
 
