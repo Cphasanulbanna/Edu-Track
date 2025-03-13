@@ -77,10 +77,10 @@ export const fetchStudents = async (req, res) => {
     const students = await User.aggregate([
       {
         $lookup: {
-          from: "roles", 
-          localField: "role", 
-          foreignField: "_id", 
-          as: "role", 
+          from: "roles",
+          localField: "role",
+          foreignField: "_id",
+          as: "role",
         },
       },
       {
@@ -90,17 +90,17 @@ export const fetchStudents = async (req, res) => {
       },
       {
         $lookup: {
-          from: "profiles",// mongo db convert "Profile" model name into"profiles"
-          localField: "profile", 
-          foreignField: "_id", 
-          as: "profile", 
+          from: "profiles", // mongo db convert "Profile" model name into"profiles"
+          localField: "profile",
+          foreignField: "_id",
+          as: "profile",
         },
       },
       {
         $unwind: {
           //mongoDb convert profile object to array, so in order to convert back to obj, we use unwind
-          path: "$profile", 
-          preserveNullAndEmptyArrays: true, 
+          path: "$profile",
+          preserveNullAndEmptyArrays: true,
         },
       },
       {
@@ -135,11 +135,18 @@ export const fetchStudents = async (req, res) => {
 
     const totalElements = await User.countDocuments();
     const totalPages = Math.ceil(totalElements / limit);
-    const itemsInPage = students.length
+    const itemsInPage = students.length;
     if (itemsInPage > 0) {
       return res
         .status(200)
-        .json({ students, totalElements, page, limit, totalPages, itemsInPage });
+        .json({
+          students,
+          totalElements,
+          page,
+          limit,
+          totalPages,
+          itemsInPage,
+        });
     }
     return res.status(200).json({
       message: "No student data found",
@@ -148,7 +155,7 @@ export const fetchStudents = async (req, res) => {
       page,
       limit,
       totalPages,
-      itemsInPage
+      itemsInPage,
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
