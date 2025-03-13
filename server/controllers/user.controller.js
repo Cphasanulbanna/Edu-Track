@@ -8,6 +8,7 @@ import { PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 
 import dotenv from "dotenv";
 import { Console } from "console";
+import Book from "../models/book.model.js";
 dotenv.config();
 
 export const fetchUsers = async (req, res) => {
@@ -137,16 +138,14 @@ export const fetchStudents = async (req, res) => {
     const totalPages = Math.ceil(totalElements / limit);
     const itemsInPage = students.length;
     if (itemsInPage > 0) {
-      return res
-        .status(200)
-        .json({
-          students,
-          totalElements,
-          page,
-          limit,
-          totalPages,
-          itemsInPage,
-        });
+      return res.status(200).json({
+        students,
+        totalElements,
+        page,
+        limit,
+        totalPages,
+        itemsInPage,
+      });
     }
     return res.status(200).json({
       message: "No student data found",
@@ -157,6 +156,22 @@ export const fetchStudents = async (req, res) => {
       totalPages,
       itemsInPage,
     });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const fetchBorrowedBooks = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    if (!userId) {
+      return res.status(400).json({ message: "User Id is required" });
+    }
+    const books = await Book.find({ borrower: userId });
+    if (!books.length) {
+      return res.status(404).json({ message: "No borrowed books found" });
+    }
+    return res.status(404).json({ books });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

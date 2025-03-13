@@ -59,7 +59,6 @@ export const borrowBook = async (req, res) => {
       },
     });
 
-    console.log({ book });
 
     if (!book) {
       return res.status(404).json({ message: "No book found" });
