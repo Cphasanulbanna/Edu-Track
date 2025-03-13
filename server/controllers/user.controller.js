@@ -1,5 +1,4 @@
 import User from "../models/user.model.js";
-import Role from "../models/role.model.js";
 import path from "path";
 import fs from "fs";
 import s3 from "../config/s3.config.js";
@@ -7,7 +6,6 @@ import { fileURLToPath } from "url";
 import { PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 
 import dotenv from "dotenv";
-import { Console } from "console";
 import Book from "../models/book.model.js";
 dotenv.config();
 

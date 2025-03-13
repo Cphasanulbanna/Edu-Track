@@ -8,6 +8,7 @@ import userRoutes from "./routes/user.routes.js";
 import bookRoutes from "./routes/book.routes.js";
 
 import { connectDb } from "./config/db.js";
+import "./jobs/library.crone.js"
 import passport from "./middleware/googleOauth.middleware.js";
 
 dotenv.config();

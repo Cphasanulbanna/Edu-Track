@@ -11,7 +11,8 @@ export const sendMail = async (
   name = "Guest",
   receiverMail = "",
   subject = "No subject",
-  resetLink = ""
+  resetLink = "",
+  templateName="reset-password.html"
 ) => {
   let transport = nodemailer.createTransport({
     service: "gmail",
@@ -26,7 +27,7 @@ export const sendMail = async (
   const __dirname = dirname(__filename);
 
   // Construct the template file path
-    const templatePath = path.join(__dirname, "../templates", "reset-password.html");
+    const templatePath = path.join(__dirname, "../templates", templateName);
     console.log({templatePath});
     
   
