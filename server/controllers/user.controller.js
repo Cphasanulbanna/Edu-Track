@@ -7,6 +7,7 @@ import { fileURLToPath } from "url";
 import { PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 
 import dotenv from "dotenv";
+import { Console } from "console";
 dotenv.config();
 
 export const fetchUsers = async (req, res) => {
@@ -73,41 +74,72 @@ export const fetchStudents = async (req, res) => {
   try {
     const elementsToSkip = (page - 1) * limit;
 
-    const studentRole = await Role.findOne({ name: "student" });
-    let searchQuery = {};
-    if (search) {
-      searchQuery = {
-        role: studentRole._id,
-        $or: [
-          {
-            "profile.first_name": { $regex: search, $options: "i" },
-          },
-          {
-            "profile.last_name_name": { $regex: search, $options: "i" },
-          },
-        ],
-      };
-    } else {
-      searchQuery = {
-        role: studentRole._id,
-      };
-    }
+    const students = await User.aggregate([
+      {
+        $lookup: {
+          from: "roles", 
+          localField: "role", 
+          foreignField: "_id", 
+          as: "role", 
+        },
+      },
+      {
+        $match: {
+          "role.name": "student",
+        },
+      },
+      {
+        $lookup: {
+          from: "profiles",// mongo db convert "Profile" model name into"profiles"
+          localField: "profile", 
+          foreignField: "_id", 
+          as: "profile", 
+        },
+      },
+      {
+        $unwind: {
+          //mongoDb convert profile object to array, so in order to convert back to obj, we use unwind
+          path: "$profile", 
+          preserveNullAndEmptyArrays: true, 
+        },
+      },
+      {
+        $match: {
+          $or: [
+            { "profile.first_name": { $regex: search, $options: "i" } },
+            { "profile.last_name": { $regex: search, $options: "i" } },
+          ],
+        },
+      },
+      {
+        $sort: {
+          createdAt: sort === "desc" ? -1 : 1,
+        },
+      },
+      {
+        $skip: elementsToSkip,
+      },
+      {
+        $limit: limit,
+      },
+      {
+        $project: {
+          email: 1,
+          role: { _id: 1, name: 1 },
+          profile: { first_name: 1, last_name: 1, mobile_number: 1 },
+          createdAt: 1,
+          updatedAt: 1,
+        },
+      },
+    ]);
 
-        const sortOptions = sort ? { createdAt: sort === "desc" ? -1 : 1 } : { createdAt: -1 };
-
-    const students = await User.find(searchQuery)
-      .skip(elementsToSkip)
-      .limit(limit)
-      .sort(sortOptions)
-      .select("-password -__v -googleId -updatedAt")
-      .populate("role", "-__v -_id")
-      .populate("profile", "-__v -_id");
-    const totalElements = await User.countDocuments({ role: studentRole.id });
+    const totalElements = await User.countDocuments();
     const totalPages = Math.ceil(totalElements / limit);
-    if (totalElements > 0) {
+    const itemsInPage = students.length
+    if (itemsInPage > 0) {
       return res
         .status(200)
-        .json({ students, totalElements, page, limit, totalPages });
+        .json({ students, totalElements, page, limit, totalPages, itemsInPage });
     }
     return res.status(200).json({
       message: "No student data found",
@@ -116,6 +148,7 @@ export const fetchStudents = async (req, res) => {
       page,
       limit,
       totalPages,
+      itemsInPage
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });

@@ -40,7 +40,7 @@ app.use(passport.session());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 
-connectDb();
+connectDb()
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
 });
