@@ -16,28 +16,28 @@ cron.schedule("* * * * *", async () => {
         foreignField: "_id",
         as: "user_details",
       },
-      },
+    },
     {
       $unwind: "$user_details",
-    //   preserveNullAndEmptyArrays: true,
-      },
-        {
+      //   preserveNullAndEmptyArrays: true,
+    },
+    {
       $lookup: {
-        from: "profiles",            // Lookup the 'profiles' collection
+        from: "profiles", // Lookup the 'profiles' collection
         localField: "user_details.profile", // Match the 'profile' field from User model (ObjectId reference)
-        foreignField: "_id",         // Match it with '_id' field in Profile model
-        as: "profile_details",       // Alias for the profile data
+        foreignField: "_id", // Match it with '_id' field in Profile model
+        as: "profile_details", // Alias for the profile data
       },
     },
     {
       $unwind: {
-        path: "$profile_details",   // Unwind the profile details to get individual fields
+        path: "$profile_details", // Unwind the profile details to get individual fields
         // preserveNullAndEmptyArrays: true, // If no profile, keep the result empty
       },
     },
     {
       $project: {
-            "profile_details.first_name": 1,  // Now project first_name from profile_details
+        "profile_details.first_name": 1, // Now project first_name from profile_details
         "profile_details.last_name": 1,
         "user_details.email": 1,
       },
