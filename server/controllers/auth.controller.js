@@ -4,10 +4,13 @@ import User from "../models/user.model.js";
 import {
   generateAccessToken,
   generateRefreshToken,
+  generateResetPasswordToken,
   hashPassword,
   validatePassword,
   validateRefreshToken,
+  validateResetPasswordToken,
 } from "../utils/encryption.js";
+import { sendMail } from "../utils/sendMail.js";
 
 export const createRoles = async (req, res) => {
   const { name } = req.body;
@@ -113,6 +116,11 @@ export const login = async (req, res) => {
     }
 
     const user = await User.findOne({ email });
+    if (user?.googleId && !user.password) {
+      return res.status(400).json({
+        message: "Please use google login as u have't updated your password",
+      });
+    }
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -182,4 +190,61 @@ export const refreshAccessToken = async (req, res) => {
 export const logout = async (req, res) => {
   res.clearCookie("refresh-token");
   return res.status(200).json({ message: "Logged out successfully" });
+};
+
+export const resetPasswordMail = async (req, res) => {
+  const { email } = req.body;
+  try {
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(400).json({ message: "Incorrect mail" });
+    }
+
+    await user.populate("profile", "-__v");
+
+    const token = generateResetPasswordToken(email);
+    const resetLink = `http://localhost:5173/reset-password?token=${token}`;
+    const subject = "Password Reset Request";
+
+    await sendMail(user?.profile?.first_name, email, subject, resetLink);
+    return res
+      .status(200)
+      .json({ message: `Password reset link has sent to '${email}'` });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  const { token, newPassword } = req.body;
+
+  try {
+    if (!token || !newPassword) {
+      return res
+        .status(400)
+        .json({ message: "Password and Token is required" });
+    }
+
+    const decoded = validateResetPasswordToken(token);
+    if (!decoded) {
+      return res.status(400).json({ message: "Invalid or expired token" });
+    }
+    const user = await User.findOne({ email: decoded.email });
+
+    if (!user) {
+      return res.status(404).json({ message: "Access denied. invalid token" });
+    }
+
+    const hashedPassword = await hashPassword(newPassword);
+    user.password = hashedPassword;
+    await user.save();
+
+    return res.status(200).json({ message: "Password updated successfully" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 };
