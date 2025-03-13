@@ -61,19 +61,20 @@ export const signup = async (req, res) => {
 
     const hashedPassword = await hashPassword(password);
 
+    const newUser = new User({
+      email,
+      password: hashedPassword,
+      role,
+    });
+    await newUser.save();
+
     const newProfile = new Profile({
       first_name,
       last_name,
       mobile_number,
     });
     await newProfile.save();
-
-    const newUser = new User({
-      email,
-      password: hashedPassword,
-      role,
-      profile: newProfile._id,
-    });
+    newUser.profile = newProfile._id;
     await newUser.save();
     await newUser.populate("role", "-__v");
     await newUser.populate("profile", "-__v");

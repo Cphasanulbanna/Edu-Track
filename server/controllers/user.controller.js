@@ -69,14 +69,54 @@ export const updateProfile = async (req, res) => {
 };
 
 export const fetchStudents = async (req, res) => {
+  const { limit = 5, page = 1, sort = "", search = "" } = req.query;
   try {
+    const elementsToSkip = (page - 1) * limit;
+
     const studentRole = await Role.findOne({ name: "student" });
-    const students = await User.find({ role: studentRole.id }).select("-password -__v -googleId -updatedAt").populate("role", "-__v -_id").populate("profile", "-__v -_id")
-    const totalElements = await User.countDocuments({role:studentRole.id})
-    if (totalElements > 0) {
-      return res.status(200).json({ students,totalElements });
+    let searchQuery = {};
+    if (search) {
+      searchQuery = {
+        role: studentRole._id,
+        $or: [
+          {
+            "profile.first_name": { $regex: search, $options: "i" },
+          },
+          {
+            "profile.last_name_name": { $regex: search, $options: "i" },
+          },
+        ],
+      };
+    } else {
+      searchQuery = {
+        role: studentRole._id,
+      };
     }
-    return res.status(200).json({ message: "No student data found",students:[], totalElements });
+
+        const sortOptions = sort ? { createdAt: sort === "desc" ? -1 : 1 } : { createdAt: -1 };
+
+    const students = await User.find(searchQuery)
+      .skip(elementsToSkip)
+      .limit(limit)
+      .sort(sortOptions)
+      .select("-password -__v -googleId -updatedAt")
+      .populate("role", "-__v -_id")
+      .populate("profile", "-__v -_id");
+    const totalElements = await User.countDocuments({ role: studentRole.id });
+    const totalPages = Math.ceil(totalElements / limit);
+    if (totalElements > 0) {
+      return res
+        .status(200)
+        .json({ students, totalElements, page, limit, totalPages });
+    }
+    return res.status(200).json({
+      message: "No student data found",
+      students: [],
+      totalElements,
+      page,
+      limit,
+      totalPages,
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

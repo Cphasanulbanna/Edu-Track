@@ -19,10 +19,11 @@ const userSchema = new mongoose.Schema(
       ref: "Profile",
     },
     role: [{ type: mongoose.Schema.Types.ObjectId, ref: "Role" }],
-    googleId: { type: String, unique: true },
+    googleId: { type: String },
   },
   { timestamps: true }
 );
 
 const User = mongoose.model("User", userSchema);
+
 export default User;
