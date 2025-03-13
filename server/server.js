@@ -5,6 +5,7 @@ import session from "express-session";
 
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import bookRoutes from "./routes/book.routes.js";
 
 import { connectDb } from "./config/db.js";
 import passport from "./middleware/googleOauth.middleware.js";
@@ -39,6 +40,7 @@ app.use(passport.session());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/book", bookRoutes);
 
 connectDb()
 app.listen(PORT, () => {

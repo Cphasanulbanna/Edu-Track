@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema(
     },
     borrower: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     dueDate: { type: Date },
-    returned: { type: Boolean, default: false },
+    borrowed: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
