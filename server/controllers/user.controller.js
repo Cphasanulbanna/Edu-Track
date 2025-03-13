@@ -167,7 +167,7 @@ export const fetchBorrowedBooks = async (req, res) => {
     if (!userId) {
       return res.status(400).json({ message: "User Id is required" });
     }
-    const books = await Book.find({ borrower: userId });
+    const books = await Book.find({ borrower: userId }).select("-__v -borrower -updatedAt -createdAt")
     if (!books.length) {
       return res.status(404).json({ message: "No borrowed books found" });
     }
