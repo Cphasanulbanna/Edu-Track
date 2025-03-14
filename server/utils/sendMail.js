@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
 import Mustache from "mustache";
-import fs from "fs"; 
+import fs from "fs";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 
@@ -12,7 +12,7 @@ export const sendMail = async (
   receiverMail = "",
   subject = "No subject",
   resetLink = "",
-  templateName="reset-password.html"
+  templateName = "reset-password.html"
 ) => {
   let transport = nodemailer.createTransport({
     service: "gmail",
@@ -27,10 +27,8 @@ export const sendMail = async (
   const __dirname = dirname(__filename);
 
   // Construct the template file path
-    const templatePath = path.join(__dirname, "../templates", templateName);
-    console.log({templatePath});
-    
-  
+  const templatePath = path.join(__dirname, "../templates", templateName);
+
   try {
     // Read the template file
     const template = fs.readFileSync(templatePath, "utf8");
