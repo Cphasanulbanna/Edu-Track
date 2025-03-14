@@ -1,8 +1,9 @@
 import cron from "node-cron";
 import Book from "../models/book.model.js";
 import { sendMail } from "../utils/sendMail.js";
+import { LIBRARY_JOB_TIME } from "../constant/constant.js";
 
-cron.schedule("* * * * *", async () => {
+cron.schedule(LIBRARY_JOB_TIME, async () => {
   const users = await Book.aggregate([
     {
       $match: {
@@ -19,7 +20,6 @@ cron.schedule("* * * * *", async () => {
     },
     {
       $unwind: "$user_details",
-      //   preserveNullAndEmptyArrays: true,
     },
     {
       $lookup: {
@@ -32,7 +32,6 @@ cron.schedule("* * * * *", async () => {
     {
       $unwind: {
         path: "$profile_details", // Unwind the profile details to get individual fields
-        // preserveNullAndEmptyArrays: true, // If no profile, keep the result empty
       },
     },
     {
@@ -46,7 +45,6 @@ cron.schedule("* * * * *", async () => {
 
   for (const user of users) {
     const name = `${user.profile_details.first_name} ${user.profile_details.last_name}`;
-    console.log({ user });
     if (user.user_details.email) {
       await sendMail(
         name,

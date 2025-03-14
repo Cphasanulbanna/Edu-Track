@@ -6,7 +6,7 @@ const storage = multer.diskStorage({
     cb(null, 'uploads/'); // Set your desired folder
   },
   filename: (req, file, cb) => {
-    cb(null,  file.originalname); // Use current timestamp + original filename
+    cb(null,  file.originalname);
   },
 });
 
