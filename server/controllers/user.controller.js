@@ -55,8 +55,7 @@ export const updateProfile = async (req, res) => {
     const command = new PutObjectCommand(uploadParams);
 
     // Upload the file to S3 using the send() method of the S3 client
-    const data = await s3.send(command);
-    console.log({ data });
+     await s3.send(command);
     fs.unlinkSync(path.join(__dirname, "../uploads", req.file.filename));
 
     res.status(200).json({
