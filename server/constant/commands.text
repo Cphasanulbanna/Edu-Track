@@ -1,0 +1,8 @@
+//crone
+
+pm2 start crone-file-path.js --name cron-job-name
+pm2 startup = To make sure PM2 starts automatically after a system reboot
+pm2 logs cronjob = monitoring
+pm2 restart cron-job-name =  restart job after changes in job file
+pm2 stop cron-job-name
+

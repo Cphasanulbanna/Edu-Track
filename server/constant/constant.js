@@ -1,0 +1,1 @@
+export const LIBRARY_JOB_TIME = '0 8 * * 1'
