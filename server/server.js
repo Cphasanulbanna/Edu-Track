@@ -9,6 +9,9 @@ import bookRoutes from "./routes/book.routes.js";
 import postRoutes from "./routes/post.routes.js";
 import courseRoutes from "./routes/course.routes.js";
 import attendanceRoutes from "./routes/attendance.routes.js";
+import departmentRoutes from "./routes/department.routes.js";
+
+
 
 import { connectDb } from "./config/db.js";
 import passport from "./middleware/googleOauth.middleware.js";
@@ -47,6 +50,7 @@ app.use("/api/book", bookRoutes);
 app.use("/api/post", postRoutes);
 app.use("/api/course", courseRoutes);
 app.use("/api/attendance", attendanceRoutes);
+app.use("/api/department", departmentRoutes)
 
 connectDb()
 app.listen(PORT, () => {

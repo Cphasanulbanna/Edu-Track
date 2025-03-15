@@ -1,12 +1,11 @@
 import { COLLEGE_CHECK_IN_TIME } from "../constant/constant.js";
 import Attendance from "../models/attendance.model.js";
-import Course from "../models/course.model.js";
 import User from "../models/user.model.js";
 import dayjs from "dayjs";
 import { getTimeFromDate } from "../utils/date.js";
 import Department from "../models/department.model.js";
 
-export const checkedIn = async (req, res) => {
+export const checkIn = async (req, res) => {
   const { departmentId, studentId } = req.params;
   const { checkInDate } = req.body;
   try {
