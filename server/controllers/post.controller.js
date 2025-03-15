@@ -83,13 +83,25 @@ export const fetchPosts = async (req, res) => {
         },
       })
       .populate({
+        path: "comments",
+        select: "content",
+        populate: {
+          path: "user", 
+          select: "-email -password -role -createdAt -updatedAt -__v",
+          populate: {
+            path: "profile",
+            select: "first_name last_name"
+          }
+        },
+      })
+      .populate({
         path: "user",
         select: "-email -password -role -createdAt -updatedAt -__v",
         populate: {
           path: "profile",
           select: "first_name last_name -_id",
         },
-      });
+      })
     if (!posts.length) {
       return res.status(404).json({ message: "No posts found" });
     }
@@ -167,6 +179,32 @@ export const likePost = async (req, res) => {
     return res
       .status(200)
       .json({ message: `${isLiked ? "post disliked" : "post liked"}` });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const commentPost = async (req, res) => {
+  const { id, userId } = req.params;
+  const { content } = req.body;
+  try {
+    if (!content) {
+      return res.status(400).json({ message: "comment is required" });
+    }
+    if (!id || !userId) {
+      return res
+        .status(400)
+        .json({ message: "Post Id and User Id is required" });
+    }
+
+    const post = await Post.findById(id);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+    await Post.findByIdAndUpdate(id, {
+      $push: { comments: { user: userId, content } },
+    });
+    return res.status(200).json({ message: "New comment added" });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
