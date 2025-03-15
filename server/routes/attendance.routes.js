@@ -1,8 +1,8 @@
 import express from "express";
-import { checkedIn } from "../controllers/attendance.controller.js";
+import { checkIn } from "../controllers/attendance.controller.js";
 
 const router = express.Router();
 
-router.post("/checkIn/:classId/:studentId", checkedIn)
+router.post("/checkIn/:departmentId/:studentId", checkIn)
 
 export default router;
