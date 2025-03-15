@@ -9,12 +9,18 @@ const courseSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      default: ""
+      default: "",
     },
-    teachers : [
+    teachers: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        ref: "User",
+      },
+    ],
+    students: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
       },
     ],
   },

@@ -7,15 +7,21 @@ const attendanceSchema = new mongoose.Schema(
       default: false,
       required: true,
     },
+    date: {
+      type: Date,
+      required: true,
+    },
     checkInTime: {
       type: Date,
       required: true,
     },
     checkOutTime: {
       type: Date,
+      required: function () {
+        return this.checkedIn;
+      },
     },
     status: {
-      default: false,
       type: String,
       enum: ["present", "absent", "late", "leave"],
     },
@@ -29,7 +35,7 @@ const attendanceSchema = new mongoose.Schema(
       ref: "Course",
       required: true,
     },
-    location: { type: String },
+    location: { type: String, default: "" },
   },
   { timestamps: true }
 );
