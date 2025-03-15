@@ -20,7 +20,9 @@ const userSchema = new mongoose.Schema(
     },
     role: [{ type: mongoose.Schema.Types.ObjectId, ref: "Role" }],
     googleId: { type: String },
-    courses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }],
+    course: { type: mongoose.Schema.Types.ObjectId, ref: "Course", required: () => this.role?.[0]?.("teacher") },
+    roleNumber: { unique: true, type: String, required: () => this.role?.[0]?.("student") },
+    department: { unique: true, type: String, required: () => this.role?.[0]?.("Department") }
   },
   { timestamps: true }
 );
