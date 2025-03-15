@@ -13,7 +13,7 @@ export const fetchCourses = async (req, res) => {
 };
 
 export const createCourses = async (req, res) => {
-  const { title, description = "", teachers  =[] } = req.body;
+  const { title, description = "", teachers  =[], duration=3 } = req.body;
   try {
     if (!title) {
       return res.status(400).json({ message: "Course title is required" });
@@ -22,7 +22,7 @@ export const createCourses = async (req, res) => {
     if (course) {
       return res.status(400).json({ message: "Course already added" });
     }
-    const newCourse = new Course({ title, description,teachers  });
+    const newCourse = new Course({ title, description,teachers, duration  });
     await newCourse.save();
     return res
       .status(200)
