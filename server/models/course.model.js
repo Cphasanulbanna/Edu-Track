@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { checkIndexes, dropAnIndex } from "../helper/db/db.helper.js";
 
 const courseSchema = new mongoose.Schema(
   {
@@ -9,21 +10,12 @@ const courseSchema = new mongoose.Schema(
     },
     description: {
       type: String,
+      default: ""
     },
-    teachers: [
+    teachers : [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        validate: {
-          validator: async function (teacherId) {
-            const user = await mongoose.model("User").findOne({
-              _id: teacherId,
-              role: "teacher",
-            });
-            return user != null;
-          },
-          message: "User must have the 'teacher' role",
-        },
+        ref: "User"
       },
     ],
   },
