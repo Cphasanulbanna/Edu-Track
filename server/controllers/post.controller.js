@@ -65,7 +65,31 @@ export const createPost = async (req, res) => {
 
 export const fetchPosts = async (req, res) => {
   try {
-    const posts = await Post.find({});
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const sortBy = req.query.sortBy || "createdAt";
+    const order = req.query.order === "desc" ? -1 : 1;
+    const skip = (page - 1) * limit;
+    const posts = await Post.find({})
+      .skip(skip)
+      .limit(limit)
+      .sort({ [sortBy]: order })
+      .populate({
+        path: "likes.user",
+        select: "-email -password -role -createdAt -updatedAt -__v",
+        populate: {
+          path: "profile",
+          select: "first_name last_name -_id",
+        },
+      })
+      .populate({
+        path: "user",
+        select: "-email -password -role -createdAt -updatedAt -__v",
+        populate: {
+          path: "profile",
+          select: "first_name last_name -_id",
+        },
+      });
     if (!posts.length) {
       return res.status(404).json({ message: "No posts found" });
     }
@@ -111,6 +135,38 @@ export const deletePost = async (req, res) => {
     await s3.send(new DeleteObjectCommand(deleteParams));
     await Post.findByIdAndDelete(id);
     return res.status(200).json({ message: `Post deleted with id of ${id}` });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const likePost = async (req, res) => {
+  const { id, userId } = req.params;
+  try {
+    if (!id || !userId) {
+      return res
+        .status(400)
+        .json({ message: "Post Id and User Id is required" });
+    }
+
+    const post = await Post.findById(id);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+    const isLiked = post.likes.some((obj) => obj.user.toString() === userId);
+    await Post.findByIdAndUpdate(
+      id,
+      isLiked
+        ? {
+            $pull: { likes: { user: userId } },
+          }
+        : {
+            $push: { likes: { user: userId } },
+          }
+    );
+    return res
+      .status(200)
+      .json({ message: `${isLiked ? "post disliked" : "post liked"}` });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
