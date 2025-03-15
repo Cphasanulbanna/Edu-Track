@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { checkIndexes, dropAnIndex } from "../helper/db/db.helper.js";
 
 const courseSchema = new mongoose.Schema(
   {
