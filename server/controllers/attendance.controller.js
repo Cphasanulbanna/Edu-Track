@@ -4,14 +4,15 @@ import Course from "../models/course.model.js";
 import User from "../models/user.model.js";
 import dayjs from "dayjs";
 import { getTimeFromDate } from "../utils/date.js";
+import Department from "../models/department.model.js";
 
 export const checkedIn = async (req, res) => {
-  const { courseId, studentId } = req.params;
+  const { departmentId, studentId } = req.params;
   const { checkInDate } = req.body;
   try {
-    if (!courseId || !studentId) {
+    if (!departmentId || !studentId) {
       return res.status(400).json({
-        message: "Student Id and Class Id are required",
+        message: "Student Id and Department Id are required",
       });
     }
 
@@ -21,23 +22,23 @@ export const checkedIn = async (req, res) => {
       });
     }
 
-    const attendance = await Attendance.findOne({
-      class: courseId,
-      student: studentId,
-      date: checkInDate,
-    });
-    if (attendance.checkedIn) {
-      return res.status(400).json({ message: "Already checked in today" });
-    }
-
-    const course = await Course.findById(courseId);
-    if (!course) {
-      return res.status(404).json({ message: "Course not found" });
+    const department = await Department.findById(departmentId);
+    if (!department) {
+      return res.status(404).json({ message: "Department not found" });
     }
 
     const student = await User.findById(studentId);
     if (!student) {
       return res.status(404).json({ message: "Student not found" });
+    }
+
+    const attendance = await Attendance.findOne({
+      department: departmentId,
+      student: studentId,
+      date: checkInDate,
+    });
+    if (attendance.checkedIn) {
+      return res.status(400).json({ message: "Already checked in today" });
     }
 
     const checkInTime = getTimeFromDate(checkInDate);
@@ -52,7 +53,7 @@ export const checkedIn = async (req, res) => {
       checkInTime: checkInTime,
       date: checkInDate,
       student: studentId,
-      class: courseId,
+      department: departmentId,
     });
 
     await newAttendance.save();

@@ -30,9 +30,9 @@ const attendanceSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    class: {
+    department: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Course",
+      ref: "Department",
       required: true,
     },
     location: { type: String, default: "" },
