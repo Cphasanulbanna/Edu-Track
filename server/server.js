@@ -10,6 +10,9 @@ import postRoutes from "./routes/post.routes.js";
 import courseRoutes from "./routes/course.routes.js";
 import attendanceRoutes from "./routes/attendance.routes.js";
 import departmentRoutes from "./routes/department.routes.js";
+import batchRoutes from "./routes/batch.routes.js";
+
+
 
 
 
@@ -51,6 +54,7 @@ app.use("/api/post", postRoutes);
 app.use("/api/course", courseRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/department", departmentRoutes)
+app.use("/api/batch", batchRoutes)
 
 connectDb()
 app.listen(PORT, () => {

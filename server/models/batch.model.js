@@ -11,7 +11,7 @@ const batchSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Course",
     },
-    year: { type: Number, required: true, unique: true },
+    year: { type: Number, required: true },
     students: [
       {
         type: mongoose.Schema.Types.ObjectId,
