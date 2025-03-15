@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema(
     },
     role: [{ type: mongoose.Schema.Types.ObjectId, ref: "Role" }],
     googleId: { type: String },
+    courses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }],
   },
   { timestamps: true }
 );
