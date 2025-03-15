@@ -4,13 +4,13 @@ const departmentSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true
   },
   course: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Course",
   },
-  year: { type: Number, required: true },
-  students: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  teachers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
 const Department = mongoose.model("Department", departmentSchema);
