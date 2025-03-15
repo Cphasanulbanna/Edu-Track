@@ -7,6 +7,9 @@ const courseSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
+    duration: {
+      type: Number
+    },
     description: {
       type: String,
       default: "",
@@ -16,13 +19,7 @@ const courseSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
-    ],
-    students: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
+    ]
   },
   { timestamps: true }
 );
