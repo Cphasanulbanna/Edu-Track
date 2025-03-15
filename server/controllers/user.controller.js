@@ -55,7 +55,7 @@ export const updateProfile = async (req, res) => {
     const command = new PutObjectCommand(uploadParams);
 
     // Upload the file to S3 using the send() method of the S3 client
-     await s3.send(command);
+    await s3.send(command);
     fs.unlinkSync(path.join(__dirname, "../uploads", req.file.filename));
 
     res.status(200).json({
@@ -84,6 +84,20 @@ export const fetchStudents = async (req, res) => {
       {
         $match: {
           "role.name": "student",
+        },
+      },
+      {
+        $lookup: {
+          from: "batches",
+          localField: "batch",
+          foreignField: "_id",
+          as: "batch",
+        },
+      },
+      {
+        $unwind: {
+          path: "$batch",
+          preserveNullAndEmptyArrays: true,
         },
       },
       {
@@ -125,6 +139,7 @@ export const fetchStudents = async (req, res) => {
           email: 1,
           role: { _id: 1, name: 1 },
           profile: { first_name: 1, last_name: 1, mobile_number: 1 },
+          batch: { _id: 1, title: 1 },
           createdAt: 1,
           updatedAt: 1,
         },
@@ -164,7 +179,9 @@ export const fetchBorrowedBooks = async (req, res) => {
     if (!userId) {
       return res.status(400).json({ message: "User Id is required" });
     }
-    const books = await Book.find({ borrower: userId }).select("-__v -borrower -updatedAt -createdAt")
+    const books = await Book.find({ borrower: userId }).select(
+      "-__v -borrower -updatedAt -createdAt"
+    );
     if (!books.length) {
       return res.status(404).json({ message: "No borrowed books found" });
     }

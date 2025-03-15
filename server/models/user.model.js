@@ -22,8 +22,12 @@ const userSchema = new mongoose.Schema(
     googleId: { type: String },
     course: { type: mongoose.Schema.Types.ObjectId, ref: "Course" },
     roleNumber: { unique: true, type: String },
-    department: { unique: true, type: String },
-    batch: { unique: true, type: String }
+    department: {
+      unique: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Department",
+    },
+    batch: { unique: true, type: mongoose.Schema.Types.ObjectId, ref: "Batch" },
   },
   { timestamps: true }
 );
