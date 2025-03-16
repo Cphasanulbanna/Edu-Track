@@ -9,7 +9,7 @@ const quizSchema = new mongoose.Schema(
     },
     published: { type: Boolean, default: false },
     description: { type: String },
-    questions: [{ type: mongoose.Schema.Types.ObjectId, ref: "Question" }],
+    questions: [{ type: mongoose.Schema.Types.ObjectId, ref: "QuizQuestions" }],
   },
   { timestamps: true }
 );
