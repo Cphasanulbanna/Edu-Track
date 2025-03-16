@@ -23,6 +23,19 @@ export const applyLeave = async (req, res) => {
 
     const formattedFromDate = convertToDateOnly(fromDate);
     const formattedToDate = convertToDateOnly(toDate);
+
+    const leave = await LeaveRequest.findOne({
+      fromDate: formattedFromDate,
+      toDate: formattedToDate,
+      user: userId,
+      batch: batchId,
+    });
+    if (leave) {
+      return res
+        .status(400)
+        .json({ message: "You have already applied leave for these dates" });
+    }
+
     const newLeaveRequest = new LeaveRequest({
       fromDate: formattedFromDate,
       toDate: formattedToDate,
