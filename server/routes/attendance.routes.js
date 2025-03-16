@@ -3,6 +3,6 @@ import { checkIn } from "../controllers/attendance.controller.js";
 
 const router = express.Router();
 
-router.post("/checkIn/:departmentId/:studentId", checkIn)
+router.post("/checkIn/:batchId/:studentId", checkIn)
 
 export default router;

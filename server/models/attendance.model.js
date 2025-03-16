@@ -5,21 +5,17 @@ const attendanceSchema = new mongoose.Schema(
     checkedIn: {
       type: Boolean,
       default: false,
-      required: true,
     },
     date: {
-      type: Date,
+      type: String,
       required: true,
     },
     checkInTime: {
-      type: Date,
+      type: String,
       required: true,
     },
     checkOutTime: {
-      type: Date,
-      required: function () {
-        return this.checkedIn;
-      },
+      type: String,
     },
     status: {
       type: String,
@@ -30,12 +26,12 @@ const attendanceSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    department: {
+    batch: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Department",
+      ref: "Batch",
       required: true,
     },
-    location: { type: String, default: "" },
+    location: { type: String },
   },
   { timestamps: true }
 );

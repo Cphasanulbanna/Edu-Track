@@ -1,17 +1,19 @@
-import { COLLEGE_CHECK_IN_TIME } from "../constant/constant.js";
 import Attendance from "../models/attendance.model.js";
 import User from "../models/user.model.js";
 import dayjs from "dayjs";
-import { getTimeFromDate } from "../utils/date.js";
-import Department from "../models/department.model.js";
+import {
+  COLLEGE_CHECK_IN_TIME,
+  convertUTCtoIST,
+} from "../utils/date.js";
+import Batch from "../models/batch.model.js";
 
 export const checkIn = async (req, res) => {
-  const { departmentId, studentId } = req.params;
+  const { batchId, studentId } = req.params;
   const { checkInDate } = req.body;
   try {
-    if (!departmentId || !studentId) {
+    if (!batchId || !studentId) {
       return res.status(400).json({
-        message: "Student Id and Department Id are required",
+        message: "Student Id and Batch Id are required",
       });
     }
 
@@ -21,9 +23,9 @@ export const checkIn = async (req, res) => {
       });
     }
 
-    const department = await Department.findById(departmentId);
-    if (!department) {
-      return res.status(404).json({ message: "Department not found" });
+    const batch = await Batch.findById(batchId);
+    if (!batch) {
+      return res.status(404).json({ message: "Batch not found" });
     }
 
     const student = await User.findById(studentId);
@@ -32,17 +34,18 @@ export const checkIn = async (req, res) => {
     }
 
     const attendance = await Attendance.findOne({
-      department: departmentId,
+      batch: batchId,
       student: studentId,
       date: checkInDate,
     });
-    if (attendance.checkedIn) {
+    if (attendance?.checkedIn) {
       return res.status(400).json({ message: "Already checked in today" });
     }
 
-    const checkInTime = getTimeFromDate(checkInDate);
+    const checkInTime = convertUTCtoIST(checkInDate);
+    const fixedTime = convertUTCtoIST(COLLEGE_CHECK_IN_TIME);
 
-    if (dayjs(checkInTime).isAfter(COLLEGE_CHECK_IN_TIME)) {
+    if (dayjs(checkInTime).isAfter(fixedTime)) {
       return res
         .status(400)
         .json({ message: "Check in failed, Cannot check in after 9:00 AM" });
@@ -52,7 +55,7 @@ export const checkIn = async (req, res) => {
       checkInTime: checkInTime,
       date: checkInDate,
       student: studentId,
-      department: departmentId,
+      batch: batchId,
     });
 
     await newAttendance.save();
