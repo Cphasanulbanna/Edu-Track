@@ -158,3 +158,27 @@ export const checkOut = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const fetchAttendanceOfStudent = async (req, res) => {
+  const { studentId } = req.params;
+  try {
+    if (!studentId) {
+      return res.status(400).json({ message: "Student Id is required" });
+    }
+    const student = await User.findById(studentId);
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    const attendances = await Attendance.find({ student: student }).sort({
+      date: -1,
+    });
+    if (!attendances.length) {
+      return res.status(404).json({ message: "Attendance records not found" });
+    }
+
+    return res.status(404).json({ attendances });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
