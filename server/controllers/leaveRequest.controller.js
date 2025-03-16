@@ -53,3 +53,47 @@ export const applyLeave = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const takeActionOnLeave = async (req, res) => {
+  console.log("entered");
+
+  const { leaveRequestId } = req.params;
+  const { status } = req.body;
+  try {
+    if (!leaveRequestId) {
+      return res.status(400).json({ message: "Leave request id is required" });
+    }
+    if (!status) {
+      return res.status(400).json({ message: "Status is required" });
+    }
+    const leave = await LeaveRequest.findById(leaveRequestId);
+    if (!leave) {
+      return res.status(404).json({ message: "Leave request not found" });
+    }
+
+    leave.status = status;
+    await leave.save();
+    return res.status(200).json({ message: `Leave request ${status}` });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const fetchAllLeaveRequestOfUser = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    if (!userId) {
+      return res.status(400).json({ message: "User Id is required" });
+    }
+    const leaves = await LeaveRequest.find({ user: userId }).select("-__v -updatedAt -batch").sort({
+      toDate: -1,
+    })
+    if (!leaves.length) {
+      return res.status(404).json({ message: "No leave requests found" });
+    }
+
+    return res.status(200).json({ leaves });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
