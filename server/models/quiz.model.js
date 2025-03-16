@@ -7,7 +7,7 @@ const quizSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    published: { type: Boolean, default: false, required: true },
+    published: { type: Boolean, default: false },
     description: { type: String },
     questions: [{ type: mongoose.Schema.Types.ObjectId, ref: "Question" }],
   },
