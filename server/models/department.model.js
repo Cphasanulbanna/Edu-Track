@@ -11,6 +11,7 @@ const departmentSchema = new mongoose.Schema({
     ref: "Course",
   },
   teachers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+
 });
 
 const Department = mongoose.model("Department", departmentSchema);

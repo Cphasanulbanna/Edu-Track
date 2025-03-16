@@ -28,6 +28,7 @@ const userSchema = new mongoose.Schema(
       ref: "Department",
     },
     batch: { unique: true, type: mongoose.Schema.Types.ObjectId, ref: "Batch" },
+    isHeadOfDepartment: { type: Boolean },
   },
   { timestamps: true }
 );

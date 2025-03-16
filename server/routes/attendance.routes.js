@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.post("/checkIn/:batchId/:studentId", checkIn)
 router.post("/checkOut/:batchId/:studentId", checkOut)
-router.get("/:studentId", fetchAttendanceOfStudent)
+router.post("/:studentId", fetchAttendanceOfStudent)
+// router.get("/:studentId", fetchAttendanceOfStudent)
 
 export default router;
