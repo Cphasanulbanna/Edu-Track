@@ -3,13 +3,13 @@ import mongoose from "mongoose";
 const attendanceSchema = new mongoose.Schema(
   {
     checkedIn: {
-      type: Boolean,
-      default: false,
+      type: Boolean
     },
     date: {
       type: String,
       required: true,
     },
+    totalTime: {type: String},
     checkInTime: {
       type: String,
       required: true,
