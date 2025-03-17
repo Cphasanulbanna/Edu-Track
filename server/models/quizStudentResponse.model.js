@@ -10,11 +10,13 @@ const quizStudentResponseSchema = new mongoose.Schema(
         selectedOption: { type: mongoose.Schema.Types.ObjectId, ref:"QuizQuestion.option", required: true },
       },
     ],
-    score: {type: Number, default: 0}
+    score: { type: Number, default: 0 },
+    totalCorrect: { type: Number, default: 0 },
+    totalIncorrect: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
 
-const quizStudentResponse = mongoose.model("quizStudentResponse", quizStudentResponseSchema);
+const QuizStudentResponse = mongoose.model("QuizStudentResponse", quizStudentResponseSchema);
 
-export default quizStudentResponse;
+export default QuizStudentResponse;
