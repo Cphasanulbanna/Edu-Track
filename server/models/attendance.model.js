@@ -3,13 +3,13 @@ import mongoose from "mongoose";
 const attendanceSchema = new mongoose.Schema(
   {
     checkedIn: {
-      type: Boolean
+      type: Boolean,
     },
     date: {
       type: String,
       required: true,
     },
-    totalTime: {type: String},
+    totalTime: { type: String },
     checkInTime: {
       type: String,
       required: true,
@@ -19,7 +19,7 @@ const attendanceSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["present", "absent", "late", "leave"],
+      enum: ["present", "absent", "late", "leave", "holiday"],
     },
     student: {
       type: mongoose.Schema.Types.ObjectId,
@@ -32,6 +32,7 @@ const attendanceSchema = new mongoose.Schema(
       required: true,
     },
     location: { type: String },
+    isHalfDay: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
