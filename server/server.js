@@ -13,6 +13,7 @@ import departmentRoutes from "./routes/department.routes.js";
 import batchRoutes from "./routes/batch.routes.js";
 import leaveRequestRoutes from "./routes/leaveRequest.routes.js";
 import quizRoutes from "./routes/quiz.routes.js";
+import holidayRoutes from "./routes/holiday.routes.js";
 
 import { connectDb } from "./config/db.js";
 import passport from "./middleware/googleOauth.middleware.js";
@@ -55,6 +56,7 @@ app.use("/api/department", departmentRoutes);
 app.use("/api/batch", batchRoutes);
 app.use("/api/leave-request", leaveRequestRoutes);
 app.use("/api/quiz", quizRoutes);
+app.use("/api/holiday", holidayRoutes);
 
 connectDb();
 app.listen(PORT, () => {
