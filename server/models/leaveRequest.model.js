@@ -13,7 +13,7 @@ const leaveRequestSchema = new mongoose.Schema(
     fromDate: { type: Date, required: true },
     toDate: { type: Date, required: true },
     reason: { type: String, required: true },
-    status: { type: String, enum: ["pending", "approved", "denied"] },
+    status: { type: String, enum: ["pending", "approved", "rejected"] },
     batch: { type: mongoose.Schema.Types.ObjectId, ref: "Batch" },
   },
   { timestamps: true }
