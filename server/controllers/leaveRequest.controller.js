@@ -1,3 +1,4 @@
+import Attendance from "../models/attendance.model.js";
 import Batch from "../models/batch.model.js";
 import LeaveRequest from "../models/leaveRequest.model.js";
 import { convertToDateOnly } from "../utils/date.js";
@@ -71,6 +72,24 @@ export const takeActionOnLeave = async (req, res) => {
       return res.status(404).json({ message: "Leave request not found" });
     }
 
+    //
+    const studentId = leave.user;
+    const batch = leave.batch;
+    const fromDate = leave.fromDate;
+    const toDate = leave.toDate;
+
+    if (status === "approved") {
+      await Attendance.updateMany(
+        { date: { $gte: fromDate, $lte: toDate }, batch, student: studentId },
+        { $set: { status: "leave" } }
+      );
+    } else if (status === "rejected") {
+      await Attendance.updateMany(
+        { date: { $gte: fromDate, $lte: toDate }, batch, student: studentId },
+        { $set: { status: "absent" } }
+      );
+    }
+
     leave.status = status;
     await leave.save();
     return res.status(200).json({ message: `Leave request ${status}` });
@@ -85,9 +104,11 @@ export const fetchAllLeaveRequestOfUser = async (req, res) => {
     if (!userId) {
       return res.status(400).json({ message: "User Id is required" });
     }
-    const leaves = await LeaveRequest.find({ user: userId }).select("-__v -updatedAt -batch").sort({
-      toDate: -1,
-    })
+    const leaves = await LeaveRequest.find({ user: userId })
+      .select("-__v -updatedAt -batch")
+      .sort({
+        toDate: -1,
+      });
     if (!leaves.length) {
       return res.status(404).json({ message: "No leave requests found" });
     }
