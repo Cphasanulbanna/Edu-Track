@@ -10,7 +10,9 @@ import {
   getTimeDifference,
 } from "../utils/date.js";
 import Batch from "../models/batch.model.js";
-import { FULL_DAY_ATTENDANCE_TIME } from "../constant/constant.js";
+import { FULL_DAY_ATTENDANCE_TIME, HALF_DAY_ATTENDANCE_TIME } from "../constant/constant.js";
+import Holiday from "../models/holiday.model.js";
+import mongoose, {ObjectId} from "mongoose"
 
 export const checkIn = async (req, res) => {
   const { batchId, studentId } = req.params;
@@ -39,6 +41,20 @@ export const checkIn = async (req, res) => {
     }
 
     const formattedDate = convertToDateOnly(checkInDate);
+    const dayOfWeek = dayjs(formattedDate).day();
+
+    if (dayOfWeek === 0 || dayOfWeek === 6) {
+      return res.status(400).json({
+        message: "Check-in is not allowed on weekends (Saturday & Sunday)",
+      });
+    }
+
+    const isHoliday = await Holiday.findOne({ date: formattedDate });
+    if (isHoliday) {
+      return res.status(400).json({
+        message: `Check-in is not allowed on holidays (${isHoliday.description})`,
+      });
+    }
 
     const attendance = await Attendance.findOne({
       batch: batchId,
@@ -146,6 +162,16 @@ export const checkOut = async (req, res) => {
     ) {
       attendance.status = "absent";
     }
+
+    if (Number(timeDifference) >= Number(FULL_DAY_ATTENDANCE_TIME)) {
+         attendance.status = "present";
+    }
+
+    if (Number(timeDifference) <= Number(HALF_DAY_ATTENDANCE_TIME)) {
+      attendance.status = "present"
+      attendance.isHalfDay = true
+    }
+    
     attendance.checkOutTime = checkOutTime;
     attendance.checkedIn = false;
     attendance.totalTime = totalTime;
@@ -178,6 +204,141 @@ export const fetchAttendanceOfStudent = async (req, res) => {
     }
 
     return res.status(404).json({ attendances });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const fetchAttendanceStats = async (req, res) => {
+  const { studentId, startDate, endDate } = req.query;
+  try {
+    if (!studentId || !startDate || !endDate) {
+      return res
+        .status(400)
+        .json({ message: "Student ID and date range are required" });
+    }
+    const start = convertToDateOnly(startDate);
+    const end = convertToDateOnly(endDate);
+
+    if (dayjs(end).isBefore(start)) {
+      return res
+        .status(400)
+        .json({ message: "End date cannot be before start date" });
+    }
+
+    const attendanceStats = await Attendance.aggregate([
+      {
+        $match: {
+          student: mongoose.Types.ObjectId.createFromHexString(studentId),
+          date: { $gte: startDate, $lte: endDate },
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "student",
+          foreignField: "_id",
+          as: "studentDetails",
+        },
+      },
+      {
+        $unwind: "$studentDetails", // Convert array into an object
+      },
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const workingDaysAggregation = [
+      {
+        $match: {
+          date: { $gte: startDate, $lte: endDate },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          holidays: { $push: "$date" },
+        },
+      },
+    ];
+
+    const holidayData = await Holiday.aggregate(workingDaysAggregation);
+    const holidaySet = new Set(holidayData?.[0]?.holidays || []);
+
+    const totalWorkingDays = await Attendance.aggregate([
+      {
+        $match: {
+          date: { $gte: startDate, $lte: endDate },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          date: 1,
+          dayOfWeek: { $dateFromString: { dateString: "$date" } },
+        },
+      },
+      {
+        $match: {
+          $and: [
+            {
+              dayOfWeek: { $ne: 1 },
+            },
+            {
+              dayOfWeek: { $ne: 7 },
+            },
+            {
+              date: { $nin: [...holidaySet] },
+            },
+          ],
+        },
+      },
+      {
+        $count: "totalWorkingDays",
+      },
+    ]);
+
+    const totalDays = totalWorkingDays[0]?.totalWorkingDays || 0;
+
+    let present = 0;
+    let absent = 0;
+    let late = 0;
+    let leave = 0;
+    let attendancePercentage = 0
+    let leavePercentage = 0
+    let absentPercentage = 0
+    let latePercentage = 0
+    let averageAttendancePerWeek = 0
+
+    attendanceStats?.forEach(({ _id, count }) => {
+      if (_id === "present") present = count;
+      if (_id === "absent") absent = count;
+      if (_id === "late") late = count;
+      if (_id === "leave") leave = count;
+    });
+
+    attendancePercentage = totalDays > 0 ? (present / totalDays) * 100 : 0
+    leavePercentage = totalDays > 0 ? (leave / totalDays) * 100 : 0
+    absentPercentage = totalDays > 0 ? (absent / totalDays) * 100 : 0
+    latePercentage = totalDays > 0 ? (late / totalDays) * 100 : 0
+    averageAttendancePerWeek = totalDays > 0 ? (present*5)/totalDays:0
+
+    return res.status(200).json({
+      totalWorkingDays: totalDays,
+      present,
+      absent,
+      late,
+      leave,
+      attendancePercentage,
+      leavePercentage,
+      absentPercentage,
+      latePercentage,
+      averageAttendancePerWeek
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
