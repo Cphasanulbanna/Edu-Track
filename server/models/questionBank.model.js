@@ -6,17 +6,17 @@ const questionBankSchema = new mongoose.Schema(
       type: String,
       unique: true,
       required: true,
-        },
-    semester:{type: String, required: true},
+    },
+    semester: { type: String, required: true },
     course: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Course",
     },
-    document: {type: String}
+    uuid: { type: String, required: true, unique: true },
   },
   { timestamps: true }
 );
 
-const Batch = mongoose.model("Batch", questionBankSchema);
+const QuestionBank = mongoose.model("QuestionBank", questionBankSchema);
 
-export default Batch;
+export default QuestionBank;
