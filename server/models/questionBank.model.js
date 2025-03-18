@@ -6,12 +6,12 @@ const questionBankSchema = new mongoose.Schema(
       type: String,
       unique: true,
       required: true,
-    },
+        },
+    semester:{type: String, required: true},
     course: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Course",
     },
-    year: { type: Number, required: true },
     document: {type: String}
   },
   { timestamps: true }

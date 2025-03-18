@@ -14,6 +14,7 @@ import batchRoutes from "./routes/batch.routes.js";
 import leaveRequestRoutes from "./routes/leaveRequest.routes.js";
 import quizRoutes from "./routes/quiz.routes.js";
 import holidayRoutes from "./routes/holiday.routes.js";
+import questionBankRoutes from "./routes/questionBank.routes.js";
 
 import { connectDb } from "./config/db.js";
 import passport from "./middleware/googleOauth.middleware.js";
@@ -57,6 +58,7 @@ app.use("/api/batch", batchRoutes);
 app.use("/api/leave-request", leaveRequestRoutes);
 app.use("/api/quiz", quizRoutes);
 app.use("/api/holiday", holidayRoutes);
+app.use("/api/question-bank", questionBankRoutes);
 
 connectDb();
 app.listen(PORT, () => {
