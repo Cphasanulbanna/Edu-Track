@@ -116,6 +116,20 @@ export const fetchStudents = async (req, res) => {
         },
       },
       {
+        $lookup: {
+          from: "courses",
+          localField: "course",
+          foreignField: "_id",
+          as: "course",
+        },
+      },
+      {
+        $unwind: {
+          path: "$course",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
         $match: {
           $or: [
             { "profile.first_name": { $regex: search, $options: "i" } },
@@ -142,6 +156,7 @@ export const fetchStudents = async (req, res) => {
           batch: { _id: 1, title: 1 },
           createdAt: 1,
           updatedAt: 1,
+          course: {title: 1}
         },
       },
     ]);
