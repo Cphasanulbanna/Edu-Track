@@ -15,8 +15,10 @@ export const uploadQuestionBank = async (req, res) => {
     }
 
     if (
-      document.mimetype !== "application/pdf" ||
-      !document.mimetype.startsWith("image/")
+      !(
+        document.mimetype === "application/pdf" ||
+        document.mimetype.startsWith("image/")
+      )
     ) {
       return res
         .status(400)
@@ -44,7 +46,7 @@ export const uploadQuestionBank = async (req, res) => {
 
     const uploadParams = {
       Bucket: process.env.AWS_BUCKET_NAME,
-      Key: `posts/${document.filename}`,
+      Key: `question-bank/${document.filename}`,
       Body: fileContent,
       ContentType: document.mimetype,
       ACL: "public-read",
