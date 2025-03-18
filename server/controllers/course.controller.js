@@ -1,4 +1,5 @@
 import Course from "../models/course.model.js";
+import User from "../models/user.model.js";
 
 export const fetchCourses = async (req, res) => {
   try {
@@ -13,7 +14,7 @@ export const fetchCourses = async (req, res) => {
 };
 
 export const createCourses = async (req, res) => {
-  const { title, description = "", teachers  =[], duration=3 } = req.body;
+  const { title, description = "", teachers = [], duration = 3 } = req.body;
   try {
     if (!title) {
       return res.status(400).json({ message: "Course title is required" });
@@ -22,11 +23,35 @@ export const createCourses = async (req, res) => {
     if (course) {
       return res.status(400).json({ message: "Course already added" });
     }
-    const newCourse = new Course({ title, description,teachers, duration  });
+    const newCourse = new Course({ title, description, teachers, duration });
     await newCourse.save();
     return res
       .status(200)
       .json({ course: newCourse, message: "Added new course" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const enrollCourse = async (req, res) => {
+  const { courseId } = req.query;
+  const { userIds } = req.body;
+  try {
+    if (!courseId || !userIds) {
+      return res
+        .status(400)
+        .json({ message: "course Id and studentIds are required" });
+    }
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(404).json({ message: "course not found" });
+    }
+
+    await User.updateMany(
+      { _id: { $in: userIds }, course: { $exists: false } },
+      { $set: { course: courseId } }
+    );
+    return res.status(200).json({ message: "Courses added to students" });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
