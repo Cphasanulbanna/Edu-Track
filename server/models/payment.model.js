@@ -28,8 +28,9 @@ const paymentSchema = new mongoose.Schema(
       enum: ["paid", "pending", "failed"],
       default: "pending",
     },
-    paymentDate: { type: Date, default: Date.now },
+    paymentDate: { type: String },
     transactionId: { type: String, unique: true },
+    method: {type: String}
   },
   { timestamps: true }
 );
