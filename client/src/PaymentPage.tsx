@@ -1,8 +1,25 @@
+ 
 import axios from "axios";
 import { loadRazorpayScript } from "./utils/payment/loadRazorpay.checkout.ts";
 import { RazorpayOptions } from "./types/razorpay";
+import {  useCallback } from "react";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+
 
 const PaymentPage = () => {
+  const { executeRecaptcha } = useGoogleReCaptcha();
+
+  const handleReCaptchaVerify = useCallback(async () => {
+    if (!executeRecaptcha) {
+      console.log('Execute recaptcha not yet available');
+      return;
+    }
+
+    const token = await executeRecaptcha('payment');
+    return token
+  }, [executeRecaptcha]);
+
+
   async function displayRazorpay() {
     const res = await loadRazorpayScript(
       "https://checkout.razorpay.com/v1/checkout.js"
@@ -13,24 +30,26 @@ const PaymentPage = () => {
       return;
     }
 
+    const captcha = await  handleReCaptchaVerify()
+
     const response = await axios.post(
       "http://localhost:5000/api/payment/create-order",
-      { amount: "50000" },
+      { amount: 12000, captcha },
       {
-          headers: {
-        
+        headers: {
           Authorization:
-                  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QyZjU0ZWY3OWM3N2I1MDVmYjcyNTMiLCJyb2xlcyI6WyJzdHVkZW50Il0sImlhdCI6MTc0MjM2OTAyNSwiZXhwIjoxNzQyMzc2MjI1fQ._R5gbKBnGOcoS6rTqgtYIcsDdi1DI9LT5jgq80NHv-8",
-          },
-          params: {studentId: "67d2f54ef79c77b505fb7253", feeType: "SEMESTER_FEES", semesterId: "67d99ece47425362a59499ae"}
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2QyZjU0ZWY3OWM3N2I1MDVmYjcyNTMiLCJyb2xlcyI6WyJzdHVkZW50Il0sImlhdCI6MTc0MjM2OTAyNSwiZXhwIjoxNzQyMzc2MjI1fQ._R5gbKBnGOcoS6rTqgtYIcsDdi1DI9LT5jgq80NHv-8",
+        },
+        params: {
+          studentId: "67d27f0a68e1be2cc098db9a",
+          feeType: "SEMESTER_FEES",
+          semesterId: "67d99ece47425362a59499ae",
+        },
       }
     );
 
-      const order = response?.data?.order;
-      console.log({ order });
-      
-    
-      
+    const order = response?.data?.order;
+    console.log({ order });
 
     const options: RazorpayOptions = {
       key: import.meta.env.RAZORPAY_KEY, // Enter the Key ID generated from the Dashboard
@@ -41,9 +60,9 @@ const PaymentPage = () => {
       image: "",
       order_id: order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
 
-        handler: async (response) => {
-          console.log({response});
-          
+      handler: async (response) => {
+        console.log({ response });
+
         try {
           await axios.post("http://localhost:5000/api/payment/verify-payment", {
             razorpay_order_id: response.razorpay_order_id,
@@ -75,12 +94,14 @@ const PaymentPage = () => {
     paymentObject.open();
   }
 
+
+
   return (
     <div>
       PaymentPage
-      <button type="button" onClick={displayRazorpay}>
-        Pay Now
-      </button>
+        <button type="button" onClick={displayRazorpay}>
+          Pay Now
+        </button>
     </div>
   );
 };
