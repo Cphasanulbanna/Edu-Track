@@ -5,6 +5,7 @@ import axios from "axios";
 import ResetPassword from "./ResetPassword";
 import PaymentPage from "./PaymentPage";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
+import StaticGoogleMap from "./StaticGoogleMap";
 
 const App: React.FC = () => {
   const CAPTCHA_SITE_KEY = import.meta.env.VITE_GOOGLE_CAPTCHA_SITE_KEY;
@@ -25,6 +26,7 @@ const App: React.FC = () => {
         <Route path="/auth/google/callback" element={<RedirectPage />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/static-map" element={<StaticGoogleMap />} />
       </Routes>
       <div>
         <button onClick={sendmail} type="button">
