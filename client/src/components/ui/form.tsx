@@ -95,7 +95,7 @@ function FormLabel({
     <Label
       data-slot="form-label"
       data-error={!!error}
-      className={cn(className)}
+      className={cn(className, "font-normal")}
       htmlFor={formItemId}
       {...props}
     />
@@ -134,14 +134,14 @@ function FormDescription({ className, ...props }: React.ComponentProps<"p">) {
 }
 
 type FormMessageProps = React.HTMLAttributes<HTMLParagraphElement> & {
-  errorMessage?: string | undefined;
+  error: Record<string, { message?: string }> | undefined;
 };
 
-function FormMessage({ className, errorMessage, ...props }: FormMessageProps) {
-  const {  formMessageId } = useFormField()
+function FormMessage({ className, error, ...props }: FormMessageProps) {
+  const {  formMessageId, name } = useFormField()
   console.log({formMessageId});
   
-  const body = errorMessage || props.children;
+  const body = error?.[name]?.message ?? props.children;
 
   if (!body) {
     return null

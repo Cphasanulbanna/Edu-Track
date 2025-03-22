@@ -37,74 +37,88 @@ const Signup = () => {
     dispatch(signUp(data));
   };
   return (
-    <div className="grid grid-cols-1 max-w-[400px] p-6">
+    <div className="max-w-[400px] p-6">
       <Form {...form}>
-        <form onSubmit={handleSubmit(signup)}>
-          <FormField
-            control={control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter your email" {...field} />
-                </FormControl>
-                <FormMessage errorMessage={errors.email?.message} />
-              </FormItem>
-            )}
-          />
+        <form className="grid grid-cols-1 gap-y-3.5" onSubmit={handleSubmit(signup)}>
+          <div className="col-span-5">
+            <FormField
+              control={control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your email" {...field} />
+                  </FormControl>
+                  <FormMessage error={errors} />
+                </FormItem>
+              )}
+            />
+          </div>
 
-          <FormField
-            control={control}
-            name="first_name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>First Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter your First Name" {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+          <div className="col-span-5">
+            <FormField
+              control={control}
+              name="first_name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>First Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your First Name" {...field} />
+                  </FormControl>
+                   <FormMessage error={errors} />
+                </FormItem>
+              )}
+            />
+          </div>
 
-          <FormField
-            control={control}
-            name="last_name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Last Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter your Last Name" {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+          <div className="col-span-5">
+            <FormField
+              control={control}
+              name="last_name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Last Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your Last Name" {...field} />
+                  </FormControl>
+                   <FormMessage error={errors} />
+                </FormItem>
+              )}
+            />
+          </div>
 
-          <FormField
-            control={control}
-            name="mobile_number"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Mobile Number</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter your Mobile Number" {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+          <div className="col-span-5">
+            <FormField
+              control={control}
+              name="mobile_number"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Mobile Number</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your Mobile Number" {...field} />
+                  </FormControl>
+                   <FormMessage error={errors} />
+                </FormItem>
+              )}
+            />
+          </div>
 
-          <FormField
-            control={control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter your Password" {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+          <div className="col-span-5">
+            <FormField
+              control={control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your Password" {...field} />
+                  </FormControl>
+                   <FormMessage error={errors} />
+                </FormItem>
+              )}
+            />
+          </div>
           <Button loading={loading.signUp}>Signup</Button>
         </form>
       </Form>
