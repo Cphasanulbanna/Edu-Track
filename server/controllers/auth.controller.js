@@ -61,10 +61,12 @@ export const signup = async (req, res) => {
 
     const hashedPassword = await hashPassword(password);
 
+    const roleDetails = await Role.findOne({name: role})
+
     const newUser = new User({
       email,
       password: hashedPassword,
-      role,
+      role: roleDetails._id,
     });
     await newUser.save();
 
