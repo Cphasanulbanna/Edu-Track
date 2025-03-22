@@ -18,14 +18,14 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(signUp.pending, (state) => {
-        _.set(state, "loading.signup", true);
+        _.set(state, "loading.signUp", true);
       })
       .addCase(signUp.fulfilled, (state, { payload }) => {
-        _.set(state, "loading.signup", false);
+        _.set(state, "loading.signUp", false);
         _.set(state, "profileDetails", payload?.data?.profile);
       })
       .addCase(signUp.rejected, (state) => {
-        _.set(state, "loading.signup", false);
+        _.set(state, "loading.signUp", false);
       });
   },
 });

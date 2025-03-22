@@ -14,10 +14,19 @@ import { signUp } from "../thunk";
 import { useAppDispatch } from "@/app/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpSchema } from "../validate";
+import { useSelector } from "react-redux";
+import { getLoading } from "../selector";
+import { signUpDefaultValues } from "../constant";
 
 const Signup = () => {
   const dispatch = useAppDispatch();
-  const form = useForm<SignUp>({ resolver: zodResolver(signUpSchema) });
+
+  const loading = useSelector(getLoading);
+
+  const form = useForm<SignUp>({
+    defaultValues: signUpDefaultValues,
+    resolver: zodResolver(signUpSchema),
+  });
   const {
     handleSubmit,
     control,
@@ -96,7 +105,7 @@ const Signup = () => {
               </FormItem>
             )}
           />
-          <Button>Signup</Button>
+          <Button loading={loading.signUp}>Signup</Button>
         </form>
       </Form>
     </div>
