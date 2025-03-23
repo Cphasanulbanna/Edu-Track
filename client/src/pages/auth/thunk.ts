@@ -47,8 +47,9 @@ export const resetPassword = createAsyncThunk(
   ACTION_TYPES.REFRESH_PASSWORD,
   async (payload: ResetPassword, thunkAPI) => {
     try {
-      const response = await resetPasswordAPI(payload);
-      return response?.data;
+      const { data } = await resetPasswordAPI(payload);
+      successToast(data?.message);
+      return data;
     } catch (error: unknown) {
       return handleAPIError(error, thunkAPI);
     }

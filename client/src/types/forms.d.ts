@@ -1,3 +1,4 @@
+import { ReactElement } from "react";
 import { Control, FieldValues, Path } from "react-hook-form";
 
 type CustomProps<T extends FieldValues> = {
@@ -6,6 +7,7 @@ type CustomProps<T extends FieldValues> = {
   control: Control<T>;
   errors: FieldErrors<T>;
   required?: boolean;
+  rightContent?: ReactElement;
 };
 
 export type FormControllerProps<T extends FieldValues> = CustomProps<T> &

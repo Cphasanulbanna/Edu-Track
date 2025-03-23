@@ -58,6 +58,7 @@ const LogInPage = () => {
                 placeholder="Enter your email"
                 control={control}
                 errors={errors}
+                required
               />
             </div>
 
@@ -68,6 +69,8 @@ const LogInPage = () => {
                 placeholder="Enter your Password"
                 control={control}
                 errors={errors}
+                required
+                rightContent={<Link className="text-xs text-sky-400 hover:opacity-45" to={"/reset-password"}>Forget Password?</Link>}
               />
             </div>
             <Button

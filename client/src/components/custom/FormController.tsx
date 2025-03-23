@@ -16,6 +16,7 @@ const FormController = <T extends FieldValues>({
   name,
   placeholder,
   required,
+  rightContent,
   ...inputProps
 }: FormControllerProps<T>) => {
   return (
@@ -31,6 +32,7 @@ const FormController = <T extends FieldValues>({
           <FormControl>
             <Input placeholder={placeholder} {...field} {...inputProps} />
           </FormControl>
+          {rightContent && <div className="absolute bottom-[-18px] right-0">{rightContent}</div>}
           <FormMessage
             className="absolute bottom-[-18px] text-xs"
             error={errors}
