@@ -9,7 +9,7 @@ import {
 } from "./api";
 import { handleAPIError } from "@/utils/error";
 import { successToast } from "@/components/custom/Toasts";
-import { ForgetPassword, LogIn, ResetPassword, SignUp } from "./validate";
+import { ForgetPassword, LogIn, SignUp } from "./validate";
 
 export const signUp = createAsyncThunk(
   ACTION_TYPES.SIGNUP,
@@ -64,7 +64,7 @@ export const forgetPassword = createAsyncThunk(
 
 export const resetPassword = createAsyncThunk(
   ACTION_TYPES.RESET_PASSWORD,
-  async (payload: ResetPassword, thunkAPI) => {
+  async (payload: unknown, thunkAPI) => {
     try {
       const { data } = await resetPasswordAPI(payload);
       successToast(data?.message);

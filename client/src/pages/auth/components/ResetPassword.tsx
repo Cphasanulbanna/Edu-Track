@@ -31,8 +31,9 @@ const ResetPasswordPage = () => {
     formState: { errors, isValid },
   } = form;
 
-  const resetPasswordFn = async (data: ResetPassword) => {
-    const result = await dispatch(resetPassword(data));
+    const resetPasswordFn = async (data: ResetPassword) => {
+      const payload = {token, newPassword: data?.newPassword}
+    const result = await dispatch(resetPassword(payload));
     if (resetPassword.fulfilled.match(result)) {
       navigate("/login");
     }
