@@ -16,3 +16,7 @@ export const refreshTokenAPI = async () => {
 export const forgetPasswordAPI = async (data: unknown) => {
   return axiosInstance.post(API_ENDPOINTS.AUTH.FORGET_PASSWORD, data);
 };
+
+export const resetPasswordAPI = async (data: unknown) => {
+  return axiosInstance.post(API_ENDPOINTS.AUTH.RESET_PASSWORD, data);
+};

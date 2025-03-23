@@ -49,6 +49,23 @@ export const forgetPasswordSchema = z.object({
     .email({ message: "Please enter a valid email address" }),
 });
 
+export const resetPasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(1, { message: "Password is required" })
+      .min(6, { message: "Password must be at least 6 characters" })
+      .regex(/[A-Z]/, { message: "Must include an uppercase letter" })
+      .regex(/[a-z]/, { message: "Must include a lowercase letter" })
+      .regex(/\d/, { message: "Must include a number" }),
+    confirmPassword: z.string().min(1, { message: "Password is required" }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
 export type SignUp = z.infer<typeof signUpSchema>;
 export type LogIn = z.infer<typeof logInSchema>;
 export type ForgetPassword = z.infer<typeof forgetPasswordSchema>;
+export type ResetPassword = z.infer<typeof resetPasswordSchema>;

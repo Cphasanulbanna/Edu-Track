@@ -1,9 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { ACTION_TYPES } from "./actions";
-import { forgetPasswordAPI, logInAPI, refreshTokenAPI, signUpAPI } from "./api";
+import {
+  forgetPasswordAPI,
+  logInAPI,
+  refreshTokenAPI,
+  resetPasswordAPI,
+  signUpAPI,
+} from "./api";
 import { handleAPIError } from "@/utils/error";
 import { successToast } from "@/components/custom/Toasts";
-import { ForgetPassword, LogIn, SignUp } from "./validate";
+import { ForgetPassword, LogIn, ResetPassword, SignUp } from "./validate";
 
 export const signUp = createAsyncThunk(
   ACTION_TYPES.SIGNUP,
@@ -48,6 +54,19 @@ export const forgetPassword = createAsyncThunk(
   async (payload: ForgetPassword, thunkAPI) => {
     try {
       const { data } = await forgetPasswordAPI(payload);
+      successToast(data?.message);
+      return data;
+    } catch (error: unknown) {
+      return handleAPIError(error, thunkAPI);
+    }
+  }
+);
+
+export const resetPassword = createAsyncThunk(
+  ACTION_TYPES.RESET_PASSWORD,
+  async (payload: ResetPassword, thunkAPI) => {
+    try {
+      const { data } = await resetPasswordAPI(payload);
       successToast(data?.message);
       return data;
     } catch (error: unknown) {

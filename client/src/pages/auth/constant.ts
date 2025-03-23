@@ -16,3 +16,8 @@ export const logInDefaultValues = {
 export const forgetPasswordDefaultValues = {
   email: "",
 };
+
+export const resetPasswordDefaultValues = {
+  password: "",
+  confirmPassword: "",
+};

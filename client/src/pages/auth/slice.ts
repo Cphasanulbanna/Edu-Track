@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { SLICE_KEY } from "./constant";
 import _ from "lodash";
-import { forgetPassword, logIn, signUp } from "./thunk";
+import { forgetPassword, logIn, resetPassword, signUp } from "./thunk";
 
 const initialState = {
   profileDetails: null,
@@ -9,6 +9,7 @@ const initialState = {
     signUp: false,
     logIn: false,
     forgetPassword: false,
+    resetPassword: false,
   },
 };
 
@@ -48,6 +49,16 @@ const slice = createSlice({
       })
       .addCase(forgetPassword.rejected, (state) => {
         _.set(state, "loading.forgetPassword", false);
+      })
+
+      .addCase(resetPassword.pending, (state) => {
+        _.set(state, "loading.resetPassword", true);
+      })
+      .addCase(resetPassword.fulfilled, (state) => {
+        _.set(state, "loading.resetPassword", false);
+      })
+      .addCase(resetPassword.rejected, (state) => {
+        _.set(state, "loading.resetPassword", false);
       });
   },
 });
