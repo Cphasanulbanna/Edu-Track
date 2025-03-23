@@ -19,11 +19,12 @@ const Signup = () => {
   const form = useForm<SignUp>({
     defaultValues: signUpDefaultValues,
     resolver: zodResolver(signUpSchema),
+    mode:"all"
   });
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isValid },
   } = form;
 
   const signup = (data: SignUp) => {
@@ -85,7 +86,7 @@ const Signup = () => {
               errors={errors}
             />
           </div>
-          <Button loading={loading.signUp}>Signup</Button>
+          <Button disabled={!isValid} className="mt-5" loading={loading.signUp}>Signup</Button>
         </form>
       </Form>
       <div className="w-1/2">

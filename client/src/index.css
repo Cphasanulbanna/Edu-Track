@@ -103,3 +103,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+img, button,a {
+  user-select: none;
+}
