@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { getLoading } from "../selector";
 import FormController from "@/components/custom/FormController";
 import AuthLayout from "@/components/custom/AuthLayout";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
 import GoogleIcon from "@/assets/icons/google.svg";
 import { API_BASE_URL, API_ENDPOINTS } from "@/constant/api";
@@ -17,6 +17,7 @@ import { logIn } from "../thunk";
 
 const LogInPage = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const loading = useSelector(getLoading);
 
@@ -31,14 +32,17 @@ const LogInPage = () => {
     formState: { errors, isValid },
   } = form;
 
-  const LogIn = (data: LogIn) => {
-    dispatch(logIn(data));
+  const LogIn = async (data: LogIn) => {
+    const result = await dispatch(logIn(data));
+    if (logIn.fulfilled.match(result)) {
+      navigate("/");
+    }
   };
 
   const googleAuth = () => {
     window.location.href = `${API_BASE_URL}${API_ENDPOINTS.AUTH.INITIATE_GOOGLE_AUTH}`;
   };
-    
+
   return (
     <AuthLayout>
       <div className="w-[800px] p-6 flex justify-center gap-x-5 items-center mx-auto shadow-md rounded-md">
@@ -56,7 +60,6 @@ const LogInPage = () => {
                 errors={errors}
               />
             </div>
-
 
             <div className="col-span-5 my-3.5">
               <FormController

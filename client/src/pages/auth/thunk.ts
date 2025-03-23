@@ -22,8 +22,9 @@ export const logIn = createAsyncThunk(
   ACTION_TYPES.LOGIN,
   async (payload: LogIn, thunkAPI) => {
     try {
-      const response = await logInAPI(payload);
-      return response?.data;
+      const { data } = await logInAPI(payload);
+      localStorage.setItem("access-token", data?.accessToken);
+      return data;
     } catch (error: unknown) {
       return handleAPIError(error, thunkAPI);
     }

@@ -7,6 +7,7 @@ import PaymentPage from "./PaymentPage";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import StaticGoogleMap from "./StaticGoogleMap";
 import Signup from "./pages/auth/components/Signup";
+import LogInPage from "./pages/auth/components/LogInPage";
 
 const App: React.FC = () => {
   const CAPTCHA_SITE_KEY = import.meta.env.VITE_GOOGLE_CAPTCHA_SITE_KEY;
@@ -26,6 +27,7 @@ const App: React.FC = () => {
         <Route path="/payment" element={<PaymentPage />} />
         <Route path="/static-map" element={<StaticGoogleMap />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<LogInPage />} />
       </Routes>
       <div>
         <button onClick={sendmail} type="button">

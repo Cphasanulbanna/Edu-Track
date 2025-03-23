@@ -105,7 +105,7 @@ const Signup = () => {
             </Button>
 
             <p className="col-span-5 mt-2">
-              Already have an account? <Link to={"/"}>Login</Link>
+              Already have an account? <Link to={"/login"}>Login</Link>
             </p>
 
             <div className="col-span-5 mt-1.5">
