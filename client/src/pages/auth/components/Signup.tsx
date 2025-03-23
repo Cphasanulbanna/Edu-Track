@@ -46,7 +46,7 @@ const Signup = () => {
             />
           </div>
 
-          <div className="col-span-5 my-1.5">
+          <div className="col-span-5 my-3.5">
             <FormController
               label="First Name"
               name="first_name"
@@ -56,7 +56,7 @@ const Signup = () => {
             />
           </div>
 
-          <div className="col-span-5 my-1.5">
+          <div className="col-span-5 my-3.5">
             <FormController
               label="Last Name"
               name="last_name"
@@ -66,7 +66,7 @@ const Signup = () => {
             />
           </div>
 
-          <div className="col-span-5 my-1.5">
+          <div className="col-span-5 my-3.5">
             <FormController
               label="Mobile Number"
               name="mobile_number"
@@ -76,7 +76,7 @@ const Signup = () => {
             />
           </div>
 
-          <div className="col-span-5 my-1.5">
+          <div className="col-span-5 my-3.5">
             <FormController
               label="Password"
               name="password"
