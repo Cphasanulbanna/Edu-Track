@@ -28,4 +28,19 @@ export const signUpSchema = z.object({
     .regex(/^\d+$/, { message: "Mobile number must be numeric" }),
 });
 
+export const logInSchema = z.object({
+  email: z
+    .string()
+    .min(1, { message: "Email is required" })
+    .email({ message: "Please enter a valid email address" }),
+  password: z
+    .string()
+    .min(1, { message: "Password is required" })
+    .min(6, { message: "Password must be at least 6 characters" })
+    .regex(/[A-Z]/, { message: "Must include an uppercase letter" })
+    .regex(/[a-z]/, { message: "Must include a lowercase letter" })
+    .regex(/\d/, { message: "Must include a number" }),
+});
+
 export type SignUp = z.infer<typeof signUpSchema>;
+export type LogIn = z.infer<typeof logInSchema>;

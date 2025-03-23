@@ -41,7 +41,7 @@ const Signup = () => {
   };
   return (
     <AuthLayout>
-      <div className="w-[800px] p-6 flex justify-cenPter gap-x-5 items-center mx-auto shadow-md rounded-md">
+      <div className="w-[800px] p-6 flex justify-center gap-x-5 items-center mx-auto shadow-md rounded-md">
         <Form {...form}>
           <form
             className="grid grid-cols-1 w-1/2"

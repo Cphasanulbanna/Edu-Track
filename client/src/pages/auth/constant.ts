@@ -7,3 +7,8 @@ export const signUpDefaultValues = {
   password: "",
   mobileNumber: "",
 };
+
+export const logInDefaultValues = {
+  email: "",
+  password: "",
+};

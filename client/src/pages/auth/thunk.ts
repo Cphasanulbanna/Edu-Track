@@ -1,18 +1,28 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { ACTION_TYPES } from "./actions";
-import { refreshTokenAPI, signUpAPI } from "./api";
+import { logInAPI, refreshTokenAPI, signUpAPI } from "./api";
 import { handleAPIError } from "@/utils/error";
 import { successToast } from "@/components/custom/Toasts";
-import { SignUp } from "./validate";
+import { LogIn, SignUp } from "./validate";
 
 export const signUp = createAsyncThunk(
   ACTION_TYPES.SIGNUP,
   async (payload: SignUp, thunkAPI) => {
-    console.log(payload);
-
     try {
       const response = await signUpAPI(payload);
       successToast("Account created successfully");
+      return response?.data;
+    } catch (error: unknown) {
+      return handleAPIError(error, thunkAPI);
+    }
+  }
+);
+
+export const logIn = createAsyncThunk(
+  ACTION_TYPES.LOGIN,
+  async (payload: LogIn, thunkAPI) => {
+    try {
+      const response = await logInAPI(payload);
       return response?.data;
     } catch (error: unknown) {
       return handleAPIError(error, thunkAPI);

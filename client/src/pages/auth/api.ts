@@ -5,6 +5,10 @@ export const signUpAPI = async (data: unknown) => {
   return axiosInstance.post(API_ENDPOINTS.AUTH.SIGNUP, data);
 };
 
+export const logInAPI = async (data: unknown) => {
+  return axiosInstance.post(API_ENDPOINTS.AUTH.LOGIN, data);
+};
+
 export const refreshTokenAPI = async () => {
   return axiosInstance.post(API_ENDPOINTS.AUTH.REFRESH_ACCESS_TOKEN);
 };
