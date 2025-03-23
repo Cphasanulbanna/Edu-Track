@@ -1,7 +1,6 @@
-import { SignUp } from "@/types/forms";
-import { z, ZodType } from "zod";
+import { z } from "zod";
 
-export const signUpSchema: ZodType<SignUp> = z.object({
+export const signUpSchema = z.object({
   first_name: z
     .string({ required_error: "First name is required" })
     .min(3, { message: "Last name must be at least 3 characters" }),
@@ -27,3 +26,5 @@ export const signUpSchema: ZodType<SignUp> = z.object({
     .max(10, { message: "Mobile number must be no more than 10 digits" })
     .regex(/^\d+$/, { message: "Mobile number must be numeric" }),
 });
+
+export type SignUp = z.infer<typeof signUpSchema>;
