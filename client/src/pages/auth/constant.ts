@@ -13,6 +13,6 @@ export const logInDefaultValues = {
   password: "",
 };
 
-export const resetPasswordDefaultValues = {
+export const forgetPasswordDefaultValues = {
   email: "",
 };

@@ -6,6 +6,6 @@ export const API_ENDPOINTS = {
     LOGIN: "/auth/login",
     REFRESH_ACCESS_TOKEN: "/auth/refresh-access-token",
     INITIATE_GOOGLE_AUTH: "/auth/google",
-    RESET_PASSWORD: "/auth/reset-password-mail",
+    FORGET_PASSWORD: "/auth/reset-password-mail",
   },
 };

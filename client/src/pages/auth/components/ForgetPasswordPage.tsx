@@ -8,19 +8,19 @@ import { getLoading } from "../selector";
 import FormController from "@/components/custom/FormController";
 import AuthLayout from "@/components/custom/AuthLayout";
 import { Link, useNavigate } from "react-router-dom";
-import {  ResetPassword, resetPasswordSchema } from "../validate";
-import {  resetPasswordDefaultValues } from "../constant";
-import {  resetPassword } from "../thunk";
+import { ForgetPassword, forgetPasswordSchema } from "../validate";
+import { forgetPasswordDefaultValues } from "../constant";
+import { forgetPassword } from "../thunk";
 
-const ResetPasswordPage = () => {
+const ForgetPasswordPage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const loading = useSelector(getLoading);
 
-  const form = useForm<ResetPassword>({
-    defaultValues: resetPasswordDefaultValues,
-    resolver: zodResolver(resetPasswordSchema),
+  const form = useForm<ForgetPassword>({
+    defaultValues: forgetPasswordDefaultValues,
+    resolver: zodResolver(forgetPasswordSchema),
     mode: "all",
   });
   const {
@@ -29,9 +29,9 @@ const ResetPasswordPage = () => {
     formState: { errors, isValid },
   } = form;
 
-  const resetPasswordFn = async (data: ResetPassword) => {
-    const result = await dispatch(resetPassword(data))
-    if (resetPassword.fulfilled.match(result)) {
+  const forgetPasswordFn = async (data: ForgetPassword) => {
+    const result = await dispatch(forgetPassword(data))
+    if (forgetPassword.fulfilled.match(result)) {
       navigate("/login");
     }
   };
@@ -42,7 +42,7 @@ const ResetPasswordPage = () => {
         <Form {...form}>
           <form
             className="grid grid-cols-1 w-full"
-            onSubmit={handleSubmit(resetPasswordFn)}
+            onSubmit={handleSubmit(forgetPasswordFn)}
           >
             <div className="col-span-5 my-3.5">
               <FormController
@@ -57,9 +57,9 @@ const ResetPasswordPage = () => {
             <Button
               disabled={!isValid}
               className="mt-5"
-              loading={loading.resetPassword}
+              loading={loading.forgetPassword}
             >
-              Reset Password
+              Forget Password
             </Button>
 
             <p className="col-span-5 mt-1 flex justify-end">
@@ -72,4 +72,4 @@ const ResetPasswordPage = () => {
   );
 };
 
-export default ResetPasswordPage;
+export default ForgetPasswordPage;

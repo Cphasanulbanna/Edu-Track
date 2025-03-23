@@ -6,7 +6,7 @@ import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import StaticGoogleMap from "./StaticGoogleMap";
 import Signup from "./pages/auth/components/Signup";
 import LogInPage from "./pages/auth/components/LogInPage";
-import ResetPasswordPage from "./pages/auth/components/ResetPasswordPage";
+import ForgetPasswordPage from "./pages/auth/components/ForgetPasswordPage";
 
 const App: React.FC = () => {
   const CAPTCHA_SITE_KEY = import.meta.env.VITE_GOOGLE_CAPTCHA_SITE_KEY;
@@ -14,7 +14,7 @@ const App: React.FC = () => {
     <GoogleReCaptchaProvider reCaptchaKey={CAPTCHA_SITE_KEY}>
       <Routes>
         <Route path="/auth/google/callback" element={<RedirectPage />} />
-        <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route path="/forget-password" element={<ForgetPasswordPage />} />
         <Route path="/payment" element={<PaymentPage />} />
         <Route path="/static-map" element={<StaticGoogleMap />} />
         <Route path="/signup" element={<Signup />} />

@@ -70,7 +70,7 @@ const LogInPage = () => {
                 control={control}
                 errors={errors}
                 required
-                rightContent={<Link className="text-xs text-sky-400 hover:opacity-45" to={"/reset-password"}>Forget Password?</Link>}
+                rightContent={<Link className="text-xs text-sky-400 hover:opacity-45" to={"/forget-password"}>Forget Password?</Link>}
               />
             </div>
             <Button
