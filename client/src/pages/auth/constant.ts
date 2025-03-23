@@ -12,3 +12,7 @@ export const logInDefaultValues = {
   email: "",
   password: "",
 };
+
+export const resetPasswordDefaultValues = {
+  email: "",
+};

@@ -1,13 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { SLICE_KEY } from "./constant";
 import _ from "lodash";
-import { logIn, signUp } from "./thunk";
+import { logIn, resetPassword, signUp } from "./thunk";
 
 const initialState = {
   profileDetails: null,
   loading: {
     signUp: false,
     logIn: false,
+    resetPassword: false,
   },
 };
 
@@ -37,6 +38,16 @@ const slice = createSlice({
       })
       .addCase(logIn.rejected, (state) => {
         _.set(state, "loading.logIn", false);
+      })
+
+      .addCase(resetPassword.pending, (state) => {
+        _.set(state, "loading.resetPassword", true);
+      })
+      .addCase(resetPassword.fulfilled, (state) => {
+        _.set(state, "loading.resetPassword", false);
+      })
+      .addCase(resetPassword.rejected, (state) => {
+        _.set(state, "loading.resetPassword", false);
       });
   },
 });

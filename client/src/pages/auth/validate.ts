@@ -42,5 +42,13 @@ export const logInSchema = z.object({
     .regex(/\d/, { message: "Must include a number" }),
 });
 
+export const resetPasswordSchema = z.object({
+  email: z
+    .string()
+    .min(1, { message: "Email is required" })
+    .email({ message: "Please enter a valid email address" }),
+});
+
 export type SignUp = z.infer<typeof signUpSchema>;
 export type LogIn = z.infer<typeof logInSchema>;
+export type ResetPassword = z.infer<typeof resetPasswordSchema>;

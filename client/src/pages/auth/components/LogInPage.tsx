@@ -33,7 +33,7 @@ const LogInPage = () => {
   } = form;
 
   const LogIn = async (data: LogIn) => {
-    const result = await dispatch(logIn(data));
+    const result = await dispatch(logIn(data))
     if (logIn.fulfilled.match(result)) {
       navigate("/");
     }
@@ -73,7 +73,7 @@ const LogInPage = () => {
             <Button
               disabled={!isValid}
               className="mt-5"
-              loading={loading.LogIn}
+              loading={loading.logIn}
             >
               LogIn
             </Button>
