@@ -2,8 +2,8 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { ACTION_TYPES } from "./actions";
 import { refreshTokenAPI, signUpAPI } from "./api";
 import { handleAPIError } from "@/utils/error";
-import { SignUp } from "@/types/forms";
 import { successToast } from "@/components/custom/Toasts";
+import { SignUp } from "./validate";
 
 export const signUp = createAsyncThunk(
   ACTION_TYPES.SIGNUP,

@@ -10,9 +10,6 @@ import Signup from "./pages/auth/components/Signup";
 
 const App: React.FC = () => {
   const CAPTCHA_SITE_KEY = import.meta.env.VITE_GOOGLE_CAPTCHA_SITE_KEY;
-  const googleLogin = () => {
-    window.location.href = "http://localhost:5000/api/auth/google";
-  };
 
   const sendmail = async () => {
     const response = await axios.post(
@@ -33,11 +30,6 @@ const App: React.FC = () => {
       <div>
         <button onClick={sendmail} type="button">
           send password reset mail
-        </button>
-      </div>
-      <div>
-        <button onClick={googleLogin} type="button">
-          Google
         </button>
       </div>
     </GoogleReCaptchaProvider>

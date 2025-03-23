@@ -28,9 +28,6 @@ passport.use(
       passReqToCallback: true,
     },
     async function (request, accessToken, refreshToken, profile, done) {
-      // console.log('request', request);
-
-      // console.log({ profile });
 
       try {
         let user = await User.findOne({ email: profile?._json?.email });
@@ -38,11 +35,8 @@ passport.use(
         const roleNames = user?.role?.map((obj) => obj?.name) ?? ["student"];
 
         if (user) {
-          console.log("block 1");
           const accessToken = generateAccessToken(user._id, roleNames);
           const refreshToken = generateRefreshToken(user._id);
-
-          console.log({ accessToken, refreshToken });
 
           await user.populate("role", "-__v");
           await user.populate("profile", "-__v");
@@ -51,7 +45,7 @@ passport.use(
             secure: false, //true in prod
           });
           request.res.cookie("access-token", accessToken, {
-            httpOnly: true,
+            httpOnly: false,
             secure: false, //true in prod
           });
           if (!user.password) {
