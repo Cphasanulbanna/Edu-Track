@@ -42,7 +42,7 @@ function Button({
   size,
   asChild = false,
   loading = false,
-  disabled=false,
+  disabled = false,
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
@@ -56,7 +56,7 @@ function Button({
     <Comp
       disabled={disabled}
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }), { "!cursor-not-allowed select-none opacity-50 pointer-events-none":
+      className={cn(buttonVariants({ variant, size, className }), "!cursor-pointer", { "!cursor-not-allowed select-none opacity-50 pointer-events-none":
             isDisabled,})}
       {...props}
     >
