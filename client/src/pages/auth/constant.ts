@@ -18,6 +18,6 @@ export const forgetPasswordDefaultValues = {
 };
 
 export const resetPasswordDefaultValues = {
-  password: "",
+  newPassword: "",
   confirmPassword: "",
 };

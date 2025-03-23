@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { getLoading } from "../selector";
 import FormController from "@/components/custom/FormController";
 import AuthLayout from "@/components/custom/AuthLayout";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { ResetPassword, resetPasswordSchema } from "../validate";
 import { resetPasswordDefaultValues } from "../constant";
 import { resetPassword } from "../thunk";
@@ -15,7 +15,9 @@ import { resetPassword } from "../thunk";
 const ResetPasswordPage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
+  const token = searchParams.get("token");
   const loading = useSelector(getLoading);
 
   const form = useForm<ResetPassword>({
@@ -37,7 +39,7 @@ const ResetPasswordPage = () => {
   };
 
   return (
-    <AuthLayout>
+    <AuthLayout permission={!!token}>
       <div className="w-[450px] p-6 flex justify-center gap-x-5 items-center mx-auto shadow-lg rounded-md">
         <Form {...form}>
           <form
@@ -47,7 +49,7 @@ const ResetPasswordPage = () => {
             <div className="col-span-5 my-3.5">
               <FormController
                 label="New Password"
-                name="password"
+                name="newPassword"
                 placeholder="Enter your new password"
                 control={control}
                 errors={errors}

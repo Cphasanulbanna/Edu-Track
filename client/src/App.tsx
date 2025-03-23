@@ -7,6 +7,7 @@ import StaticGoogleMap from "./StaticGoogleMap";
 import Signup from "./pages/auth/components/Signup";
 import LogInPage from "./pages/auth/components/LogInPage";
 import ForgetPasswordPage from "./pages/auth/components/ForgetPasswordPage";
+import ResetPasswordPage from "./pages/auth/components/ResetPassword";
 
 const App: React.FC = () => {
   const CAPTCHA_SITE_KEY = import.meta.env.VITE_GOOGLE_CAPTCHA_SITE_KEY;
@@ -15,6 +16,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/auth/google/callback" element={<RedirectPage />} />
         <Route path="/forget-password" element={<ForgetPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/payment" element={<PaymentPage />} />
         <Route path="/static-map" element={<StaticGoogleMap />} />
         <Route path="/signup" element={<Signup />} />
