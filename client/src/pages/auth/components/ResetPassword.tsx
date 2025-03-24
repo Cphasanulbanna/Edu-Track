@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useSelector } from "react-redux";
 import { getLoading } from "../selector";
 import FormController from "@/components/custom/FormController";
-import AuthLayout from "@/components/custom/AuthLayout";
+import AuthLayout from "@/components/layout/AuthLayout";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { ResetPassword, resetPasswordSchema } from "../validate";
 import { resetPasswordDefaultValues } from "../constant";

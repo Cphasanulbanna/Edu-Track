@@ -10,7 +10,7 @@ import { getLoading } from "../selector";
 import { signUpDefaultValues } from "../constant";
 import SignupBg from "@/assets/icons/signup-bg.svg";
 import FormController from "@/components/custom/FormController";
-import AuthLayout from "@/components/custom/AuthLayout";
+import AuthLayout from "@/components/layout/AuthLayout";
 import { Link } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
 import GoogleIcon from "@/assets/icons/google.svg";
