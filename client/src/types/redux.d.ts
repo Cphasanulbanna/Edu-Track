@@ -19,6 +19,14 @@ export interface AuthState {
   };
 }
 
+export interface ADMIN_DASHBOARD_STATE {
+  ADMIN_DASHBOARD: string;
+  userList: [Record<string, unknown>];
+  loading: {
+    usersList: boolean;
+  };
+}
+
 export interface SidebarItem {
   title: string;
   url: string;

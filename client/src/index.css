@@ -11,7 +11,7 @@
   --card-foreground: #131313;
   --popover: #ffffff;
   --popover-foreground: #131313;
-  --primary: #7742ff;
+  --primary: #b342ff;
   --primary-foreground: #f2f2ff;
   --secondary: #f1e8ff;
   --secondary-foreground: #2a1d3c;
@@ -123,3 +123,4 @@
 img, button, a, div {
   user-select: none;
 }
+

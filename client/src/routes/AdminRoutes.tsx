@@ -1,6 +1,6 @@
 import AdminLayout from "@/components/layout/AdminLayout";
-import StudentsList from "@/pages/admin/dahsboard/StudentsList";
-import Teachers from "@/pages/admin/dahsboard/Teachers";
+import StudentsList from "@/pages/admin/dahsboard/components/StudentsList";
+import Teachers from "@/pages/admin/dahsboard/components/Teachers";
 import { Route, Routes } from "react-router-dom";
 
 const AdminRoutes = () => {
