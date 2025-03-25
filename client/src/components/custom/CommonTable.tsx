@@ -4,12 +4,13 @@ import FormController from "./FormController";
 import { SearchIcon } from "lucide-react";
 import { useState } from "react";
 import { Column, CommonTableProps, TableRow } from "@/types/components";
+import CommonPagination from "./CommonPagination";
 
 type SearchForm = {
   search?: string;
 };
 
-const CommonTable = ({ data, columns }: CommonTableProps) => {
+const CommonTable = ({ data, columns, onPageChange, page, totalPages }: CommonTableProps) => {
   const form = useForm<SearchForm>({
     mode: "all",
     defaultValues: { search: "" },
@@ -130,6 +131,9 @@ const CommonTable = ({ data, columns }: CommonTableProps) => {
         </tbody>
         <tfoot></tfoot>
       </table>
+      <div>
+          <CommonPagination onPageChange={onPageChange} totalPages={totalPages} page={page}/>
+      </div>
     </div>
   );
 };

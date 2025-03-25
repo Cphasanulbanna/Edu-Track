@@ -14,7 +14,13 @@ export type Column<T> = {
   type?: "multi-select";
 };
 
-export interface CommonTableProps {
+export interface CommonPaginationProps {
+  onPageChange: (page: number) => void;
+  page: number;
+  totalPages: number;
+}
+
+export interface CommonTableProps extends CommonPaginationProps {
   data: TableRow[];
   columns: Column<TableRow>[];
 }

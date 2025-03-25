@@ -1,5 +1,5 @@
 import CommonTable from "@/components/custom/CommonTable";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../thunk";
 import { AppDispatch } from "@/app/store";
@@ -8,10 +8,18 @@ import { Column, TableRow } from "@/types/components";
 
 const StudentsList = () => {
   const dispatch = useDispatch<AppDispatch>();
-    const students = useSelector(getUserList)
+  const students = useSelector(getUserList)
+  
+  const [page,setPage] = useState<number>(1)
   useEffect(() => {
     dispatch(fetchUsers());
   }, []);
+
+  const onPageClick = (currentPage: number) => {
+    console.log({currentPage});
+    
+    setPage(currentPage)
+  }
 
   const renderTableField = (value:string) => {
   return <p>{value}</p>;
@@ -42,12 +50,12 @@ const StudentsList = () => {
       },
       {
         header: "Role",
-        cell: ({ row }) => renderTableField(row?.role?.[0]?.name),
+        cell: ({ row }) => renderTableField(row?.roles?.[0]?.name),
       },
     ];
   return (
     <div className="flex-1  w-full h-full p-16">
-      <CommonTable data={students} columns={columns} />
+      <CommonTable data={students} columns={columns} page={page} totalPages={10} onPageChange={onPageClick}/>
     </div>
   );
 };
