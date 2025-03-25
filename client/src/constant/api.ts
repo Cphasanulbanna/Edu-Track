@@ -9,4 +9,7 @@ export const API_ENDPOINTS = {
     FORGET_PASSWORD: "/auth/reset-password-mail",
     RESET_PASSWORD: "/auth/reset-password",
   },
+  USERS: {
+    FETCH_USERS: "/users/",
+  },
 };
