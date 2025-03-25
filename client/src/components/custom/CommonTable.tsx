@@ -3,37 +3,13 @@ import { Checkbox } from "../ui/checkbox";
 import FormController from "./FormController";
 import { SearchIcon } from "lucide-react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { getUserList } from "@/pages/admin/dahsboard/selector";
-
-type DynamicRow = {
-  _id: string | number;
-  [key: string]: any;
-};
-
-type CellProps<T> = {
-  row: T;
-};
-
-type Column<T> = {
-  header: string;
-  field?: keyof T;
-  cell?: (props: CellProps<T>) => React.ReactNode;
-  type?: "multi-select";
-};
+import { Column, CommonTableProps, TableRow } from "@/types/components";
 
 type SearchForm = {
   search?: string;
 };
 
-const renderTableField = (value: string | number | null) => {
-  return <p>{value}</p>;
-};
-
-const CommonTable = () => {
-  const data = useSelector(getUserList)
-  console.log({data});
-  
+const CommonTable = ({ data, columns }: CommonTableProps) => {
   const form = useForm<SearchForm>({
     mode: "all",
     defaultValues: { search: "" },
@@ -42,59 +18,6 @@ const CommonTable = () => {
     control,
     formState: { errors },
   } = form;
-
-  const columns: Column<DynamicRow>[] = [
-    {
-      type: "multi-select",
-      header: "multi-select",
-    },
-    {
-      header: "First Name",
-      cell: (field) => renderTableField(field?.row?.profile?.first_name),
-    },
-        {
-      header: "Last Name",
-      cell: (field) => renderTableField(field?.row?.profile?.last_name),
-    },
-    {
-      header: "Mobile",
-      field: "mobile",
-      cell: (field) => renderTableField(field?.row?.profile?.mobile_number),
-    },
-    {
-      header: "Email",
-      field: "emailId",
-      cell: ({ row }) => renderTableField(row?.emailId),
-    },
-    {
-      header: "Address",
-      field: "address",
-    },
-  ];
-
-  // const data: DynamicRow[] = [
-  //   {
-  //     _id: 1,
-  //     name: "hasanul",
-  //     mobile: "9999999999",
-  //     emailId: " testmail@.com",
-  //     address: null,
-  //   },
-  //   {
-  //     _id: 2,
-  //     name: "hanoon",
-  //     mobile: "7666665555",
-  //     emailId: " hanoon@.com",
-  //     address: "",
-  //   },
-  //   {
-  //     _id: 3,
-  //     name: "hifsu",
-  //     mobile: "7666665555",
-  //     emailId: " hanoon@.com",
-  //     address: "",
-  //   },
-  // ];
 
   const [selectedRowIds, setSelectedRowIds] = useState<Set<string | number>>(
     new Set()
@@ -105,11 +28,11 @@ const CommonTable = () => {
     if (selectedRowIds.size === data.length) {
       setSelectedRowIds(new Set());
     } else {
-      setSelectedRowIds(new Set(data?.map((row: DynamicRow) => row?._id)));
+      setSelectedRowIds(new Set(data?.map((row: TableRow) => row?._id)));
     }
   };
 
-  const selectRow = (row: DynamicRow) => {
+  const selectRow = (row: TableRow) => {
     const rows = new Set(selectedRowIds);
     if (rows.has(row._id)) {
       rows.delete(row._id);
@@ -119,17 +42,15 @@ const CommonTable = () => {
     setSelectedRowIds(rows);
   };
 
-  const isRowSelected = (row: DynamicRow) => {
+  const isRowSelected = (row: TableRow) => {
     if (!row._id) return false;
     return selectedRowIds.has(row._id);
   };
 
-  const renderTableRow = (col: Column<DynamicRow>, row: DynamicRow) => {
+  const renderTableRow = (col: Column<TableRow>, row: TableRow) => {
     if (col.type === "multi-select") {
       return (
-        <td
-          className="py-3 text-center first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]"
-        >
+        <td className="py-3 text-center first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]">
           <Checkbox
             className="border-primary"
             onClick={() => selectRow(row)}
@@ -140,18 +61,14 @@ const CommonTable = () => {
     }
     if (col?.cell) {
       return (
-        <td
-          className="text-center py-3 first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]"
-        >
+        <td className="text-center py-3 first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]">
           {col.cell({ row: row })}
         </td>
       );
     }
     if (col?.field) {
       return (
-        <td
-          className="text-center py-3 first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]"
-        >
+        <td className="text-center py-3 first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]">
           {row[col.field] || "No Data Available"}
         </td>
       );
@@ -200,7 +117,7 @@ const CommonTable = () => {
           </tr>
         </thead>
         <tbody>
-          {data?.map((row: DynamicRow) => {
+          {data?.map((row: TableRow) => {
             return (
               <tr
                 key={row._id}
