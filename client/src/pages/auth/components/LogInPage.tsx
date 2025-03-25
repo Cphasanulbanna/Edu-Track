@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { useAppDispatch } from "@/app/store";
+import { AppDispatch } from "@/app/store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getLoading } from "../selector";
 import FormController from "@/components/custom/FormController";
 import AuthLayout from "@/components/layout/AuthLayout";
@@ -16,7 +16,7 @@ import { logInDefaultValues } from "../constant";
 import { logIn } from "../thunk";
 
 const LogInPage = () => {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const loading = useSelector(getLoading);

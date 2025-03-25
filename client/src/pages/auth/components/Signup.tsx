@@ -2,10 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { signUp } from "../thunk";
-import { useAppDispatch } from "@/app/store";
+import { AppDispatch } from "@/app/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SignUp, signUpSchema } from "../validate";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getLoading } from "../selector";
 import { signUpDefaultValues } from "../constant";
 import SignupBg from "@/assets/icons/signup-bg.svg";
@@ -17,7 +17,7 @@ import GoogleIcon from "@/assets/icons/google.svg";
 import { API_BASE_URL, API_ENDPOINTS } from "@/constant/api";
 
 const Signup = () => {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const loading = useSelector(getLoading);
 

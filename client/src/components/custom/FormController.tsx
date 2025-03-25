@@ -17,6 +17,7 @@ const FormController = <T extends FieldValues>({
   placeholder,
   required,
   rightContent,
+  leftContent,
   ...inputProps
 }: FormControllerProps<T>) => {
   return (
@@ -30,9 +31,10 @@ const FormController = <T extends FieldValues>({
             {required && "*"}
           </FormLabel>
           <FormControl>
-            <Input placeholder={placeholder} {...field} {...inputProps} />
+            <Input placeholder={placeholder} {...field} {...inputProps} className={leftContent ? "pl-7": ""} />
           </FormControl>
           {rightContent && <div className="absolute bottom-[-18px] right-0">{rightContent}</div>}
+          {leftContent && <div className="absolute bottom-2 left-2">{leftContent}</div>}
           <FormMessage
             className="absolute bottom-[-18px] text-xs"
             error={errors}
