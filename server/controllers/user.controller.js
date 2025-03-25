@@ -10,16 +10,120 @@ import Book from "../models/book.model.js";
 dotenv.config();
 
 export const fetchUsers = async (req, res) => {
+  const { role, page = 1, limit = 5 } = req.query;
+  const elementsToSkip = (page - 1) * limit;
   try {
-    const users = await User.find({})
-      .select("-__v -password")
-      .populate("role", "-__v")
-      .populate("profile", "-__v");
-    if (!users) {
+    const pipeline = [
+      {
+        $facet: {
+          users: [
+            // Unwind roles array
+            {
+              $unwind: "$role", // this is array of ObjectIds
+            },
+
+            // Lookup each role
+            {
+              $lookup: {
+                from: "roles",
+                localField: "role",
+                foreignField: "_id",
+                as: "roleDetails",
+              },
+            },
+            {
+              $unwind: "$roleDetails",
+            },
+
+            // Optional filter by role name
+            ...(role
+              ? [
+                  {
+                    $match: {
+                      "roleDetails.name": role,
+                    },
+                  },
+                ]
+              : []),
+
+            // Group back user by _id and collect roles
+            {
+              $group: {
+                _id: "$_id",
+                email: { $first: "$email" },
+                profile: { $first: "$profile" },
+                roles: { $push: "$roleDetails" },
+              },
+            },
+
+            // Lookup profile
+            {
+              $lookup: {
+                from: "profiles",
+                localField: "profile",
+                foreignField: "_id",
+                as: "profile",
+              },
+            },
+            {
+              $unwind: "$profile",
+            },
+
+            // Final Projection
+            {
+              $project: {
+                email: 1,
+                roles: {
+                  $map: {
+                    input: "$roles",
+                    as: "role",
+                    in: {
+                      _id: "$$role._id",
+                      name: "$$role.name",
+                    },
+                  },
+                },
+                profile: {
+                  first_name: "$profile.first_name",
+                  last_name: "$profile.last_name",
+                  mobile_number: "$profile.mobile_number",
+                  avatar: "$profile.avatar",
+                },
+              },
+            },
+            {
+              $skip: elementsToSkip,
+            },
+            {
+              $limit: limit,
+            },
+          ],
+          totalUsers: [
+            {
+              $count: "count",
+            },
+          ],
+        },
+      },
+    ];
+
+    const [results] = await User.aggregate(pipeline);
+    if (!results) {
       return res.status(404).json({ message: "No data found" });
     }
+    const { users, totalUsers } = results;
+    const totalPages = Math.ceil(totalUsers?.[0]?.count / limit);
 
-    return res.status(200).json({ users });
+    return res
+      .status(200)
+      .json({
+        users: users,
+        totalUsers: totalUsers?.[0]?.count,
+        totalPages,
+        page,
+        limit,
+        itemsInPage: users?.length,
+      });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -156,7 +260,7 @@ export const fetchStudents = async (req, res) => {
           batch: { _id: 1, title: 1 },
           createdAt: 1,
           updatedAt: 1,
-          course: {title: 1}
+          course: { title: 1 },
         },
       },
     ]);
