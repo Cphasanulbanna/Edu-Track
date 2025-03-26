@@ -11,7 +11,8 @@ export type Column<T> = {
   header: string;
   field?: keyof T;
   cell?: (props: CellProps<T>) => React.ReactNode;
-  type?: "multi-select";
+  type?: "multi-select" | "select" | "actions";
+  actions?: Record<string, any>[];
 };
 
 export interface CommonPaginationProps {
@@ -20,7 +21,20 @@ export interface CommonPaginationProps {
   totalPages: number;
 }
 
-export interface CommonTableProps extends CommonPaginationProps {
+export interface SearchInputProps {
+  searchData?: (e: React.ChangeEvent<HTMLInputElement>) => e;
+  searchTerm?: string;
+}
+
+export interface CommonTableProps
+  extends CommonPaginationProps,
+    SearchInputProps {
   data: TableRow[];
   columns: Column<TableRow>[];
+  totalElements: number;
+}
+
+export interface TableDropDownProps {
+  actions: Record<string, any>[] | undefined;
+  clickedRow: TableRow;
 }
