@@ -22,6 +22,7 @@ export interface AuthState {
 export interface ADMIN_DASHBOARD_STATE {
   ADMIN_DASHBOARD: string;
   userList: [Record<string, unknown>];
+  totalPages?: number;
   loading: {
     usersList: boolean;
   };

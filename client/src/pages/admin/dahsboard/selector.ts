@@ -1,12 +1,12 @@
+import { RootState } from "@/app/store";
 import { flow } from "lodash";
-import { ADMIN_DASHBOARD_STATE } from "@/types/redux";
 import { SLICE_KEY } from "./constant";
+import { initialState } from "./slice";
 
-const getAdminDashboardSlice = (state: ADMIN_DASHBOARD_STATE) =>
-  state[SLICE_KEY];
+const getAdminDashboardSlice = (state: RootState) => state[SLICE_KEY];
 
-const loading = (state: ADMIN_DASHBOARD_STATE) => state.loading;
+const loading = (state: typeof initialState) => state.loading;
 export const getLoading = flow(getAdminDashboardSlice, loading);
 
-const userList = (state: ADMIN_DASHBOARD_STATE) => state.userList;
-export const getUserList = flow(getAdminDashboardSlice, userList);
+const userData = (state: typeof initialState) => state.userData;
+export const getUserData = flow(getAdminDashboardSlice, userData);

@@ -3,10 +3,14 @@ import { SLICE_KEY } from "./constant";
 import _ from "lodash";
 import { fetchUsers } from "./thunk";
 
-const initialState = {
-  userList: null,
+export const initialState = {
+  userData: {
+    users: [],
+    totalPages: 0,
+    totalElements: 0,
+  },
   loading: {
-    userList: false,
+    userData: false,
   },
 };
 
@@ -17,14 +21,16 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchUsers.pending, (state) => {
-        _.set(state, "loading.userList", true);
+        _.set(state, "loading.userData", true);
       })
       .addCase(fetchUsers.fulfilled, (state, { payload }) => {
-        _.set(state, "loading.userList", false);
-        _.set(state, "userList", payload?.users);
+        _.set(state, "loading.userData", false);
+        _.set(state, "userData.users", payload?.users);
+        _.set(state, "userData.totalPages", payload?.totalPages);
+        _.set(state, "userData.totalElements", payload?.totalUsers);
       })
       .addCase(fetchUsers.rejected, (state) => {
-        _.set(state, "loading.userList", false);
+        _.set(state, "loading.userData", false);
       });
   },
 });

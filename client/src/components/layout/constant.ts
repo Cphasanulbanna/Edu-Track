@@ -1,3 +1,4 @@
+import { DeleteIcon, EditIcon } from "lucide-react";
 import { FaUsers } from "react-icons/fa6";
 import { GiTeacher } from "react-icons/gi";
 import { IconType } from "react-icons/lib";
@@ -7,4 +8,6 @@ export const iconMap: Record<string, IconType> = {
   PiStudentFill,
   GiTeacher,
   FaUsers,
+  delete: DeleteIcon,
+  edit: EditIcon,
 };
