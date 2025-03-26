@@ -10,7 +10,7 @@ import Book from "../models/book.model.js";
 dotenv.config();
 
 export const fetchUsers = async (req, res) => {
-  const { role, page = 1, limit = 5 } = req.query;
+  const { role, page = 1, limit = 5, search = "" } = req.query;
   const elementsToSkip = (page - 1) * limit;
   try {
     const pipeline = [
@@ -69,6 +69,15 @@ export const fetchUsers = async (req, res) => {
               $unwind: "$profile",
             },
 
+            {
+              $match: {
+                $or: [
+                  { "profile.first_name": { $regex: search, $options: "i" } },
+                  { "profile.last_name": { $regex: search, $options: "i" } },
+                ],
+              },
+            },
+
             // Final Projection
             {
               $project: {
@@ -102,9 +111,49 @@ export const fetchUsers = async (req, res) => {
             },
           ],
           totalUsers: [
+            { $unwind: "$role" },
             {
-              $count: "count",
+              $lookup: {
+                from: "roles",
+                localField: "role",
+                foreignField: "_id",
+                as: "roleDetails",
+              },
             },
+            { $unwind: "$roleDetails" },
+            ...(role
+              ? [
+                  {
+                    $match: {
+                      "roleDetails.name": role,
+                    },
+                  },
+                ]
+              : []),
+            {
+              $group: {
+                _id: "$_id",
+                profile: { $first: "$profile" },
+              },
+            },
+            {
+              $lookup: {
+                from: "profiles",
+                localField: "profile",
+                foreignField: "_id",
+                as: "profile",
+              },
+            },
+            { $unwind: "$profile" },
+            {
+              $match: {
+                $or: [
+                  { "profile.first_name": { $regex: search, $options: "i" } },
+                  { "profile.last_name": { $regex: search, $options: "i" } },
+                ],
+              },
+            },
+            { $count: "count" },
           ],
         },
       },
@@ -115,6 +164,8 @@ export const fetchUsers = async (req, res) => {
       return res.status(404).json({ message: "No data found" });
     }
     const { users, totalUsers } = results;
+    console.log({ users });
+
     const totalPages = Math.ceil(totalUsers?.[0]?.count / limit);
 
     return res.status(200).json({
