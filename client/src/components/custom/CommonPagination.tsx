@@ -1,4 +1,3 @@
-
 import { CommonPaginationProps } from "@/types/components";
 import {
   Pagination,
@@ -10,7 +9,11 @@ import {
   PaginationPrevious,
 } from "../ui/pagination";
 
-const CommonPagination = ({onPageChange =() => {},totalPages=0, page=1}: CommonPaginationProps) => {
+const CommonPagination = ({
+  onPageChange = () => {},
+  totalPages = 0,
+  page = 1,
+}: CommonPaginationProps) => {
   const pageNumbers = [];
   const visiblePages = 5;
   const startPage = Math.max(1, page - Math.floor(visiblePages / 2));
@@ -22,26 +25,30 @@ const CommonPagination = ({onPageChange =() => {},totalPages=0, page=1}: CommonP
 
   const handleClick = (pageNumber: number) => {
     if (page !== pageNumber) {
-        onPageChange(pageNumber)
+      onPageChange(pageNumber);
     }
   };
   const handleNext = () => {
     const nextPage = page + 1;
     if (nextPage <= totalPages) {
-        onPageChange(nextPage)
+      onPageChange(nextPage);
     }
   };
 
   const handlePrev = () => {
     const prevPage = page - 1;
     if (prevPage >= 1) {
-        onPageChange(prevPage)
+      onPageChange(prevPage);
     }
   };
   return (
     <Pagination>
       <PaginationContent>
-        <PaginationItem className="cursor-pointer">
+        <PaginationItem
+          className={` ${
+            page === 1 ? "hover:cursor-not-allowed" : "cursor-pointer"
+          }`}
+        >
           <PaginationPrevious onClick={handlePrev} />
         </PaginationItem>
         {startPage > 1 && (
