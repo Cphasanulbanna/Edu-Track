@@ -32,6 +32,7 @@ export interface CommonTableProps
   data: TableRow[];
   columns: Column<TableRow>[];
   totalElements: number;
+  isLoading?: boolean;
 }
 
 export interface TableDropDownProps {

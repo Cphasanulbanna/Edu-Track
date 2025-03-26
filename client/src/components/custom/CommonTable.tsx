@@ -4,6 +4,7 @@ import { Column, CommonTableProps, TableRow } from "@/types/components";
 import CommonPagination from "./CommonPagination";
 import SearchInput from "./SearchInput";
 import TableDropDown from "./TableDropDown";
+import Spinner from "./Spinner";
 
 const CommonTable = ({
   data,
@@ -14,11 +15,12 @@ const CommonTable = ({
   searchData,
   searchTerm,
   totalElements,
+  isLoading = false,
 }: CommonTableProps) => {
   const [selectedRowIds, setSelectedRowIds] = useState<Set<string | number>>(
     new Set()
   );
-  const isAllSelected = selectedRowIds.size === data?.length;
+  const isAllSelected = selectedRowIds.size === data?.length || false
 
   const toggleSelectAll = () => {
     if (selectedRowIds.size === data.length) {
@@ -50,7 +52,7 @@ const CommonTable = ({
           <Checkbox
             className="border-primary"
             onClick={() => selectRow(row)}
-            checked={isRowSelected(row)}
+            checked={isRowSelected(row) || false}
           />
         </td>
       );
@@ -59,7 +61,7 @@ const CommonTable = ({
       return (
         <td className="py-3 text-center first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]">
           <p className="flex justify-center">
-            <TableDropDown actions={col.actions} clickedRow={row}/>
+            <TableDropDown actions={col.actions} clickedRow={row} />
           </p>
         </td>
       );
@@ -113,20 +115,30 @@ const CommonTable = ({
           </tr>
         </thead>
         <tbody>
-          {data?.map((row: TableRow) => {
-            return (
-              <tr
-                key={row._id}
-                className="odd:bg-white even:bg-secondary bg-gray-300 relative after:content-[''] after:absolute after:left-[-8px] after:bottom-[-4px] after:flex after:right-[-8px] after:h-[0.5px]  after:bg-gray-300 last:after:content-none"
-              >
-                {columns?.map((col) => renderTableRow(col, row))}
-              </tr>
-            );
-          })}
+          {isLoading ? (
+            <tr>
+              <td colSpan={100} className="py-20">
+                <div className="flex items-center justify-center">
+                  <Spinner />
+                </div>
+              </td>
+            </tr>
+          ) : (
+            data?.map((row: TableRow) => {
+              return (
+                <tr
+                  key={row._id}
+                  className="odd:bg-white even:bg-secondary bg-gray-300 relative after:content-[''] after:absolute after:left-[-8px] after:bottom-[-4px] after:flex after:right-[-8px] after:h-[0.5px]  after:bg-gray-300 last:after:content-none"
+                >
+                  {columns?.map((col) => renderTableRow(col, row))}
+                </tr>
+              );
+            })
+          )}
         </tbody>
         <tfoot></tfoot>
       </table>
-      {totalElements > 5 && (
+      {totalElements > 5 && !isLoading && (
         <div className="mt-5">
           <CommonPagination
             onPageChange={onPageChange}

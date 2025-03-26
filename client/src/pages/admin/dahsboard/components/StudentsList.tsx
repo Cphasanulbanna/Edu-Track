@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../thunk";
 import { AppDispatch } from "@/app/store";
 import { Column, TableRow } from "@/types/components";
-import { getUserData } from "../selector";
+import { getLoading, getUserData } from "../selector";
 
 const StudentsList = () => {
   const dispatch = useDispatch<AppDispatch>();
   const data = useSelector(getUserData);
+  const loading = useSelector(getLoading)
   const { users, totalPages, totalElements } = data;
 
   const [page, setPage] = useState<number>(1);
@@ -79,6 +80,7 @@ const StudentsList = () => {
         totalElements={totalElements}
         onPageChange={onPageClick}
         searchData={searchData}
+        isLoading={loading.userData}
       />
     </div>
   );
