@@ -223,6 +223,15 @@ export const fetchAllTransactions = async (req, res) => {
               },
             },
             { $unwind: "$semester" },
+                  {
+              $lookup: {
+                from: "courses",
+                localField: "semester.course",
+                foreignField: "_id",
+                as: "course",
+              },
+            },
+            { $unwind: "$course" },
             {
               $sort: {
                 paymentDate: -1,
@@ -242,6 +251,7 @@ export const fetchAllTransactions = async (req, res) => {
                   firstName: "$profile.first_name",
                   lastName: "$profile.last_name",
                 },
+                course: "$course.title",
                 transactionId: 1,
               },
             },
