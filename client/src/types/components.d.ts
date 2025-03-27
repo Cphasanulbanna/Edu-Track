@@ -16,9 +16,9 @@ export type Column<T> = {
 };
 
 export interface CommonPaginationProps {
-  onPageChange: (page: number) => void;
-  page: number;
-  totalPages: number;
+  onPageChange?: (page: number) => void;
+  page?: number;
+  totalPages?: number;
 }
 
 export interface SearchInputProps {
@@ -31,7 +31,7 @@ export interface CommonTableProps
     SearchInputProps {
   data: TableRow[];
   columns: Column<TableRow>[];
-  totalElements: number;
+  totalElements?: number;
   isLoading?: boolean;
 }
 

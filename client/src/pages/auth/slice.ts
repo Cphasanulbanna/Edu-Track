@@ -3,7 +3,7 @@ import { SLICE_KEY } from "./constant";
 import _ from "lodash";
 import { forgetPassword, logIn, resetPassword, signUp } from "./thunk";
 
-const initialState = {
+export const initialState = {
   profileDetails: null,
   loading: {
     signUp: false,

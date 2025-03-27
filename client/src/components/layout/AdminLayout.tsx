@@ -11,6 +11,17 @@ import { actions as commonSliceActions } from "@/common/slice";
       url: "students",
       icon: "PiStudentFill",
     },
+     {
+      title: "Courses",
+      url: "courses",
+      icon: "courses",
+    },
+      {
+      title: "Transactions",
+      url: "transactions",
+      icon: "transactions",
+    },
+
     {
       title: "Teachers",
       url: "teachers",
@@ -18,7 +29,7 @@ import { actions as commonSliceActions } from "@/common/slice";
     },
     {
       title: "Staff",
-      url: "#",
+      url: "]]]]",
       icon: "FaUsers",
     },
   ];

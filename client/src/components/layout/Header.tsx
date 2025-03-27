@@ -26,13 +26,13 @@ const Header = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem>
-                  <Link to="/signup">Student</Link>
+                  <Link to="/auth/signup" state={{role: "student"}}>Student</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/signup">Teacher</Link>
+                  <Link to="/auth/signup" state={{role: "teacher"}}>Teacher</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/signup">Admin</Link>
+                  <Link to="/auth/signup">Admin</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -42,13 +42,13 @@ const Header = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem>
-                  <Link to="/login">Student</Link>
+                  <Link to="/auth/login">Student</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/login">Teacher</Link>
+                  <Link to="/auth/login">Teacher</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/login">Admin</Link>
+                  <Link to="/auth/login">Admin</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>{" "}

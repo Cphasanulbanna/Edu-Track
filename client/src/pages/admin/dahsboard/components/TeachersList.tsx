@@ -6,7 +6,7 @@ import { AppDispatch } from "@/app/store";
 import { Column, TableRow } from "@/types/components";
 import { getLoading, getUserData } from "../selector";
 
-const StudentsList = () => {
+const TeachersList = () => {
   const dispatch = useDispatch<AppDispatch>();
   const data = useSelector(getUserData);
   const loading = useSelector(getLoading)
@@ -15,7 +15,7 @@ const StudentsList = () => {
   const [page, setPage] = useState<number>(1);
 
   useEffect(() => {
-    dispatch(fetchUsers());
+    dispatch(fetchUsers({ queryParams: { role: "teacher" } }));
   }, [dispatch]);
 
   const onPageClick = (currentPage: number) => {
@@ -86,4 +86,4 @@ const StudentsList = () => {
   );
 };
 
-export default StudentsList;
+export default TeachersList;

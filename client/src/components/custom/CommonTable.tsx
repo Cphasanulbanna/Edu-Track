@@ -11,10 +11,10 @@ const CommonTable = ({
   columns,
   onPageChange,
   page,
-  totalPages,
+  totalPages=0,
   searchData,
   searchTerm,
-  totalElements,
+  totalElements = 0,
   isLoading = false,
 }: CommonTableProps) => {
   const [selectedRowIds, setSelectedRowIds] = useState<Set<string | number>>(
@@ -48,7 +48,7 @@ const CommonTable = ({
   const renderTableRow = (col: Column<TableRow>, row: TableRow) => {
     if (col.type === "multi-select" || col.type === "select") {
       return (
-        <td className="py-3 text-center first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]">
+        <td key={col.header} className="py-3 text-center first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]">
           <Checkbox
             className="border-primary"
             onClick={() => selectRow(row)}
@@ -59,7 +59,7 @@ const CommonTable = ({
     }
     if (col.type === "actions") {
       return (
-        <td className="py-3 text-center first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]">
+        <td key={col.header} className="py-3 text-center first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]">
           <p className="flex justify-center">
             <TableDropDown actions={col.actions} clickedRow={row} />
           </p>
@@ -68,14 +68,14 @@ const CommonTable = ({
     }
     if (col?.cell) {
       return (
-        <td className="text-center py-3 first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]">
+        <td key={col.header} className="text-center py-3 first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]">
           {col.cell({ row: row })}
         </td>
       );
     }
     if (col?.field) {
       return (
-        <td className="text-center py-3 first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]">
+        <td key={col.header} className="text-center py-3 first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]">
           {row[col.field] || "No Data Available"}
         </td>
       );
@@ -88,7 +88,7 @@ const CommonTable = ({
       <SearchInput searchData={searchData} searchTerm={searchTerm} />
       <table className="bg-white-100 w-[100%]  table-auto border-separate border-spacing-x-0 border-spacing-y-[6px] border border-gray-300 rounded-md px-2 overflow-hidden relative">
         <thead className="bg-primary relative after:content-[''] after:absolute after:left-[-8px] after:bottom-[0px] after:flex after:right-[-8px] after:h-[1px]  after:bg-gray-300 py-8">
-          <tr className="">
+          <tr>
             {columns?.map((column) => {
               if (column?.type === "multi-select") {
                 return (
@@ -105,7 +105,7 @@ const CommonTable = ({
               }
               return (
                 <th
-                  className="first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px] py-8"
+                  className="first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px] py-8 text-white"
                   key={column?.header}
                 >
                   {column?.header}

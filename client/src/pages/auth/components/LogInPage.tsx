@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch, useSelector } from "react-redux";
 import { getLoading } from "../selector";
 import FormController from "@/components/custom/FormController";
-import AuthLayout from "@/components/layout/AuthLayout";
 import { Link, useNavigate } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
 import GoogleIcon from "@/assets/icons/google.svg";
@@ -44,7 +43,6 @@ const LogInPage = () => {
   };
 
   return (
-    <AuthLayout>
       <div className="w-[800px] p-6 flex justify-center gap-x-5 items-center mx-auto shadow-md rounded-md">
         <Form {...form}>
           <form
@@ -110,7 +108,6 @@ const LogInPage = () => {
           {/* <img src={LogInBg} alt="" /> */}
         </div>
       </div>
-    </AuthLayout>
   );
 };
 

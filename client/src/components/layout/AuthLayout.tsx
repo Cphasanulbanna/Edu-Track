@@ -1,10 +1,14 @@
 import UnAuthorized from "@/pages/auth/components/UnAuthorized";
-import { ReactNode } from "react";
+import { Outlet } from "react-router-dom";
 
-const AuthLayout = ({ children, permission = true }: { children: ReactNode,permission?:boolean }) => {
+
+
+const AuthLayout = ({  permission = true }: { permission?:boolean }) => {
   return (
-    <div className="w-screen h-screen flex justify-center items-center py-7 px-16">
-      {permission ? children : <UnAuthorized />}
+    <div className="w-screen h-screen flex justify-center items-center py-7">
+      {permission ? <div>
+        <Outlet />
+      </div> : <UnAuthorized />}
     </div>
   );
 };

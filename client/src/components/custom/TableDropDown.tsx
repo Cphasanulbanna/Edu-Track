@@ -1,5 +1,4 @@
 import { TableDropDownProps } from "@/types/components";
-import { iconMap } from "../layout/constant";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
@@ -7,14 +6,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { iconMap } from "@/constant/icons";
 
 const TableDropDown = ({ actions = [], clickedRow }: TableDropDownProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="cursor-pointer font-semibold">
-        <button className="cursor-pointer">
+        <div className="cursor-pointer">
           <span style={{ writingMode: "vertical-rl" }}>...</span>
-        </button>
+        </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         {actions?.map((action) => {

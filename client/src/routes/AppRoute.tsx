@@ -1,7 +1,9 @@
 
 import { Route, Routes } from "react-router-dom";
-import AdminRoutes from "./AdminRoutes";
+import { lazy } from "react";
 
+const AdminRoutes = lazy(() => import("./AdminRoutes"))
+const AuthRoutes = lazy(() => import("./AuthRoutes"))
 const AppRoute = () => {
   return (
 
@@ -15,6 +17,7 @@ const AppRoute = () => {
         <Route path="/login" element={<LogInPage />} />
         <Route path="/" element={<HomePage />} /> */}
           <Route path="/admin/*" element={<AdminRoutes />} />
+          <Route path="/auth/*" element={<AuthRoutes />} />
       </Routes>
 
   );
