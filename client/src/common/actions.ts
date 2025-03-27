@@ -1,0 +1,6 @@
+import { SLICE_KEY } from "./constant";
+
+export const ACTION_TYPES = {
+  FETCH_TRANSACTIONS: `${SLICE_KEY}/FETCH_TRANSACTIONS`,
+  FETCH_COURSES: `${SLICE_KEY}/FETCH_COURSES`,
+};

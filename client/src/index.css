@@ -124,3 +124,6 @@ img, button, a, div {
   user-select: none;
 }
 
+.active {
+  background-color: var(--secondary)
+}
