@@ -31,6 +31,19 @@ export const createRoles = async (req, res) => {
   }
 };
 
+export const fetchAllRoles = async (req, res) => {
+  try {
+    const roles = await Role.find({});
+    if (!roles.length) {
+      res.status(404).json({ message: "No roles found" });
+    }
+
+    res.status(200).json({ roles });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 export const signup = async (req, res) => {
   const {
     first_name,
@@ -61,7 +74,7 @@ export const signup = async (req, res) => {
 
     const hashedPassword = await hashPassword(password);
 
-    const roleDetails = await Role.findOne({name: role})
+    const roleDetails = await Role.findOne({ name: role });
 
     const newUser = new User({
       email,

@@ -26,7 +26,7 @@ export const createCourses = async (req, res) => {
     const newCourse = new Course({ title, description, teachers, duration });
     await newCourse.save();
     return res
-      .status(200)
+      .status(201)
       .json({ course: newCourse, message: "Added new course" });
   } catch (error) {
     return res.status(500).json({ message: error.message });

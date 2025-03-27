@@ -6,13 +6,15 @@ import {
   refreshAccessToken,
   logout,
   resetPassword,
-  resetPasswordMail
+  resetPasswordMail,
+  fetchAllRoles
 } from "../controllers/auth.controller.js";
 import passport from "../middleware/googleOauth.middleware.js";
 
 const router = express.Router();
 
 router.post("/role", createRoles);
+router.get("/role", fetchAllRoles);
 router.post("/signup", signup);
 router.post("/login", login);
 router.post("/logout", logout);
