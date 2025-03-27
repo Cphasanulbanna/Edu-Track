@@ -11,25 +11,27 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getSidebarData } from "@/common/selector";
 import { SidebarItem } from "@/types/redux";
-import { iconMap } from "./constant";
-
+import { iconMap } from "@/constant/icons";
 
 const SidebarComponent = () => {
   const sidebarData = useSelector(getSidebarData);
 
   const renderSidebarData = (item: SidebarItem) => {
-    const Icon= iconMap[item.icon]
+    const Icon = iconMap[item.icon];
     return (
       <SidebarMenuItem key={item.title}>
         <SidebarMenuButton asChild>
-          <Link to={item.url}>
-            <Icon />
-            <span className="text-black">{item.title}</span>
-          </Link>
+          <NavLink
+            className={({ isActive }) =>isActive ? "active": "" }
+            to={item.url}
+          >
+            <Icon className="text-primary group-[.active]:text-white" />
+            <span className="text-black font-semibold">{item.title}</span>
+          </NavLink>
         </SidebarMenuButton>
       </SidebarMenuItem>
     );
@@ -48,7 +50,7 @@ const SidebarComponent = () => {
               <SidebarGroupContent>
                 <SidebarMenu>
                   {sidebarData?.items.map((item: SidebarItem) => {
-                    return renderSidebarData(item)
+                    return renderSidebarData(item);
                   })}
                 </SidebarMenu>
               </SidebarGroupContent>
