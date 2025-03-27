@@ -6,7 +6,7 @@ import upload from "../middleware/upload.middleware.js";
 
 const router = express.Router();
 
-router.get("/", authMiddleware(["admin","student"]), fetchUsers);
+router.get("/", authMiddleware(["admin","student", "teacher"]), fetchUsers);
 router.post("/update-profile", upload.single("image"), updateProfile)
 router.get("/students", fetchStudents)
 router.get("/books/:userId", fetchBorrowedBooks)

@@ -10,7 +10,7 @@ import Book from "../models/book.model.js";
 dotenv.config();
 
 export const fetchUsers = async (req, res) => {
-  const { role, page = 1, limit = 5, search = "" } = req.query;
+  const { role, page = 1, limit = 7, search = "" } = req.query;
   const elementsToSkip = (page - 1) * limit;
   try {
     const pipeline = [
