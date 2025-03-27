@@ -12,4 +12,11 @@ export const API_ENDPOINTS = {
   USERS: {
     FETCH_USERS: "/users/",
   },
+  PAYMENT: {
+    TRANSACTIONS: "/payment/history",
+  },
+  COURSES: {
+    FETCH_COURSES: "/course",
+    CREATE_COURSE: "/course",
+  },
 };

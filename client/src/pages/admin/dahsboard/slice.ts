@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { SLICE_KEY } from "./constant";
 import _ from "lodash";
-import { fetchUsers } from "./thunk";
+import { createCourse, fetchUsers } from "./thunk";
 
 export const initialState = {
   userData: {
@@ -11,6 +11,7 @@ export const initialState = {
   },
   loading: {
     userData: false,
+    createCourse: false,
   },
 };
 
@@ -31,6 +32,16 @@ const slice = createSlice({
       })
       .addCase(fetchUsers.rejected, (state) => {
         _.set(state, "loading.userData", false);
+      })
+
+      .addCase(createCourse.pending, (state) => {
+        _.set(state, "loading.createCourse", true);
+      })
+      .addCase(createCourse.fulfilled, (state) => {
+        _.set(state, "loading.createCourse", false);
+      })
+      .addCase(createCourse.rejected, (state) => {
+        _.set(state, "loading.createCourse", false);
       });
   },
 });

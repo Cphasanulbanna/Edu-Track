@@ -2,4 +2,5 @@ import { SLICE_KEY } from "./constant";
 
 export const ACTION_TYPES = {
   FETCH_USERS: `${SLICE_KEY}/FETCH_USERS`,
+  CREATE_COURSE: `${SLICE_KEY}/CREATE_COURSE`,
 };
