@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCoursesData, getLoading } from "@/common/selector";
 import { Button } from "@/components/ui/button";
 import CreateCourse from "./CreateCourse";
+import { deleteCourse } from "../thunk";
 
 const Courses = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -26,6 +27,14 @@ const Courses = () => {
     return <p>{value || "Not Available"}</p>;
   };
 
+  const editCourse = (data: TableRow) => {
+    console.log({data});
+  }
+
+  const deleteCourseFn = (data: TableRow) => {
+    dispatch(deleteCourse({params: {id: String(data?._id)}}))
+  }
+
   const columns: Column<TableRow>[] = [
     {
       header: "Title",
@@ -39,6 +48,20 @@ const Courses = () => {
       header: "Duration",
       cell: (field) => renderTableField(field?.row?.duration),
     },
+    {
+      header: "Actions",
+      type: "actions",
+      actions: [
+        {
+          name: "edit",
+          handleClick: editCourse
+        },
+          {
+          name: "delete",
+          handleClick: deleteCourseFn
+        }
+      ]
+    }
   ]
 
   const closeCourseModal = () => {
