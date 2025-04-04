@@ -17,5 +17,6 @@ type APIPayloadType =
   | {
       queryParams?: Record<string, string | number> | undefined;
       requestBody?: Record<string, string | number> | undefined;
+      params?: Record<string, string> | undefined;
     }
   | undefined;
