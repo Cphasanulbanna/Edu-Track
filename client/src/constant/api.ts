@@ -18,5 +18,6 @@ export const API_ENDPOINTS = {
   COURSES: {
     FETCH_COURSES: "/course",
     CREATE_COURSE: "/course",
+    DELETE_COURSE: "/course/:id",
   },
 };

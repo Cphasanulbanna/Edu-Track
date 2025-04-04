@@ -13,3 +13,10 @@ export const createCourseAPI = async (data?: APIPayloadType) => {
   const { requestBody = {} } = data || {};
   return axiosInstance.post(API_ENDPOINTS.COURSES.CREATE_COURSE, requestBody);
 };
+
+export const deleteCourseAPI = async (data?: APIPayloadType) => {
+  const { params = {} } = data || {};
+  return axiosInstance.delete(
+    API_ENDPOINTS.COURSES.DELETE_COURSE?.replace(":id", params?.id)
+  );
+};

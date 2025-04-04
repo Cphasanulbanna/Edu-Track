@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { ACTION_TYPES } from "./actions";
-import { createCourseAPI, fetchUsersApi } from "./api";
+import { createCourseAPI, deleteCourseAPI, fetchUsersApi } from "./api";
 import { handleAPIError } from "@/utils/error";
 import { APIPayloadType } from "@/types/redux";
 
@@ -21,6 +21,18 @@ export const createCourse = createAsyncThunk(
   async (payload: APIPayloadType, thunkAPI) => {
     try {
       const { data } = await createCourseAPI(payload);
+      return data;
+    } catch (error: unknown) {
+      return handleAPIError(error, thunkAPI);
+    }
+  }
+);
+
+export const deleteCourse = createAsyncThunk(
+  ACTION_TYPES.DELETE_COURSE,
+  async (payload: APIPayloadType, thunkAPI) => {
+    try {
+      const { data } = await deleteCourseAPI(payload);
       return data;
     } catch (error: unknown) {
       return handleAPIError(error, thunkAPI);
