@@ -11,7 +11,6 @@ const PaymentPage = () => {
 
   const handleReCaptchaVerify = useCallback(async () => {
     if (!executeRecaptcha) {
-      console.log('Execute recaptcha not yet available');
       return;
     }
 
@@ -49,7 +48,6 @@ const PaymentPage = () => {
     );
 
     const order = response?.data?.order;
-    console.log({ order });
 
     const options: RazorpayOptions = {
       key: import.meta.env.RAZORPAY_KEY, // Enter the Key ID generated from the Dashboard
@@ -61,7 +59,6 @@ const PaymentPage = () => {
       order_id: order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
 
       handler: async (response) => {
-        console.log({ response });
 
         try {
           await axios.post("http://localhost:5000/api/payment/verify-payment", {

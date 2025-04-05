@@ -56,7 +56,6 @@ export const applyLeave = async (req, res) => {
 };
 
 export const takeActionOnLeave = async (req, res) => {
-  console.log("entered");
 
   const { leaveRequestId } = req.params;
   const { status } = req.body;
