@@ -30,6 +30,7 @@ export interface FilterDropDownProps {
   filterDropDownData?: Record<string, any>[] | undefined;
   filterOnClick?: (item: string) => void;
   filterTitle?: string;
+  clearSelectedFilters?: () => void;
 }
 
 export interface CommonTableProps

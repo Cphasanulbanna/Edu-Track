@@ -20,6 +20,7 @@ const CommonTable = ({
   filterDropDownData,
   filterOnClick,
   filterTitle,
+  clearSelectedFilters
 }: CommonTableProps) => {
   const [selectedRowIds, setSelectedRowIds] = useState<Set<string | number>>(
     new Set()
@@ -107,6 +108,7 @@ const CommonTable = ({
           filterOnClick={filterOnClick}
           filterDropDownData={filterDropDownData}
           filterTitle={filterTitle}
+          clearSelectedFilters={clearSelectedFilters}
         />
       </div>
       <table className="bg-white-100 w-[100%]  table-auto border-separate border-spacing-x-0 border-spacing-y-[6px] border border-gray-300 rounded-md px-2 overflow-hidden relative">

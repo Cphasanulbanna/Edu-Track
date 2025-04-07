@@ -7,25 +7,52 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { iconMap } from "@/constant/icons";
+import { useState } from "react";
+import { X } from "lucide-react";
 
 const FilterDropDown = ({
   filterDropDownData = [],
-    filterOnClick=() => {},
-  filterTitle
+  filterOnClick = () => {},
+  filterTitle,
+  clearSelectedFilters = () => {},
 }: FilterDropDownProps) => {
+  const [selectedValue, setSelectedValue] = useState<string>("");
   const FilterIcon = iconMap?.filter;
+
+  const clearFilters = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedValue("");
+    clearSelectedFilters();
+  };
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="cursor-pointer font-semibold">
-        <div className="cursor-pointer flex items-center gap-1.5">
-                  {filterTitle} <FilterIcon className="w-4 h-4"/>
-        </div>
-      </DropdownMenuTrigger>
+      {selectedValue ? (
+        <button
+          type="button"
+          onClick={(e) => clearFilters(e)}
+          className="cursor-pointer flex items-center gap-1.5"
+        >
+          {selectedValue}
+          <X className="w-4 h-4 text-red-700" />
+        </button>
+      ) : (
+        <DropdownMenuTrigger className="cursor-pointer font-semibold">
+          <div className="cursor-pointer flex items-center gap-1.5">
+            {filterTitle} <FilterIcon className="w-4 h-4" />
+          </div>
+        </DropdownMenuTrigger>
+      )}
       <DropdownMenuContent>
         {filterDropDownData?.map((item) => {
           return (
             <DropdownMenuItem key={item?.name}>
-              <Button onClick={()=>filterOnClick(item?.name)} variant={"ghost"}>
+              <Button
+                onClick={() => {
+                  filterOnClick(item?.name);
+                  setSelectedValue(item?.name);
+                }}
+                variant={"ghost"}
+              >
                 <p className="flex items-center gap-1 capitalize">
                   {item?.name}
                 </p>

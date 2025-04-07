@@ -35,6 +35,10 @@ const StudentsList = () => {
      dispatch(fetchUsers({ queryParams: { batch: encodeURIComponent(data)} }));
   }
 
+  const clearFilters = () => {
+      dispatch(fetchUsers());
+  }
+
   const renderTableField = (value: string) => {
     return <p>{value}</p>;
   };
@@ -98,6 +102,7 @@ const StudentsList = () => {
         filterDropDownData={formattedBatchData}
         filterTitle="Batch"
         filterOnClick={filterByBatch}
+        clearSelectedFilters={clearFilters}
       />
     </div>
   );
