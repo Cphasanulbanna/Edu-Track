@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import {
@@ -19,17 +19,30 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "../ui/button";
 import { Option } from "@/types/forms";
-
+import { Controller } from "react-hook-form";
 
 interface SelectDropdownProps {
-  readonly options: Option[],
-  readonly placeholder?: string,
-  readonly optionKey: keyof Option
+  readonly options: Option[];
+  readonly placeholder?: string;
+  readonly optionKey: keyof Option;
 }
 
-export function SelectDropdown({placeholder="Select/Search", optionKey="_id", options=[]}:SelectDropdownProps) {
+export function SelectDropdown({
+  placeholder = "Select/Search",
+  optionKey = "_id",
+  options = [],
+  control,
+  name,
+  handleChange,
+  onChange,
+  field,
+}: SelectDropdownProps) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
+
+  const clearSelection = () => {
+    handleChange()
+    onChange()
+  }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -38,13 +51,26 @@ export function SelectDropdown({placeholder="Select/Search", optionKey="_id", op
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="w-[300px] justify-between relative"
         >
-          <span>
-             {value
-            ? options?.find((data) => data?.[optionKey] === value)?.label
-            : "Select..."}
-            </span>
+          <div className="overflow-ellipsis overflow-hidden">
+            <Controller
+              control={control}
+              name={name}
+              render={() => (
+                <div className="">
+                  <span>
+                    {field.value
+                      ? options?.find(
+                          (data) => data?.[optionKey] === field.value
+                        )?.label
+                      : "Select..."}
+                  </span>
+                  <button onClick={clearSelection} className="cursor-pointer  absolute z-20 right-1 top-[-50%] bottom-[-50%]"> {field?.value && <X className="text-red-700 w-4 h-4"/>}</button>
+                </div>
+              )}
+            />
+          </div>
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -59,15 +85,18 @@ export function SelectDropdown({placeholder="Select/Search", optionKey="_id", op
                   key={data?.[optionKey]}
                   value={data?.[optionKey]}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
                     setOpen(false);
+                    onChange(currentValue);
+                    handleChange(currentValue);
                   }}
                 >
                   {data?.label}
                   <Check
                     className={cn(
                       "ml-auto",
-                      value === data?.[optionKey] ? "opacity-100" : "opacity-0"
+                      field?.value === data?.[optionKey]
+                        ? "opacity-100"
+                        : "opacity-0"
                     )}
                   />
                 </CommandItem>

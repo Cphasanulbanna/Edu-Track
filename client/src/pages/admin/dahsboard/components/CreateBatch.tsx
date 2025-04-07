@@ -49,8 +49,13 @@ const CreateBatch = ({ close, open }: CreateBatchTypes) => {
     label: obj?.name,
     value: obj?.name,
   }));
+    
+    const handleChange = (data) => {
+        console.log({data});
+        
+    }
   return (
-    <CommonModal close={close} open={open} title="Add new course">
+    <CommonModal close={close} open={open} title="Add new Batch">
       <Form {...form}>
         <form onSubmit={handleSubmit(createBatchFn)}>
           <div className="col-span-5 my-3.5">
@@ -64,6 +69,7 @@ const CreateBatch = ({ close, open }: CreateBatchTypes) => {
               required
               options={formattedDepartments}
               optionKey="_id"
+              handleChange={handleChange}
             />
           </div>
           <div className="col-span-5 my-3.5">

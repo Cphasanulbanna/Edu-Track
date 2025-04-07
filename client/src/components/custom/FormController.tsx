@@ -21,7 +21,8 @@ const FormController = <T extends FieldValues>({
   rightContent,
   leftContent,
   options = [],
-  optionKey="_id",
+  optionKey = "_id",
+  handleChange,
   ...inputProps
 }: FormControllerProps<T>) => {
  switch (type) {
@@ -30,14 +31,14 @@ const FormController = <T extends FieldValues>({
     <FormField
       control={control}
       name={name}
-      render={() => (
+      render={({field}) => (
         <FormItem className="relative">
           <FormLabel>
             {label}
             {required && "*"}
           </FormLabel>
           <FormControl>
-            <SelectDropdown options={options} optionKey={optionKey} />
+            <SelectDropdown options={options} optionKey={optionKey} control={control} name={name} handleChange={handleChange} onChange={field?.onChange} field={field} />
           </FormControl>
           <FormMessage
             className="absolute bottom-[-18px] text-xs"
