@@ -19,12 +19,12 @@ type CreateBatchTypes = {
 };
 
 type Department = {
-    name: string
-}
+  name: string;
+};
 
 const CreateBatch = ({ close, open }: CreateBatchTypes) => {
   const dispatch = useDispatch<AppDispatch>();
-  const departments = useSelector(getDepartments) as Department[]
+  const departments = useSelector(getDepartments) as Department[];
   const loading = useSelector(getLoading);
   const form = useForm<CreateBatchType>({
     mode: "all",
@@ -63,6 +63,7 @@ const CreateBatch = ({ close, open }: CreateBatchTypes) => {
               errors={errors}
               required
               options={formattedDepartments}
+              optionKey="_id"
             />
           </div>
           <div className="col-span-5 my-3.5">

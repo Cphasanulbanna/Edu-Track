@@ -20,7 +20,8 @@ const FormController = <T extends FieldValues>({
   required,
   rightContent,
   leftContent,
-  options=[],
+  options = [],
+  optionKey="_id",
   ...inputProps
 }: FormControllerProps<T>) => {
  switch (type) {
@@ -36,7 +37,7 @@ const FormController = <T extends FieldValues>({
             {required && "*"}
           </FormLabel>
           <FormControl>
-            <SelectDropdown options={options} />
+            <SelectDropdown options={options} optionKey={optionKey} />
           </FormControl>
           <FormMessage
             className="absolute bottom-[-18px] text-xs"

@@ -22,11 +22,12 @@ import { Option } from "@/types/forms";
 
 
 interface SelectDropdownProps {
-  options: Option[],
-  placeholder?: string
+  readonly options: Option[],
+  readonly placeholder?: string,
+  readonly optionKey: keyof Option
 }
 
-export function SelectDropdown({placeholder="Select/Search", options=[]}:SelectDropdownProps) {
+export function SelectDropdown({placeholder="Select/Search", optionKey="_id", options=[]}:SelectDropdownProps) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
 
@@ -41,7 +42,7 @@ export function SelectDropdown({placeholder="Select/Search", options=[]}:SelectD
         >
           <span>
              {value
-            ? options?.find((data) => data?.value === value)?.label
+            ? options?.find((data) => data?.[optionKey] === value)?.label
             : "Select..."}
             </span>
           <ChevronsUpDown className="opacity-50" />
@@ -55,8 +56,8 @@ export function SelectDropdown({placeholder="Select/Search", options=[]}:SelectD
             <CommandGroup>
               {options?.map((data) => (
                 <CommandItem
-                  key={data?.value}
-                  value={data?.value}
+                  key={data?.[optionKey]}
+                  value={data?.[optionKey]}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue);
                     setOpen(false);
@@ -66,7 +67,7 @@ export function SelectDropdown({placeholder="Select/Search", options=[]}:SelectD
                   <Check
                     className={cn(
                       "ml-auto",
-                      value === data?.value ? "opacity-100" : "opacity-0"
+                      value === data?.[optionKey] ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>
