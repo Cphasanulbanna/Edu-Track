@@ -10,13 +10,15 @@ import { AppDispatch } from "@/app/store";
 import { createCourse } from "../thunk";
 import { getLoading } from "../selector";
 import { fetchCourses } from "@/common/thunk";
+import { useEffect } from "react";
 
 type CreateCourseTypes = {
   close: () => void;
   open: boolean;
+  dataToEdit?: Record<string,string>
 };
 
-const CreateCourse = ({ close, open }: CreateCourseTypes) => {
+const CreateCourse = ({ close, open ,dataToEdit}: CreateCourseTypes) => {
   const dispatch = useDispatch<AppDispatch>();
   const loading = useSelector(getLoading);
   const form = useForm<CreateCourseType>({
@@ -40,6 +42,12 @@ const CreateCourse = ({ close, open }: CreateCourseTypes) => {
       close();
     }
   };
+
+  useEffect(() => {
+    if (dataToEdit) {
+      reset({course: dataToEdit?.title})
+    }
+  }, [dataToEdit,reset])
   return (
     <CommonModal close={close} open={open} title="Add new course">
       <Form {...form}>
@@ -55,8 +63,9 @@ const CreateCourse = ({ close, open }: CreateCourseTypes) => {
             />
           </div>
           <div className="flex justify-end">
+            
             <Button loading={loading.createCourse} type="submit">
-              Save
+              {dataToEdit ? "Update": "Save"}
             </Button>
           </div>
         </form>

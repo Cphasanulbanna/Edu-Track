@@ -26,9 +26,16 @@ export interface SearchInputProps {
   searchTerm?: string;
 }
 
+export interface FilterDropDownProps {
+  filterDropDownData?: Record<string, any>[] | undefined;
+  filterOnClick?: (item: string) => void;
+  filterTitle?: string;
+}
+
 export interface CommonTableProps
   extends CommonPaginationProps,
-    SearchInputProps {
+    SearchInputProps,
+    FilterDropDownProps {
   data: TableRow[];
   columns: Column<TableRow>[];
   totalElements?: number;

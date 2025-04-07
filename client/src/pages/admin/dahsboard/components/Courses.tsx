@@ -14,10 +14,10 @@ const Courses = () => {
   const coursesData = useSelector(getCoursesData);
   const loading = useSelector(getLoading);
 
-  const [openCourseModal, setOpenCourseModal] = useState<boolean>(false)
+  const [openCourseModal, setOpenCourseModal] = useState<boolean>(false);
+  const [dataToEdit,setDataToEdit] = useState({})
 
   const { courses } = coursesData;
-
 
   useEffect(() => {
     dispatch(fetchCourses());
@@ -28,12 +28,18 @@ const Courses = () => {
   };
 
   const editCourse = (data: TableRow) => {
-    console.log({data});
-  }
+    setDataToEdit(data)
+    setOpenCourseModal(true)
+  };
 
-  const deleteCourseFn = (data: TableRow) => {
-    dispatch(deleteCourse({params: {id: String(data?._id)}}))
-  }
+  const deleteCourseFn = async (data: TableRow) => {
+    const result = await dispatch(
+      deleteCourse({ params: { id: String(data?._id) } })
+    );
+    if (deleteCourse.fulfilled.match(result)) {
+      dispatch(fetchCourses());
+    }
+  };
 
   const columns: Column<TableRow>[] = [
     {
@@ -54,22 +60,22 @@ const Courses = () => {
       actions: [
         {
           name: "edit",
-          handleClick: editCourse
+          handleClick: editCourse,
         },
-          {
+        {
           name: "delete",
-          handleClick: deleteCourseFn
-        }
-      ]
-    }
-  ]
+          handleClick: deleteCourseFn,
+        },
+      ],
+    },
+  ];
 
   const closeCourseModal = () => {
-    setOpenCourseModal(false)
-  }
+    setOpenCourseModal(false);
+  };
   return (
     <div className="flex-1  w-full h-full p-16">
-      <CreateCourse open={openCourseModal} close={closeCourseModal}/>
+      <CreateCourse open={openCourseModal} close={closeCourseModal} dataToEdit={dataToEdit} />
       <CommonTable
         data={courses}
         columns={columns}

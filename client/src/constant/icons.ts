@@ -1,4 +1,4 @@
-import { DeleteIcon, EditIcon, Paperclip } from "lucide-react";
+import { DeleteIcon, EditIcon, Filter, Paperclip } from "lucide-react";
 import { FaUsers } from "react-icons/fa6";
 import { GiMoneyStack, GiTeacher } from "react-icons/gi";
 import { IconType } from "react-icons/lib";
@@ -12,4 +12,5 @@ export const iconMap: Record<string, IconType> = {
   edit: EditIcon,
   transactions: GiMoneyStack,
   courses: Paperclip,
+  filter: Filter,
 };
