@@ -15,3 +15,7 @@ export const fetchCoursesAPI = async (data?: APIPayloadType) => {
     params: queryParams,
   });
 };
+
+export const fetchDepartmentsAPI = async () => {
+  return axiosInstance.get(API_ENDPOINTS.DEPARTMENT.FETCH_DEPARTMENTS);
+};
