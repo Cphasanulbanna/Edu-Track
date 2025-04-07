@@ -5,42 +5,45 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { actions as commonSliceActions } from "@/common/slice";
 
-  const items = [
-    {
-      title: "Students",
-      url: "students",
-      icon: "PiStudentFill",
-    },
-     {
-      title: "Courses",
-      url: "courses",
-      icon: "courses",
-    },
-      {
-      title: "Transactions",
-      url: "transactions",
-      icon: "transactions",
-    },
+const items = [
+  {
+    title: "Students",
+    url: "students",
+    icon: "PiStudentFill",
+  },
+  {
+    title: "Courses",
+    url: "courses",
+    icon: "courses",
+  },
+  {
+    title: "Batches",
+    url: "batches",
+    icon: "courses",
+  },
+  {
+    title: "Transactions",
+    url: "transactions",
+    icon: "transactions",
+  },
 
-    {
-      title: "Teachers",
-      url: "teachers",
-      icon: "GiTeacher",
-    },
-    {
-      title: "Staff",
-      url: "]]]]",
-      icon: "FaUsers",
-    },
-  ];
+  {
+    title: "Teachers",
+    url: "teachers",
+    icon: "GiTeacher",
+  },
+  {
+    title: "Staff",
+    url: "]]]]",
+    icon: "FaUsers",
+  },
+];
 const AdminLayout = () => {
   const dispatch = useDispatch();
 
-
-
   useEffect(() => {
     dispatch(commonSliceActions.setSidebarData({ name: "Admin", items }));
-  }, [ dispatch]);
+  }, [dispatch]);
   return (
     <div>
       <div className="fixed top-0 left-0 z-40 right-0">
