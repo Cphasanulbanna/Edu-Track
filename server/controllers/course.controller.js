@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Course from "../models/course.model.js";
 import User from "../models/user.model.js";
 
@@ -59,12 +60,14 @@ export const enrollCourse = async (req, res) => {
 
 export const deleteCourse = async (req, res) => {
   const { id } = req.params;
+  const courseId = mongoose.Types.ObjectId.createFromHexString(id)
   try {
-    const course = await Course.findById(id);
+
+    const course = await Course.findById(courseId);
     if (!course) {
       return res.status(404).json({ message: "No courses found" });
     }
-    await Course.findByIdAndDelete(id);
+    await Course.findByIdAndDelete(courseId);
     return res.status(200).json({ message: "Course deleted" });
   } catch (error) {
     return res.status(500).json({ message: error.message });

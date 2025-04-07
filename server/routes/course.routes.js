@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get("/", fetchCourses)
 router.post("/", createCourses)
-router.delete("/", deleteCourse)
+router.delete("/:id", deleteCourse)
 router.post("/enroll", enrollCourse)
 
 export default router;
