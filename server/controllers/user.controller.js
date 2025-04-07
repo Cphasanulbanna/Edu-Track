@@ -10,8 +10,12 @@ import Book from "../models/book.model.js";
 dotenv.config();
 
 export const fetchUsers = async (req, res) => {
-  const { role, page = 1, limit = 7, search = "" } = req.query;
+  const { role, page = 1, limit = 7, search = "", batch = "" } = req.query;
   const elementsToSkip = (page - 1) * limit;
+  const decodedBatch = decodeURIComponent(batch);
+
+  console.log({ decodedBatch });
+
   try {
     const pipeline = [
       {
@@ -46,12 +50,38 @@ export const fetchUsers = async (req, res) => {
                 ]
               : []),
 
+            {
+              $lookup: {
+                from: "batches",
+                localField: "batch",
+                foreignField: "_id",
+                as: "batchDetails",
+              },
+            },
+            {
+              $unwind: {
+                path: "$batchDetails",
+                preserveNullAndEmptyArrays: true, // This is fine if you want to keep users without batches
+              },
+            },
+
+            ...(decodedBatch
+              ? [
+                  {
+                    $match: {
+                      "batchDetails.title": decodedBatch, // Using decoded batch
+                    },
+                  },
+                ]
+              : []),
+
             // Group back user by _id and collect roles
             {
               $group: {
                 _id: "$_id",
                 email: { $first: "$email" },
                 profile: { $first: "$profile" },
+                batchDetails: { $first: "$batchDetails" },
                 roles: { $push: "$roleDetails" },
               },
             },
@@ -82,6 +112,9 @@ export const fetchUsers = async (req, res) => {
             {
               $project: {
                 email: 1,
+                batch: {
+                  title: "$batchDetails.title",
+                },
                 roles: {
                   $map: {
                     input: "$roles",
@@ -130,6 +163,16 @@ export const fetchUsers = async (req, res) => {
                   },
                 ]
               : []),
+
+            ...(decodedBatch
+              ? [
+                  {
+                    $match: {
+                      "batchDetails.title": decodedBatch, // Using decoded batch
+                    },
+                  },
+                ]
+              : []),
             {
               $group: {
                 _id: "$_id",
@@ -164,7 +207,6 @@ export const fetchUsers = async (req, res) => {
       return res.status(404).json({ message: "No data found" });
     }
     const { users, totalUsers } = results;
-    console.log({ users });
 
     const totalPages = Math.ceil(totalUsers?.[0]?.count / limit);
 
@@ -224,7 +266,8 @@ export const updateProfile = async (req, res) => {
 };
 
 export const fetchStudents = async (req, res) => {
-  const { limit = 5, page = 1, sort = "", search = "" } = req.query;
+  const { limit = 5, page = 1, sort = "", search = "", batch = "" } = req.query;
+
   try {
     const elementsToSkip = (page - 1) * limit;
 
@@ -291,6 +334,11 @@ export const fetchStudents = async (req, res) => {
             { "profile.first_name": { $regex: search, $options: "i" } },
             { "profile.last_name": { $regex: search, $options: "i" } },
           ],
+        },
+      },
+      {
+        $match: {
+          "batch.title": { $regex: batch, $options: "i" },
         },
       },
       {
