@@ -3,8 +3,10 @@ import FormController from "@/components/custom/FormController";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Form } from "react-router-dom";
 import { createBatchSchema, CreateBatchType } from "../validate";
+import { useSelector } from "react-redux";
+import { getLoading } from "../selector";
+import { Form } from "@/components/ui/form";
 
 type CreateBatchTypes = {
   close: () => void;
@@ -12,7 +14,8 @@ type CreateBatchTypes = {
   dataToEdit?: Record<string, string>;
 };
 
-const CreateBatch = ({ close, open, dataToEdit }: CreateBatchTypes) => {
+const CreateBatch = ({ close, open }: CreateBatchTypes) => {
+  const loading = useSelector(getLoading);
   const form = useForm<CreateBatchType>({
     mode: "all",
     resolver: zodResolver(createBatchSchema),
@@ -20,7 +23,6 @@ const CreateBatch = ({ close, open, dataToEdit }: CreateBatchTypes) => {
   const {
     handleSubmit,
     control,
-    reset,
     formState: { errors },
   } = form;
 
@@ -52,8 +54,8 @@ const CreateBatch = ({ close, open, dataToEdit }: CreateBatchTypes) => {
             />
           </div>
           <div className="flex justify-end">
-            <Button loading={loading.createCourse} type="submit">
-              {dataToEdit ? "Update" : "Save"}
+            <Button loading={loading.createBatch} type="submit">
+              { "Save"}
             </Button>
           </div>
         </form>

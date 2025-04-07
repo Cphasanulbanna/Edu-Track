@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBatches } from "../thunk";
 import { getBatches, getLoading } from "../selector";
+import CreateBatch from "./CreateBatch";
 
 const Batches = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -48,9 +49,13 @@ const Batches = () => {
       ],
     },
   ];
+
+  const closeBatchModal = () => {
+    setOpenBatchModal(false)
+  }
   return (
     <div className="flex-1  w-full h-full p-16">
-      {/* <CreateCourse open={openCourseModal} close={closeCourseModal} dataToEdit={dataToEdit} /> */}
+      <CreateBatch open={openBatchModal} close={closeBatchModal}  />
       <CommonTable
         data={batches}
         columns={columns}
