@@ -65,7 +65,7 @@ function Button({
           <Loader2 className="h-4 w-4 animate-spin" />
         </span>
       )}
-      <span className={cn({ "hidden": loading })}>{props.children}</span>
+      <div className={cn({ "hidden": loading }, "flex justify-between items-center w-full p-0")}>{props.children}</div>
     </Comp>
   )
 }

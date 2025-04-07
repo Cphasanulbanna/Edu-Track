@@ -35,6 +35,7 @@ const CreateBatch = ({ close, open }: CreateBatchTypes) => {
         <form onSubmit={handleSubmit(createBatchFn)}>
           <div className="col-span-5 my-3.5">
             <FormController
+              type="select"
               label="Department"
               name="department"
               placeholder="Select Department"
@@ -55,7 +56,7 @@ const CreateBatch = ({ close, open }: CreateBatchTypes) => {
           </div>
           <div className="flex justify-end">
             <Button loading={loading.createBatch} type="submit">
-              { "Save"}
+              {"Save"}
             </Button>
           </div>
         </form>
