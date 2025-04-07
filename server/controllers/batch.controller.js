@@ -51,11 +51,13 @@ export const createBatch = async (req, res) => {
 
 export const fetchBatch = async (req, res) => {
   try {
-    const batches = await Batch.find({}).populate({
-      path: "students",
-      select: "email",
-      populate: { path: "profile", select: "first_name last_name" },
-    });
+    const batches = await Batch.find({})
+      .populate({
+        path: "students",
+        select: "email ",
+        populate: { path: "profile", select: "first_name last_name" },
+      })
+      .populate({ path: "course", select: "title" });
     if (!batches.length) {
       return res.status(404).json({ message: `No batch found` });
     }
