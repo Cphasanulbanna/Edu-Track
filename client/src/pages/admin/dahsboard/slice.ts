@@ -1,7 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { SLICE_KEY } from "./constant";
 import _ from "lodash";
-import { createCourse, deleteCourse, fetchBatches, fetchUsers } from "./thunk";
+import {
+  createBatch,
+  createCourse,
+  deleteCourse,
+  fetchBatches,
+  fetchUsers,
+} from "./thunk";
 
 export const initialState = {
   userData: {
@@ -17,6 +23,7 @@ export const initialState = {
     createCourse: false,
     deleteCourse: false,
     fetchBatches: false,
+    createBatch: false,
   },
 };
 
@@ -68,6 +75,16 @@ const slice = createSlice({
       })
       .addCase(fetchBatches.rejected, (state) => {
         _.set(state, "loading.fetchBatches", false);
+      })
+
+      .addCase(createBatch.pending, (state) => {
+        _.set(state, "loading.createBatch", true);
+      })
+      .addCase(createBatch.fulfilled, (state) => {
+        _.set(state, "loading.createBatch", false);
+      })
+      .addCase(createBatch.rejected, (state) => {
+        _.set(state, "loading.createBatch", false);
       });
   },
 });

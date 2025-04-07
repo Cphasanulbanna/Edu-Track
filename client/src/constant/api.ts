@@ -22,5 +22,6 @@ export const API_ENDPOINTS = {
   },
   BATCH: {
     FETCH_BATCHES: "/batch",
+    CREATE_BATCH: "/batch/:departmentId",
   },
 };

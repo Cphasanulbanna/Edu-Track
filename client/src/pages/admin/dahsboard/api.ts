@@ -24,3 +24,14 @@ export const deleteCourseAPI = async (data?: APIPayloadType) => {
 export const fetchBatchesAPI = async () => {
   return axiosInstance.get(API_ENDPOINTS.BATCH.FETCH_BATCHES);
 };
+
+export const createBatchAPI = async (data?: APIPayloadType) => {
+  const { requestBody = {}, params = {} } = data || {};
+  return axiosInstance.post(
+    API_ENDPOINTS.BATCH.CREATE_BATCH?.replace(
+      ":departmentId",
+      params?.departmentId
+    ),
+    requestBody
+  );
+};
