@@ -5,22 +5,26 @@ import CommonPagination from "./CommonPagination";
 import SearchInput from "./SearchInput";
 import TableDropDown from "./TableDropDown";
 import Spinner from "./Spinner";
+import FilterDropDown from "./FilterDropDown";
 
 const CommonTable = ({
   data,
   columns,
   onPageChange,
   page,
-  totalPages=0,
+  totalPages = 0,
   searchData,
   searchTerm,
   totalElements = 0,
   isLoading = false,
+  filterDropDownData,
+  filterOnClick,
+  filterTitle,
 }: CommonTableProps) => {
   const [selectedRowIds, setSelectedRowIds] = useState<Set<string | number>>(
     new Set()
   );
-  const isAllSelected = selectedRowIds.size === data?.length || false
+  const isAllSelected = selectedRowIds.size === data?.length || false;
 
   const toggleSelectAll = () => {
     if (selectedRowIds.size === data.length) {
@@ -48,7 +52,10 @@ const CommonTable = ({
   const renderTableRow = (col: Column<TableRow>, row: TableRow) => {
     if (col.type === "multi-select" || col.type === "select") {
       return (
-        <td key={col.header} className="py-3 text-center first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]">
+        <td
+          key={col.header}
+          className="py-3 text-center first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]"
+        >
           <Checkbox
             className="border-primary"
             onClick={() => selectRow(row)}
@@ -59,7 +66,10 @@ const CommonTable = ({
     }
     if (col.type === "actions") {
       return (
-        <td key={col.header} className="py-3 text-center first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]">
+        <td
+          key={col.header}
+          className="py-3 text-center first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]"
+        >
           <p className="flex justify-center">
             <TableDropDown actions={col.actions} clickedRow={row} />
           </p>
@@ -68,14 +78,20 @@ const CommonTable = ({
     }
     if (col?.cell) {
       return (
-        <td key={col.header} className="text-center py-3 first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]">
+        <td
+          key={col.header}
+          className="text-center py-3 first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]"
+        >
           {col.cell({ row: row })}
         </td>
       );
     }
     if (col?.field) {
       return (
-        <td key={col.header} className="text-center py-3 first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]">
+        <td
+          key={col.header}
+          className="text-center py-3 first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]"
+        >
           {row[col.field] || "No Data Available"}
         </td>
       );
@@ -85,7 +101,14 @@ const CommonTable = ({
 
   return (
     <div>
-      <SearchInput searchData={searchData} searchTerm={searchTerm} />
+      <div className="flex justify-between gap-3 items-center">
+        <SearchInput searchData={searchData} searchTerm={searchTerm} />
+        <FilterDropDown
+          filterOnClick={filterOnClick}
+          filterDropDownData={filterDropDownData}
+          filterTitle={filterTitle}
+        />
+      </div>
       <table className="bg-white-100 w-[100%]  table-auto border-separate border-spacing-x-0 border-spacing-y-[6px] border border-gray-300 rounded-md px-2 overflow-hidden relative">
         <thead className="bg-primary relative after:content-[''] after:absolute after:left-[-8px] after:bottom-[0px] after:flex after:right-[-8px] after:h-[1px]  after:bg-gray-300 py-8">
           <tr>
