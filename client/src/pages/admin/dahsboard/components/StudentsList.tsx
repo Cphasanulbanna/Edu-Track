@@ -1,21 +1,29 @@
 import CommonTable from "@/components/custom/CommonTable";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUsers } from "../thunk";
-import { AppDispatch } from "@/app/store";
+import { fetchBatches, fetchUsers } from "../thunk";
+import { AppDispatch, RootState } from "@/app/store";
 import { Column, TableRow } from "@/types/components";
-import { getLoading, getUserData } from "../selector";
+import { getBatches, getLoading, getUserData } from "../selector";
+
+interface Batch {
+  title: string
+}
 
 const StudentsList = () => {
   const dispatch = useDispatch<AppDispatch>();
   const data = useSelector(getUserData);
-  const loading = useSelector(getLoading)
+  const batches = useSelector<RootState, Batch[]>(getBatches);
+  const loading = useSelector(getLoading);
   const { users, totalPages, totalElements } = data;
+
+  const formattedBatchData = batches?.map((obj) => ({ ...obj, name: obj?.title }))
 
   const [page, setPage] = useState<number>(1);
 
   useEffect(() => {
     dispatch(fetchUsers());
+    dispatch(fetchBatches());
   }, [dispatch]);
 
   const onPageClick = (currentPage: number) => {
@@ -23,10 +31,13 @@ const StudentsList = () => {
     dispatch(fetchUsers({ queryParams: { page: currentPage } }));
   };
 
+  const filterByBatch = (data: string) => {
+     dispatch(fetchUsers({ queryParams: { batch: encodeURIComponent(data)} }));
+  }
+
   const renderTableField = (value: string) => {
     return <p>{value}</p>;
   };
-
 
   const columns: Column<TableRow>[] = [
     {
@@ -58,12 +69,15 @@ const StudentsList = () => {
     {
       header: "Actions",
       type: "actions",
-      actions: [{
-        name: "edit",
-      }, {
-        name: "delete"
-      }]
-    }
+      actions: [
+        {
+          name: "edit",
+        },
+        {
+          name: "delete",
+        },
+      ],
+    },
   ];
 
   const searchData = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,6 +95,9 @@ const StudentsList = () => {
         onPageChange={onPageClick}
         searchData={searchData}
         isLoading={loading.userData}
+        filterDropDownData={formattedBatchData}
+        filterTitle="Batch"
+        filterOnClick={filterByBatch}
       />
     </div>
   );

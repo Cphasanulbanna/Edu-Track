@@ -10,3 +10,6 @@ export const getLoading = flow(getAdminDashboardSlice, loading);
 
 const userData = (state: typeof initialState) => state.userData;
 export const getUserData = flow(getAdminDashboardSlice, userData);
+
+const batches = (state: typeof initialState) => state.batches;
+export const getBatches = flow(getAdminDashboardSlice, batches);

@@ -20,4 +20,7 @@ export const API_ENDPOINTS = {
     CREATE_COURSE: "/course",
     DELETE_COURSE: "/course/:id",
   },
+  BATCH: {
+    FETCH_BATCHES: "/batch",
+  },
 };

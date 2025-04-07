@@ -20,3 +20,7 @@ export const deleteCourseAPI = async (data?: APIPayloadType) => {
     API_ENDPOINTS.COURSES.DELETE_COURSE?.replace(":id", params?.id)
   );
 };
+
+export const fetchBatchesAPI = async () => {
+  return axiosInstance.get(API_ENDPOINTS.BATCH.FETCH_BATCHES);
+};
