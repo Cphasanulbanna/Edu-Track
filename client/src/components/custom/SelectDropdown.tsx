@@ -40,9 +40,9 @@ export function SelectDropdown({
   const [open, setOpen] = React.useState(false);
 
   const clearSelection = () => {
-    handleChange()
-    onChange()
-  }
+    handleChange("");
+    onChange("");
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -54,22 +54,21 @@ export function SelectDropdown({
           className="w-[300px] justify-between relative"
         >
           <div className="overflow-ellipsis overflow-hidden">
-            <Controller
-              control={control}
-              name={name}
-              render={() => (
-                <div className="">
-                  <span>
-                    {field.value
-                      ? options?.find(
-                          (data) => data?.[optionKey] === field.value
-                        )?.label
-                      : "Select..."}
-                  </span>
-                  <button onClick={clearSelection} className="cursor-pointer  absolute z-20 right-1 top-[-50%] bottom-[-50%]"> {field?.value && <X className="text-red-700 w-4 h-4"/>}</button>
-                </div>
-              )}
-            />
+            <div className="">
+              <span>
+                {field.value
+                  ? options?.find((data) => data?.[optionKey] === field.value)
+                      ?.label
+                  : "Select..."}
+              </span>
+              <button
+                onClick={clearSelection}
+                className="cursor-pointer  absolute z-20 right-1 top-[-50%] bottom-[-50%]"
+              >
+                {" "}
+                {field?.value && <X className="text-red-700 w-4 h-4" />}
+              </button>
+            </div>
           </div>
           <ChevronsUpDown className="opacity-50" />
         </Button>
