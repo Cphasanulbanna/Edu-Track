@@ -5,9 +5,10 @@ import { fetchBatches, fetchUsers } from "../thunk";
 import { AppDispatch, RootState } from "@/app/store";
 import { Column, TableRow } from "@/types/components";
 import { getBatches, getLoading, getUserData } from "../selector";
+import { ROLES } from "@/common/constant";
 
 interface Batch {
-  title: string
+  title: string;
 }
 
 const StudentsList = () => {
@@ -17,30 +18,39 @@ const StudentsList = () => {
   const loading = useSelector(getLoading);
   const { users, totalPages, totalElements } = data;
 
-  const formattedBatchData = batches?.map((obj) => ({ ...obj, name: obj?.title }))
+  const formattedBatchData = batches?.map((obj) => ({
+    ...obj,
+    name: obj?.title,
+  }));
 
   const [page, setPage] = useState<number>(1);
 
   useEffect(() => {
-    dispatch(fetchUsers());
+    dispatch(fetchUsers({ queryParams: { role: ROLES.STUDENT } }));
     dispatch(fetchBatches());
   }, [dispatch]);
 
   const onPageClick = (currentPage: number) => {
     setPage(currentPage);
-    dispatch(fetchUsers({ queryParams: { page: currentPage } }));
+    dispatch(
+      fetchUsers({ queryParams: { page: currentPage, role: ROLES.STUDENT } })
+    );
   };
 
   const filterByBatch = (data: string) => {
-     dispatch(fetchUsers({ queryParams: { batch: encodeURIComponent(data)} }));
-  }
+    dispatch(
+      fetchUsers({
+        queryParams: { batch: encodeURIComponent(data), role: ROLES.STUDENT },
+      })
+    );
+  };
 
   const clearFilters = () => {
-      dispatch(fetchUsers());
-  }
+    dispatch(fetchUsers({ queryParams: { role: ROLES.STUDENT } }));
+  };
 
   const renderTableField = (value: string) => {
-    return <p>{value}</p>;
+    return <p>{value ?? "Not Available"}</p>;
   };
 
   const columns: Column<TableRow>[] = [
@@ -70,6 +80,10 @@ const StudentsList = () => {
       header: "Role",
       cell: ({ row }) => renderTableField(row?.roles?.[0]?.name),
     },
+        {
+      header: "Batch",
+      cell: ({ row }) => renderTableField(row?.batch?.title),
+    },
     {
       header: "Actions",
       type: "actions",
@@ -86,7 +100,11 @@ const StudentsList = () => {
 
   const searchData = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    dispatch(fetchUsers({ queryParams: { page: 1, search: value } }));
+    dispatch(
+      fetchUsers({
+        queryParams: { page: 1, search: value, role: ROLES.STUDENT },
+      })
+    );
   };
   return (
     <div className="flex-1  w-full h-full p-16">
