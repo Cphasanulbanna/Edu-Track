@@ -15,7 +15,7 @@ type CustomProps<T extends FieldValues> = {
   required?: boolean;
   rightContent?: ReactElement;
   leftContent?: ReactElement;
-  options: Option[];
+  options?: Option[];
 };
 
 export type FormControllerProps<T extends FieldValues> = CustomProps<T> &

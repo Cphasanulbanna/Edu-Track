@@ -41,7 +41,7 @@ export function SelectDropdown({placeholder="Select/Search", options=[]}:SelectD
         >
           <span>
              {value
-            ? options?.find((data) => data.value === value)?.label
+            ? options?.find((data) => data?.value === value)?.label
             : "Select..."}
             </span>
           <ChevronsUpDown className="opacity-50" />
@@ -55,18 +55,18 @@ export function SelectDropdown({placeholder="Select/Search", options=[]}:SelectD
             <CommandGroup>
               {options?.map((data) => (
                 <CommandItem
-                  key={data.value}
-                  value={data.value}
+                  key={data?.value}
+                  value={data?.value}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue);
                     setOpen(false);
                   }}
                 >
-                  {data.label}
+                  {data?.label}
                   <Check
                     className={cn(
                       "ml-auto",
-                      value === data.value ? "opacity-100" : "opacity-0"
+                      value === data?.value ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>
