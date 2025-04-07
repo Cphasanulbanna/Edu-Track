@@ -1,6 +1,4 @@
 import axios from "axios";
-import { useEffect } from "react";
-import { getCookie } from "./utils/common";
 
 const RedirectPage = () => {
   const fetchData = async () => {
@@ -10,13 +8,6 @@ const RedirectPage = () => {
     console.log({ response });
   };
 
-  useEffect(() => {
-    const accessToken = getCookie("access-token");
-    if (accessToken) {
-      localStorage.setItem("access-token", accessToken);
-      document.cookie = "access-token=; Max-Age=0; path=/";
-    }
-  }, []);
 
   return (
     <div>

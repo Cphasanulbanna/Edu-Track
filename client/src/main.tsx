@@ -10,6 +10,8 @@ import { ErrorBoundary } from "react-error-boundary";
 import Loader from "./components/layout/Loader.tsx";
 import ErrorPage from "./components/layout/ErrorPage.tsx";
 
+
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
