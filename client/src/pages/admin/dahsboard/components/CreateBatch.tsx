@@ -4,9 +4,13 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { createBatchSchema, CreateBatchType } from "../validate";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getLoading } from "../selector";
 import { Form } from "@/components/ui/form";
+import { useEffect } from "react";
+import { AppDispatch } from "@/app/store";
+import { fetchDepartments } from "@/common/thunk";
+import { getDepartments } from "@/common/selector";
 
 type CreateBatchTypes = {
   close: () => void;
@@ -14,7 +18,13 @@ type CreateBatchTypes = {
   dataToEdit?: Record<string, string>;
 };
 
+type Department = {
+    name: string
+}
+
 const CreateBatch = ({ close, open }: CreateBatchTypes) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const departments = useSelector(getDepartments) as Department[]
   const loading = useSelector(getLoading);
   const form = useForm<CreateBatchType>({
     mode: "all",
@@ -29,6 +39,16 @@ const CreateBatch = ({ close, open }: CreateBatchTypes) => {
   const createBatchFn = () => {
     //
   };
+
+  useEffect(() => {
+    dispatch(fetchDepartments());
+  }, [dispatch]);
+
+  const formattedDepartments = departments?.map((obj) => ({
+    ...obj,
+    label: obj?.name,
+    value: obj?.name,
+  }));
   return (
     <CommonModal close={close} open={open} title="Add new course">
       <Form {...form}>
@@ -42,6 +62,7 @@ const CreateBatch = ({ close, open }: CreateBatchTypes) => {
               control={control}
               errors={errors}
               required
+              options={formattedDepartments}
             />
           </div>
           <div className="col-span-5 my-3.5">

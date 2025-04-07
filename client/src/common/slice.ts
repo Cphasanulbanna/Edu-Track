@@ -74,7 +74,7 @@ const slice = createSlice({
       })
       .addCase(fetchDepartments.fulfilled, (state, { payload }) => {
         _.set(state, "loading.departments", false);
-        _.set(state, "departments", payload?.data);
+        _.set(state, "departments", payload?.departments);
       })
       .addCase(fetchDepartments.rejected, (state) => {
         _.set(state, "loading.departments", false);
