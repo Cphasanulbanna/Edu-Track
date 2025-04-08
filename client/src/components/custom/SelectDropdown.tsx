@@ -26,8 +26,8 @@ interface SelectDropdownProps<T extends FieldValues> {
   readonly optionKey: keyof Option;
   readonly handleChange: (data: string | string[]) => void;
   readonly field: ControllerRenderProps<T, Path<T>>;
-  readonly error?: string,
-  readonly isMultiSelect?: boolean
+  readonly error?: string;
+  readonly isMultiSelect?: boolean;
 }
 
 export function SelectDropdown<T extends FieldValues>({
@@ -37,15 +37,16 @@ export function SelectDropdown<T extends FieldValues>({
   handleChange = () => {},
   field,
   error,
-  isMultiSelect =false
+  isMultiSelect = false,
 }: SelectDropdownProps<T>) {
   const [open, setOpen] = useState<boolean>(false);
 
   const clearSelection = () => {
     handleChange(isMultiSelect ? [] : "");
-  field.onChange(isMultiSelect ? [] : "");
+    field.onChange(isMultiSelect ? [] : "");
   };
 
+  
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -59,10 +60,10 @@ export function SelectDropdown<T extends FieldValues>({
           <div className="overflow-ellipsis overflow-hidden">
             <div className="">
               <span>
-                  {isMultiSelect
+                {isMultiSelect
                   ? options
                       ?.filter((data) =>
-                        (field?.value)?.includes(data[optionKey])
+                        field?.value?.includes(data[optionKey])
                       )
                       .map((d) => d.label)
                       .join(", ") || "Select..."
@@ -90,37 +91,39 @@ export function SelectDropdown<T extends FieldValues>({
               {options?.map((data) => (
                 <CommandItem
                   key={data?.[optionKey]}
-                  value={data?.[optionKey]}
-                    onSelect={(currentValue) => {
-                      setOpen(!isMultiSelect);
+                  value={isMultiSelect ? data?.[optionKey]: data?.value}
+                  onSelect={(currentValue) => {
+                    setOpen(!isMultiSelect);
 
-                      if (isMultiSelect) {
-                        const currentArray = Array.isArray(field.value) ? field.value as string[] : [];
-                        const exists = currentArray.includes(currentValue);
-                        const newValue = exists
-                          ? currentArray.filter((v: string) => v !== currentValue)
-                          : [...currentArray, currentValue];
+                    if (isMultiSelect) {
+                      const currentArray = Array.isArray(field.value)
+                        ? (field.value as string[])
+                        : [];
+                      const exists = currentArray.includes(currentValue);
+                      const newValue = exists
+                        ? currentArray.filter((v: string) => v !== currentValue)
+                        : [...currentArray, currentValue];
 
-                        field.onChange(newValue);
-                        handleChange(newValue);
-                      } else {
-                        field.onChange(currentValue);
-                        handleChange(currentValue);
-                        setOpen(false);
-                      }
-                    }}
+                      field.onChange(newValue);
+                      handleChange(newValue);
+                    } else {
+                      field.onChange(currentValue === field?.value ? "": currentValue);
+                      handleChange(currentValue === field?.value ? "": currentValue);
+                      setOpen(false);
+                    }
+                  }}
                 >
                   {data?.label}
                   <Check
-                     className={cn(
+                    className={cn(
                       "ml-auto",
                       isMultiSelect
-                        ? (field.value).includes(data[optionKey])
+                        ? field.value.includes(data[optionKey])
                           ? "opacity-100"
                           : "opacity-0"
                         : field.value === data[optionKey]
-                          ? "opacity-100"
-                          : "opacity-0"
+                        ? "opacity-100"
+                        : "opacity-0"
                     )}
                   />
                 </CommandItem>
