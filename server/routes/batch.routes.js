@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.get("/", fetchBatch)
 router.post("/:departmentId", createBatch)
-router.post("/:batchId/:studentId", addStudentToBatch)
+router.post("/:batchId", addStudentToBatch)
 
 export default router;

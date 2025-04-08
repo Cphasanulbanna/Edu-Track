@@ -68,35 +68,60 @@ export const fetchBatch = async (req, res) => {
 };
 
 export const addStudentToBatch = async (req, res) => {
-  const { batchId, studentId } = req.params;
+  const { batchId } = req.params;
+  const { studentIds } = req.body;
   try {
-    if (!batchId || !studentId) {
+    if (
+      !batchId ||
+      !studentIds ||
+      !Array.isArray(studentIds) ||
+      studentIds.length === 0
+    ) {
       return res
         .status(400)
         .json({ message: "Batch and Student Ids are required" });
     }
 
-    const student = await User.findById(studentId);
-    if (!student) {
-      return res.status(404).json({ message: "Student not found" });
-    }
-    if (student.batch) {
-      return res
-        .status(404)
-        .json({ message: "Student is already added into another batch" });
-    }
     const batch = await Batch.findById(batchId);
     if (!batch) {
       return res.status(404).json({ message: "Batch not found" });
     }
 
-    student.batch = batchId;
-    await student.save();
+    const failedStudents = [];
+    const addedStudents = [];
 
-    batch.students.push(studentId);
+    for (const studentId of studentIds) {
+      const student = await User.findById(studentId);
+      if (!student) {
+        failedStudents.push({ studentId, message: "Student not found" });
+        continue;
+      }
+      if (student.batch) {
+        failedStudents.push({
+          studentId,
+          message: "Student is already added into another batch",
+        });
+        continue;
+      }
+
+      // Add student to batch
+      student.batch = batchId;
+      await student.save();
+      batch.students.push(studentId);
+      addedStudents.push(studentId);
+    }
+
     await batch.save();
 
-    return res.status(200).json({ message: "Student added to department" });
+    if (failedStudents.length > 0) {
+      return res.status(400).json({
+        message: "Some students could not be added",
+        failedStudents,
+        addedStudents,
+      });
+    }
+
+     return res.status(200).json({ message: "Students added to batch successfully", data: addedStudents });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
