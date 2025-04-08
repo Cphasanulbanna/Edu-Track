@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import { AppDispatch } from "@/app/store";
 import { fetchDepartments } from "@/common/thunk";
 import { getDepartments } from "@/common/selector";
-import { createBatch } from "../thunk";
+import { createBatch, fetchBatches } from "../thunk";
 
 type CreateBatchPropTypes = {
   close: () => void;
@@ -36,12 +36,23 @@ const CreateBatch = ({ close, open }: CreateBatchPropTypes) => {
     handleSubmit,
     control,
     setValue,
+    reset,
     formState: { errors },
   } = form;
 
   const createBatchFn = async (data: CreateBatchType) => {
-      console.log({ data });
-      const response = await dispatch(createBatch({params: {departmentId: data?.department}, requestBody: {year: data?.year} }))
+    console.log({ data });
+    const response = await dispatch(
+      createBatch({
+        params: { departmentId: data?.department },
+        requestBody: { year: data?.year },
+      })
+    );
+    if (createBatch.fulfilled.match(response)) {
+      dispatch(fetchBatches());
+      close();
+      reset();
+    }
   };
 
   useEffect(() => {
