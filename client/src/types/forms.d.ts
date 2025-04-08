@@ -17,6 +17,7 @@ type CustomProps<T extends FieldValues> = {
   leftContent?: ReactElement;
   options?: Option[];
   optionKey?: string;
+  isMultiSelect?: boolean;
 };
 
 export type FormControllerProps<T extends FieldValues> = CustomProps<T> &

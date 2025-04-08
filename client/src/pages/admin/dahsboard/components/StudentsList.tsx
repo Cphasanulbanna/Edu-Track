@@ -53,6 +53,7 @@ const StudentsList = () => {
     return <p>{value ?? "Not Available"}</p>;
   };
 
+
   const columns: Column<TableRow>[] = [
     {
       type: "multi-select",
@@ -93,7 +94,7 @@ const StudentsList = () => {
         },
         {
           name: "delete",
-        },
+        }
       ],
     },
   ];

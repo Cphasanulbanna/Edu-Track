@@ -22,6 +22,10 @@ const Batches = () => {
     return <p>{value ?? "Not Available"}</p>;
   };
 
+  const addStudentToBatch = () => {
+
+  }
+
   const columns: Column<TableRow>[] = [
     {
       header: "Batch Name",
@@ -34,8 +38,8 @@ const Batches = () => {
     {
       header: "Year",
       cell: (field) => renderTableField(field?.row?.year),
-      },
-     {
+    },
+    {
       header: "Students",
       cell: (field) => renderTableField(field?.row?.students?.length),
     },
@@ -44,18 +48,19 @@ const Batches = () => {
       type: "actions",
       actions: [
         {
-          name: "edit",
-        }
+          name: "Add Students",
+          handleClick: addStudentToBatch,
+        },
       ],
     },
   ];
 
   const closeBatchModal = () => {
-    setOpenBatchModal(false)
-  }
+    setOpenBatchModal(false);
+  };
   return (
     <div className="flex-1  w-full h-full p-16">
-      <CreateBatch open={openBatchModal} close={closeBatchModal}  />
+      <CreateBatch open={openBatchModal} close={closeBatchModal} />
       <CommonTable
         data={batches}
         columns={columns}

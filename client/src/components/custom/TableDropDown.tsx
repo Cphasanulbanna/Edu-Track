@@ -7,6 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { iconMap } from "@/constant/icons";
+import {  Plus } from "lucide-react";
 
 const TableDropDown = ({ actions = [], clickedRow }: TableDropDownProps) => {
   return (
@@ -18,7 +19,7 @@ const TableDropDown = ({ actions = [], clickedRow }: TableDropDownProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         {actions?.map((action) => {
-          const Icon = iconMap[action?.name];
+          const Icon = iconMap[action?.name] || Plus;
           return (
             <DropdownMenuItem key={action.name}>
               <Button

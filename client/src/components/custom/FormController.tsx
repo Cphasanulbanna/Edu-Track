@@ -22,6 +22,7 @@ const FormController = <T extends FieldValues>({
   leftContent,
   options = [],
   optionKey = "_id",
+  isMultiSelect=false,
   handleChange,
   ...inputProps
 }: FormControllerProps<T>) => {
@@ -38,7 +39,7 @@ const FormController = <T extends FieldValues>({
             {required && "*"}
           </FormLabel>
           <FormControl>
-            <SelectDropdown error={errors[name]} options={options} optionKey={optionKey}  handleChange={handleChange}  field={field} />
+            <SelectDropdown isMultiSelect={isMultiSelect} error={errors[name]} options={options} optionKey={optionKey}  handleChange={handleChange}  field={field} />
           </FormControl>
           <FormMessage
             className="absolute bottom-[-18px] text-xs"

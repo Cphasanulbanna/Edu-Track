@@ -71,7 +71,10 @@ const CreateBatch = ({ close, open }: CreateBatchPropTypes) => {
   return (
     <CommonModal close={close} open={open} title="Add new Batch">
       <Form {...form}>
-        <form className="grid grid-cols-12" onSubmit={handleSubmit(createBatchFn)}>
+        <form
+          className="grid grid-cols-12"
+          onSubmit={handleSubmit(createBatchFn)}
+        >
           <div className="col-span-8 my-3.5">
             <FormController
               type="select"
@@ -97,7 +100,11 @@ const CreateBatch = ({ close, open }: CreateBatchPropTypes) => {
             />
           </div>
           <div className="col-span-12">
-            <Button className="float-right" loading={loading.createBatch} type="submit">
+            <Button
+              className="float-right"
+              loading={loading.createBatch}
+              type="submit"
+            >
               {"Save"}
             </Button>
           </div>

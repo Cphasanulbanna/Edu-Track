@@ -24,9 +24,10 @@ interface SelectDropdownProps<T extends FieldValues> {
   readonly options: Option[];
   readonly placeholder?: string;
   readonly optionKey: keyof Option;
-  readonly handleChange: (data: string) => void;
+  readonly handleChange: (data: string | string[]) => void;
   readonly field: ControllerRenderProps<T, Path<T>>;
-  readonly error?: string
+  readonly error?: string,
+  readonly isMultiSelect?: boolean
 }
 
 export function SelectDropdown<T extends FieldValues>({
@@ -36,12 +37,13 @@ export function SelectDropdown<T extends FieldValues>({
   handleChange = () => {},
   field,
   error,
+  isMultiSelect =false
 }: SelectDropdownProps<T>) {
   const [open, setOpen] = useState<boolean>(false);
 
   const clearSelection = () => {
-    handleChange("");
-    field?.onChange("");
+    handleChange(isMultiSelect ? [] : "");
+  field.onChange(isMultiSelect ? [] : "");
   };
 
   return (
@@ -57,10 +59,15 @@ export function SelectDropdown<T extends FieldValues>({
           <div className="overflow-ellipsis overflow-hidden">
             <div className="">
               <span>
-                {field.value
-                  ? options?.find((data) => data?.[optionKey] === field.value)
-                      ?.label
-                  : "Select..."}
+                  {isMultiSelect
+                  ? options
+                      ?.filter((data) =>
+                        (field?.value)?.includes(data[optionKey])
+                      )
+                      .map((d) => d.label)
+                      .join(", ") || "Select..."
+                  : options.find((data) => data[optionKey] === field.value)
+                      ?.label || "Select..."}
               </span>
               <button
                 onClick={clearSelection}
@@ -84,19 +91,36 @@ export function SelectDropdown<T extends FieldValues>({
                 <CommandItem
                   key={data?.[optionKey]}
                   value={data?.[optionKey]}
-                  onSelect={(currentValue) => {
-                    setOpen(false);
-                    field?.onChange(currentValue);
-                    handleChange(currentValue);
-                  }}
+                    onSelect={(currentValue) => {
+                      setOpen(!isMultiSelect);
+
+                      if (isMultiSelect) {
+                        const currentArray = Array.isArray(field.value) ? field.value as string[] : [];
+                        const exists = currentArray.includes(currentValue);
+                        const newValue = exists
+                          ? currentArray.filter((v: string) => v !== currentValue)
+                          : [...currentArray, currentValue];
+
+                        field.onChange(newValue);
+                        handleChange(newValue);
+                      } else {
+                        field.onChange(currentValue);
+                        handleChange(currentValue);
+                        setOpen(false);
+                      }
+                    }}
                 >
                   {data?.label}
                   <Check
-                    className={cn(
+                     className={cn(
                       "ml-auto",
-                      field?.value === data?.[optionKey]
-                        ? "opacity-100"
-                        : "opacity-0"
+                      isMultiSelect
+                        ? (field.value).includes(data[optionKey])
+                          ? "opacity-100"
+                          : "opacity-0"
+                        : field.value === data[optionKey]
+                          ? "opacity-100"
+                          : "opacity-0"
                     )}
                   />
                 </CommandItem>
