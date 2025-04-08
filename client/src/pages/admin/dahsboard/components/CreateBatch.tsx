@@ -12,7 +12,7 @@ import { AppDispatch } from "@/app/store";
 import { fetchDepartments } from "@/common/thunk";
 import { getDepartments } from "@/common/selector";
 
-type CreateBatchTypes = {
+type CreateBatchPropTypes = {
   close: () => void;
   open: boolean;
   dataToEdit?: Record<string, string>;
@@ -22,22 +22,24 @@ type Department = {
   name: string;
 };
 
-const CreateBatch = ({ close, open }: CreateBatchTypes) => {
+const CreateBatch = ({ close, open }: CreateBatchPropTypes) => {
   const dispatch = useDispatch<AppDispatch>();
   const departments = useSelector(getDepartments) as Department[];
   const loading = useSelector(getLoading);
   const form = useForm<CreateBatchType>({
     mode: "all",
+    defaultValues: { department: "", year: "" },
     resolver: zodResolver(createBatchSchema),
   });
   const {
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = form;
 
-  const createBatchFn = () => {
-    //
+  const createBatchFn = (data: CreateBatchType) => {
+    console.log({ data });
   };
 
   useEffect(() => {
@@ -49,11 +51,10 @@ const CreateBatch = ({ close, open }: CreateBatchTypes) => {
     label: obj?.name,
     value: obj?.name,
   }));
-    
-    const handleChange = (data) => {
-        console.log({data});
-        
-    }
+
+  const handleChange = (data: string) => {
+    setValue("department", data);
+  };
   return (
     <CommonModal close={close} open={open} title="Add new Batch">
       <Form {...form}>

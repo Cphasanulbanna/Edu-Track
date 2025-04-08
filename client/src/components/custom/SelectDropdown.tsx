@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import { Check, ChevronsUpDown, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -19,29 +19,28 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "../ui/button";
 import { Option } from "@/types/forms";
-import { Controller } from "react-hook-form";
+import { ControllerRenderProps, FieldValues, Path } from "react-hook-form";
 
-interface SelectDropdownProps {
+interface SelectDropdownProps<T extends FieldValues> {
   readonly options: Option[];
   readonly placeholder?: string;
   readonly optionKey: keyof Option;
+  readonly handleChange: (data: string) => void;
+  readonly field: ControllerRenderProps<T, Path<T>>;
 }
 
-export function SelectDropdown({
+export function SelectDropdown<T extends FieldValues>({
   placeholder = "Select/Search",
   optionKey = "_id",
   options = [],
-  control,
-  name,
-  handleChange,
-  onChange,
+  handleChange = () => {},
   field,
-}: SelectDropdownProps) {
-  const [open, setOpen] = React.useState(false);
+}: SelectDropdownProps<T>) {
+  const [open, setOpen] = useState<boolean>(false);
 
   const clearSelection = () => {
     handleChange("");
-    onChange("");
+    field?.onChange("");
   };
 
   return (
@@ -85,7 +84,7 @@ export function SelectDropdown({
                   value={data?.[optionKey]}
                   onSelect={(currentValue) => {
                     setOpen(false);
-                    onChange(currentValue);
+                    field?.onChange(currentValue);
                     handleChange(currentValue);
                   }}
                 >

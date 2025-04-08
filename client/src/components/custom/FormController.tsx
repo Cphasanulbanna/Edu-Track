@@ -38,7 +38,7 @@ const FormController = <T extends FieldValues>({
             {required && "*"}
           </FormLabel>
           <FormControl>
-            <SelectDropdown options={options} optionKey={optionKey} control={control} name={name} handleChange={handleChange} onChange={field?.onChange} field={field} />
+            <SelectDropdown options={options} optionKey={optionKey}  handleChange={handleChange}  field={field} />
           </FormControl>
           <FormMessage
             className="absolute bottom-[-18px] text-xs"
