@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { AppDispatch } from "@/app/store";
 import { fetchDepartments } from "@/common/thunk";
 import { getDepartments } from "@/common/selector";
+import { createBatch } from "../thunk";
 
 type CreateBatchPropTypes = {
   close: () => void;
@@ -38,8 +39,9 @@ const CreateBatch = ({ close, open }: CreateBatchPropTypes) => {
     formState: { errors },
   } = form;
 
-  const createBatchFn = (data: CreateBatchType) => {
-    console.log({ data });
+  const createBatchFn = async (data: CreateBatchType) => {
+      console.log({ data });
+      const response = await dispatch(createBatch({params: {departmentId: data?.department}, requestBody: {year: data?.year} }))
   };
 
   useEffect(() => {

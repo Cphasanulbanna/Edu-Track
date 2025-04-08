@@ -1,9 +1,9 @@
-import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
-import {Loader2} from "lucide-react"
+import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
+import { Loader2 } from "lucide-react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
@@ -34,7 +34,7 @@ const buttonVariants = cva(
       size: "default",
     },
   }
-)
+);
 
 function Button({
   className,
@@ -46,8 +46,8 @@ function Button({
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
-    asChild?: boolean,
-    loading?: boolean
+    asChild?: boolean;
+    loading?: boolean;
   }) {
   const Comp = asChild ? Slot : "button";
   const isDisabled = loading || disabled;
@@ -56,18 +56,31 @@ function Button({
     <Comp
       disabled={disabled}
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }), "!cursor-pointer px-6", { "!cursor-not-allowed select-none opacity-50 pointer-events-none":
-            isDisabled,})}
+      className={cn(
+        buttonVariants({ variant, size, className }),
+        "!cursor-pointer",
+        {
+          "!cursor-not-allowed select-none opacity-50 pointer-events-none":
+            isDisabled,
+        }
+      )}
       {...props}
     >
-   {loading && (
-        <span className="w-[75px] flex justify-center">
-          <Loader2 className="h-4 w-4 animate-spin" />
-        </span>
-      )}
-      <div className={cn({ "hidden": loading }, "flex justify-between items-center w-full p-0")}>{props.children}</div>
+      <div
+        className={cn(
+          { hidden: loading },
+          "flex justify-between items-center w-full p-0 relative px-6"
+        )}
+      >
+        {props.children}
+        {loading && (
+          <span className="flex justify-center items-center absolute right-0 bottom-[-50%]  top-[-50%]">
+            <Loader2 className="h-4 w-4 animate-spin" />
+          </span>
+        )}
+      </div>
     </Comp>
-  )
+  );
 }
 
-export { Button, buttonVariants }
+export { Button, buttonVariants };
