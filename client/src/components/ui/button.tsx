@@ -69,7 +69,7 @@ function Button({
       <div
         className={cn(
           { hidden: loading },
-          "flex justify-between items-center w-full p-0 relative px-6"
+          "flex justify-between items-center w-full relative px-6"
         )}
       >
         {props.children}

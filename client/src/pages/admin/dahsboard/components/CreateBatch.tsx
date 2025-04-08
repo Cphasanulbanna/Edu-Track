@@ -71,8 +71,8 @@ const CreateBatch = ({ close, open }: CreateBatchPropTypes) => {
   return (
     <CommonModal close={close} open={open} title="Add new Batch">
       <Form {...form}>
-        <form onSubmit={handleSubmit(createBatchFn)}>
-          <div className="col-span-5 my-3.5">
+        <form className="grid grid-cols-12" onSubmit={handleSubmit(createBatchFn)}>
+          <div className="col-span-8 my-3.5">
             <FormController
               type="select"
               label="Department"
@@ -86,7 +86,7 @@ const CreateBatch = ({ close, open }: CreateBatchPropTypes) => {
               handleChange={handleChange}
             />
           </div>
-          <div className="col-span-5 my-3.5">
+          <div className="col-span-8 my-3.5">
             <FormController
               label="Year"
               name="year"
@@ -96,8 +96,8 @@ const CreateBatch = ({ close, open }: CreateBatchPropTypes) => {
               required
             />
           </div>
-          <div className="flex justify-end">
-            <Button loading={loading.createBatch} type="submit">
+          <div className="col-span-12">
+            <Button className="float-right" loading={loading.createBatch} type="submit">
               {"Save"}
             </Button>
           </div>

@@ -138,7 +138,9 @@ type FormMessageProps = React.HTMLAttributes<HTMLParagraphElement> & {
 };
 
 function FormMessage({ className, error, ...props }: FormMessageProps) {
-  const {  formMessageId, name } = useFormField()
+  const { formMessageId, name } = useFormField()
+  console.log({error});
+  
   
   const body = error?.[name]?.message ?? props.children;
 

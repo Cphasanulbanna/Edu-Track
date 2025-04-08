@@ -17,7 +17,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "../ui/button";
 import { Option } from "@/types/forms";
 import { ControllerRenderProps, FieldValues, Path } from "react-hook-form";
 
@@ -27,6 +26,7 @@ interface SelectDropdownProps<T extends FieldValues> {
   readonly optionKey: keyof Option;
   readonly handleChange: (data: string) => void;
   readonly field: ControllerRenderProps<T, Path<T>>;
+  readonly error?: string
 }
 
 export function SelectDropdown<T extends FieldValues>({
@@ -35,6 +35,7 @@ export function SelectDropdown<T extends FieldValues>({
   options = [],
   handleChange = () => {},
   field,
+  error,
 }: SelectDropdownProps<T>) {
   const [open, setOpen] = useState<boolean>(false);
 
@@ -46,11 +47,12 @@ export function SelectDropdown<T extends FieldValues>({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
+        <div
+          tabIndex={0}
           role="combobox"
           aria-expanded={open}
-          className="w-[300px] justify-between relative"
+          aria-invalid={!!error}
+          className="w-[300px] justify-between items-center relative file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
         >
           <div className="overflow-ellipsis overflow-hidden">
             <div className="">
@@ -65,12 +67,12 @@ export function SelectDropdown<T extends FieldValues>({
                 className="cursor-pointer  absolute z-20 right-1 top-[-50%] bottom-[-50%]"
               >
                 {" "}
-                {field?.value && <X className="text-red-700 w-4 h-4" />}
+                {field?.value && <X className="text-red-700 w-5 h-5" />}
               </button>
             </div>
           </div>
-          <ChevronsUpDown className="opacity-50" />
-        </Button>
+          <ChevronsUpDown className="opacity-50 mr-3 w-5 h-5" />
+        </div>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
