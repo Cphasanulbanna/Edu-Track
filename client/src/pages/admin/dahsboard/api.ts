@@ -37,11 +37,12 @@ export const createBatchAPI = async (data?: APIPayloadType) => {
 };
 
 export const addStudentsToBatchAPI = async (data?: APIPayloadType) => {
-  const { params = {} } = data || {};
+  const { params = {}, requestBody = {} } = data || {};
   return axiosInstance.post(
     API_ENDPOINTS.BATCH.ADD_STUDENTS_TO_BATCH?.replace(
       ":batchId",
       params.batchId
-    )
+    ),
+    requestBody
   );
 };

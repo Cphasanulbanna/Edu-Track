@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/app/store";
-import { fetchUsers } from "../thunk";
+import { addStudentsToBatch, fetchBatches, fetchUsers } from "../thunk";
 import { ROLES } from "@/common/constant";
 import { getUserData } from "../selector";
 import { Form } from "@/components/ui/form";
@@ -33,8 +33,17 @@ const AddStudentsToBatch = ({ open = false, close }: AddStudentsPropTypes) => {
     formState: { errors },
   } = form;
 
-  const addStudents = (data: unknown) => {
+  const addStudents = async (data: unknown) => {
     console.log({ data });
+    const response = await dispatch(
+      addStudentsToBatch({
+        params: { batchId: "batchId" },
+        requestBody: { studentIds: data },
+      })
+    );
+    if (addStudentsToBatch.fulfilled.match(response)) {
+      dispatch(fetchBatches());
+    }
   };
 
   useEffect(() => {
