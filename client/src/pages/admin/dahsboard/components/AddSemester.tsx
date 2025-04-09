@@ -5,6 +5,9 @@ import { Form } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { addSemesterSchema, AddSemesterType } from "../validate";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/app/store";
+import { addSemester } from "../thunk";
 
 type AddSemesterPropTypes = {
   close: () => void;
@@ -12,6 +15,7 @@ type AddSemesterPropTypes = {
 };
 
 const AddSemester = ({ open = false, close }: AddSemesterPropTypes) => {
+  const dispatch = useDispatch<AppDispatch>();
   const form = useForm<AddSemesterType>({
     mode: "all",
     resolver: zodResolver(addSemesterSchema),
@@ -22,9 +26,9 @@ const AddSemester = ({ open = false, close }: AddSemesterPropTypes) => {
     formState: { errors },
   } = form;
 
-  const addSemesterFn = () => {
-    //
-  }
+  const addSemesterFn = async () => {
+    const response = await dispatch(addSemester());
+  };
   return (
     <CommonModal close={close} open={open} title="Add Students to Batch">
       <Form {...form}>
@@ -32,8 +36,18 @@ const AddSemester = ({ open = false, close }: AddSemesterPropTypes) => {
           <div className="col-span-5 my-3.5">
             <FormController
               label="Semester"
-              name="semester"
+              name="semesterNumber"
               placeholder="Semester"
+              control={control}
+              errors={errors}
+              required
+            />
+          </div>
+          <div className="col-span-5 my-3.5">
+            <FormController
+              label="Semester Fee"
+              name="semesterFee"
+              placeholder="Semester Fee"
               control={control}
               errors={errors}
               required

@@ -25,8 +25,11 @@ export const addStudentsToBatchSchema = z.object({
 export type AddStudentsToBatchType = z.infer<typeof addStudentsToBatchSchema>;
 
 export const addSemesterSchema = z.object({
-  semester: z
-    .string({ required_error: "Semester is required" })
-    .min(1, { message: "Semester are required" }),
+  semesterNumber: z
+    .string({ required_error: "Semester Number is required" })
+    .min(1, { message: "Semester Number are required" }),
+  semesterFee: z
+    .string({ required_error: "Semester Fee is required" })
+    .min(1, { message: "Semester Fee is required" }),
 });
 export type AddSemesterType = z.infer<typeof addSemesterSchema>;
