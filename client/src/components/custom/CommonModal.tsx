@@ -19,7 +19,7 @@ const CommonModal = ({ title, description,children,open= false,close }: CommonMo
   return (
     <Dialog onOpenChange={close} open={open} >
       <DialogOverlay  />
-      <DialogTrigger>Open</DialogTrigger>
+      <DialogTrigger></DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>

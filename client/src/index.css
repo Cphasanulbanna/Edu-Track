@@ -120,7 +120,7 @@
   }
 }
 
-img, button, a, div {
+img, button, a {
   user-select: none;
 }
 

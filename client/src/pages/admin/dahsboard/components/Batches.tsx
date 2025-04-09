@@ -5,14 +5,15 @@ import { Column, TableRow } from "@/types/components";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBatches } from "../thunk";
-import { getBatches, getLoading } from "../selector";
+import { getBatches } from "../selector";
 import CreateBatch from "./CreateBatch";
+import AddStudentsToBatch from "./AddStudentsToBatch";
 
 const Batches = () => {
   const dispatch = useDispatch<AppDispatch>();
   const batches = useSelector(getBatches);
-  const loading = useSelector(getLoading);
   const [openBatchModal, setOpenBatchModal] = useState<boolean>(false);
+  const [openStudentModal, setOpenStudentModal] = useState<boolean>(false);
 
   useEffect(() => {
     dispatch(fetchBatches());
@@ -23,7 +24,7 @@ const Batches = () => {
   };
 
   const addStudentToBatch = () => {
-
+    setOpenStudentModal(true)
   }
 
   const columns: Column<TableRow>[] = [
@@ -58,13 +59,17 @@ const Batches = () => {
   const closeBatchModal = () => {
     setOpenBatchModal(false);
   };
+
+  const closeStudentModal = () => {
+    setOpenStudentModal(false)
+  }
   return (
     <div className="flex-1  w-full h-full p-16">
       <CreateBatch open={openBatchModal} close={closeBatchModal} />
+      <AddStudentsToBatch open={openStudentModal} close={closeStudentModal} />
       <CommonTable
         data={batches}
         columns={columns}
-        // isLoading={loading.courses}
       />
       <div className="flex justify-end mt-5">
         <Button onClick={() => setOpenBatchModal(true)}>Create</Button>
