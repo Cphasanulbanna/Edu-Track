@@ -116,8 +116,10 @@ const StudentsList = () => {
         totalPages={totalPages}
         totalElements={totalElements}
         onPageChange={onPageClick}
+        search
         searchData={searchData}
         isLoading={loading.userData}
+        filter
         filterDropDownData={formattedBatchData}
         filterTitle="Batch"
         filterOnClick={filterByBatch}

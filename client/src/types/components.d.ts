@@ -41,6 +41,8 @@ export interface CommonTableProps
   columns: Column<TableRow>[];
   totalElements?: number;
   isLoading?: boolean;
+  filter?: boolean;
+  search?: boolean;
 }
 
 export interface TableDropDownProps {

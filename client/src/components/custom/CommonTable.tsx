@@ -13,10 +13,12 @@ const CommonTable = ({
   onPageChange,
   page,
   totalPages = 0,
+  search=false,
   searchData,
   searchTerm,
   totalElements = 0,
   isLoading = false,
+  filter=false,
   filterDropDownData,
   filterOnClick,
   filterTitle,
@@ -103,13 +105,16 @@ const CommonTable = ({
   return (
     <div>
       <div className="flex justify-between gap-3 items-center">
-        <SearchInput searchData={searchData} searchTerm={searchTerm} />
-        <FilterDropDown
-          filterOnClick={filterOnClick}
-          filterDropDownData={filterDropDownData}
-          filterTitle={filterTitle}
-          clearSelectedFilters={clearSelectedFilters}
-        />
+        {search &&
+          <SearchInput searchData={searchData} searchTerm={searchTerm} />}
+        {filter &&
+          <FilterDropDown
+            filterOnClick={filterOnClick}
+            filterDropDownData={filterDropDownData}
+            filterTitle={filterTitle}
+            clearSelectedFilters={clearSelectedFilters}
+          />
+        }
       </div>
       <table className="bg-white-100 w-[100%]  table-auto border-separate border-spacing-x-0 border-spacing-y-[6px] border border-gray-300 rounded-md px-2 overflow-hidden relative">
         <thead className="bg-primary relative after:content-[''] after:absolute after:left-[-8px] after:bottom-[0px] after:flex after:right-[-8px] after:h-[1px]  after:bg-gray-300 py-8">
