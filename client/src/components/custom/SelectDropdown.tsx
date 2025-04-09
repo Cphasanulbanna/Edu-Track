@@ -46,7 +46,6 @@ export function SelectDropdown<T extends FieldValues>({
     field.onChange(isMultiSelect ? [] : "");
   };
 
-  
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -59,14 +58,14 @@ export function SelectDropdown<T extends FieldValues>({
         >
           <div className="overflow-ellipsis overflow-hidden">
             <div className="">
-              <span>
+              <span className="flex flex-row gap-x-1">
                 {isMultiSelect
                   ? options
                       ?.filter((data) =>
                         field?.value?.includes(data[optionKey])
                       )
-                      .map((d) => d.label)
-                      .join(", ") || "Select..."
+                    .map((d) => <span className={isMultiSelect ? "px-1 rounded-sm overflow-hidden bg-slate-300 py-0.5 cursor-pointer hover:opacity-75" : ""}>{d.label}</span>)
+                     || "Select..."
                   : options.find((data) => data[optionKey] === field.value)
                       ?.label || "Select..."}
               </span>
@@ -91,9 +90,9 @@ export function SelectDropdown<T extends FieldValues>({
               {options?.map((data) => (
                 <CommandItem
                   key={data?.[optionKey]}
-                  value={isMultiSelect ? data?.[optionKey]: data?.value}
+                  value={data?.[optionKey]}
                   onSelect={(currentValue) => {
-                    setOpen(!isMultiSelect);
+                  
 
                     if (isMultiSelect) {
                       const currentArray = Array.isArray(field.value)
@@ -107,8 +106,8 @@ export function SelectDropdown<T extends FieldValues>({
                       field.onChange(newValue);
                       handleChange(newValue);
                     } else {
-                      field.onChange(currentValue === field?.value ? "": currentValue);
-                      handleChange(currentValue === field?.value ? "": currentValue);
+                      field.onChange(currentValue);
+                      handleChange(currentValue);
                       setOpen(false);
                     }
                   }}
