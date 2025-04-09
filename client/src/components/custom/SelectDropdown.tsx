@@ -40,12 +40,17 @@ export function SelectDropdown<T extends FieldValues>({
   isMultiSelect = false,
 }: SelectDropdownProps<T>) {
   const [open, setOpen] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const clearSelection = () => {
     handleChange(isMultiSelect ? [] : "");
     field.onChange(isMultiSelect ? [] : "");
   };
 
+  const filteredOptions = options.filter((data) => {
+    const label = data?.label?.toLowerCase() ?? "";
+    return label.includes(searchTerm.toLowerCase());
+  });
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -92,12 +97,19 @@ export function SelectDropdown<T extends FieldValues>({
         </div>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
-        <Command>
-          <CommandInput placeholder={placeholder} className="h-9" />
+        <Command shouldFilter={true}>
+          <CommandInput
+            value={searchTerm}
+            onValueChange={(data) => setSearchTerm(data)}
+            placeholder={placeholder}
+            className="h-9"
+          />
           <CommandList>
-            <CommandEmpty>Not found.</CommandEmpty>
-            <CommandGroup>
-              {options?.map((data) => (
+            {filteredOptions.length === 0 && (
+              <CommandEmpty>Not found.</CommandEmpty>
+            )}
+            <CommandGroup forceMount>
+              {filteredOptions?.map((data) => (
                 <CommandItem
                   key={String(data?.[optionKey])}
                   value={String(data?.[optionKey])}
