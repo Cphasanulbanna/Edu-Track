@@ -23,3 +23,10 @@ export const addStudentsToBatchSchema = z.object({
     .min(1, { message: "Students are required" }),
 });
 export type AddStudentsToBatchType = z.infer<typeof addStudentsToBatchSchema>;
+
+export const addSemesterSchema = z.object({
+  semester: z
+    .string({ required_error: "Semester is required" })
+    .min(1, { message: "Semester are required" }),
+});
+export type AddSemesterType = z.infer<typeof addSemesterSchema>;

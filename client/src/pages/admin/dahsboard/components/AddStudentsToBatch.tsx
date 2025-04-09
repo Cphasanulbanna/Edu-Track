@@ -55,8 +55,6 @@ const AddStudentsToBatch = ({
     dispatch(fetchUsers({ queryParams: { role: ROLES.STUDENT } }));
   }, [dispatch]);
 
-  console.log({ students });
-
   const formattedStudents = students?.map((obj: User) => ({
     ...obj,
     label: `${obj?.profile?.first_name} ${obj?.profile?.last_name}`,

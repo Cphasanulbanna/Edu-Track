@@ -1,11 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { ACTION_TYPES } from "./actions";
 import {
+  addSemesterAPI,
   addStudentsToBatchAPI,
   createBatchAPI,
   createCourseAPI,
   deleteCourseAPI,
   fetchBatchesAPI,
+  fetchSemestersAPI,
   fetchUsersApi,
 } from "./api";
 import { handleAPIError } from "@/utils/error";
@@ -81,6 +83,31 @@ export const addStudentsToBatch = createAsyncThunk(
     try {
       const { data } = await addStudentsToBatchAPI(payload);
       successToast("Students added to Batch");
+      return data;
+    } catch (error: unknown) {
+      return handleAPIError(error, thunkAPI);
+    }
+  }
+);
+
+export const addSemester = createAsyncThunk(
+  ACTION_TYPES.ADD_SEMESTER,
+  async (payload: APIPayloadType, thunkAPI) => {
+    try {
+      const { data } = await addSemesterAPI(payload);
+      successToast("Added new semester");
+      return data;
+    } catch (error: unknown) {
+      return handleAPIError(error, thunkAPI);
+    }
+  }
+);
+
+export const fetchSemesters = createAsyncThunk(
+  ACTION_TYPES.FETCH_SEMESTERS,
+  async (_, thunkAPI) => {
+    try {
+      const { data } = await fetchSemestersAPI();
       return data;
     } catch (error: unknown) {
       return handleAPIError(error, thunkAPI);

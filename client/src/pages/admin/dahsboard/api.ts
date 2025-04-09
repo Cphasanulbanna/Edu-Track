@@ -46,3 +46,12 @@ export const addStudentsToBatchAPI = async (data?: APIPayloadType) => {
     requestBody
   );
 };
+
+export const addSemesterAPI = async (data?: APIPayloadType) => {
+  const { requestBody = {} } = data || {};
+  return axiosInstance.post(API_ENDPOINTS.SEMESTER.ADD_SEMESTER, requestBody);
+};
+
+export const fetchSemestersAPI = async () => {
+  return axiosInstance.post(API_ENDPOINTS.SEMESTER.FETCH_ALL_SEMESTERS);
+};

@@ -2,11 +2,13 @@ import { createSlice } from "@reduxjs/toolkit";
 import { SLICE_KEY } from "./constant";
 import _ from "lodash";
 import {
+  addSemester,
   addStudentsToBatch,
   createBatch,
   createCourse,
   deleteCourse,
   fetchBatches,
+  fetchSemesters,
   fetchUsers,
 } from "./thunk";
 
@@ -17,6 +19,7 @@ export const initialState = {
     totalElements: 0,
   },
   batches: [],
+  semesters: [],
 
   // LOADER STATE
   loading: {
@@ -26,6 +29,8 @@ export const initialState = {
     fetchBatches: false,
     createBatch: false,
     addStudentsToBatch: false,
+    addSemester: false,
+    fetchSemesters: false,
   },
 };
 
@@ -97,6 +102,27 @@ const slice = createSlice({
       })
       .addCase(addStudentsToBatch.rejected, (state) => {
         _.set(state, "loading.addStudentsToBatch", false);
+      })
+
+      .addCase(addSemester.pending, (state) => {
+        _.set(state, "loading.addSemester", true);
+      })
+      .addCase(addSemester.fulfilled, (state) => {
+        _.set(state, "loading.addSemester", false);
+      })
+      .addCase(addSemester.rejected, (state) => {
+        _.set(state, "loading.addSemester", false);
+      })
+
+      .addCase(fetchSemesters.pending, (state) => {
+        _.set(state, "loading.fetchSemesters", true);
+      })
+      .addCase(fetchSemesters.fulfilled, (state, { payload }) => {
+        _.set(state, "loading.fetchSemesters", false);
+        _.set(state, "semesters", payload?.semesters);
+      })
+      .addCase(fetchSemesters.rejected, (state) => {
+        _.set(state, "loading.fetchSemesters", false);
       });
   },
 });

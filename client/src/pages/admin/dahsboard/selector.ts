@@ -13,3 +13,6 @@ export const getUserData = flow(getAdminDashboardSlice, userData);
 
 const batches = (state: typeof initialState) => state.batches;
 export const getBatches = flow(getAdminDashboardSlice, batches);
+
+const semesters = (state: typeof initialState) => state.semesters;
+export const getSemesters = flow(getAdminDashboardSlice, semesters);

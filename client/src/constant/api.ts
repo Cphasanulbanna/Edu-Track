@@ -20,6 +20,10 @@ export const API_ENDPOINTS = {
     CREATE_COURSE: "/course",
     DELETE_COURSE: "/course/:id",
   },
+  SEMESTER: {
+    ADD_SEMESTER: "/semester",
+    FETCH_ALL_SEMESTERS: "/semester",
+  },
   BATCH: {
     FETCH_BATCHES: "/batch",
     CREATE_BATCH: "/batch/:departmentId",
