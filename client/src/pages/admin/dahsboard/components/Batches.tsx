@@ -14,6 +14,7 @@ const Batches = () => {
   const batches = useSelector(getBatches);
   const [openBatchModal, setOpenBatchModal] = useState<boolean>(false);
   const [openStudentModal, setOpenStudentModal] = useState<boolean>(false);
+  const [selectedBatchId,setSelectedBatchId] = useState<string>("")
 
   useEffect(() => {
     dispatch(fetchBatches());
@@ -23,7 +24,8 @@ const Batches = () => {
     return <p>{value ?? "Not Available"}</p>;
   };
 
-  const addStudentToBatch = () => {
+  const addStudentToBatch = (data: Record<string, unknown> = {}) => {
+    setSelectedBatchId(data?._id as string)
     setOpenStudentModal(true)
   }
 
@@ -62,11 +64,12 @@ const Batches = () => {
 
   const closeStudentModal = () => {
     setOpenStudentModal(false)
+    setSelectedBatchId("")
   }
   return (
     <div className="flex-1  w-full h-full p-16">
       <CreateBatch open={openBatchModal} close={closeBatchModal} />
-      <AddStudentsToBatch open={openStudentModal} close={closeStudentModal} />
+      <AddStudentsToBatch open={openStudentModal} close={closeStudentModal} batchId={selectedBatchId} />
       <CommonTable
         data={batches}
         columns={columns}

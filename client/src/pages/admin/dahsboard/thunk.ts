@@ -10,6 +10,7 @@ import {
 } from "./api";
 import { handleAPIError } from "@/utils/error";
 import { APIPayloadType } from "@/types/redux";
+import { successToast } from "@/components/custom/Toasts";
 
 export const fetchUsers = createAsyncThunk(
   ACTION_TYPES.FETCH_USERS,
@@ -28,6 +29,7 @@ export const createCourse = createAsyncThunk(
   async (payload: APIPayloadType, thunkAPI) => {
     try {
       const { data } = await createCourseAPI(payload);
+      successToast("Course created");
       return data;
     } catch (error: unknown) {
       return handleAPIError(error, thunkAPI);
@@ -40,6 +42,7 @@ export const deleteCourse = createAsyncThunk(
   async (payload: APIPayloadType, thunkAPI) => {
     try {
       const { data } = await deleteCourseAPI(payload);
+      successToast("Course deleted");
       return data;
     } catch (error: unknown) {
       return handleAPIError(error, thunkAPI);
@@ -64,6 +67,7 @@ export const createBatch = createAsyncThunk(
   async (payload: APIPayloadType, thunkAPI) => {
     try {
       const { data } = await createBatchAPI(payload);
+      successToast("Batch created");
       return data;
     } catch (error: unknown) {
       return handleAPIError(error, thunkAPI);
@@ -76,6 +80,7 @@ export const addStudentsToBatch = createAsyncThunk(
   async (payload: APIPayloadType, thunkAPI) => {
     try {
       const { data } = await addStudentsToBatchAPI(payload);
+      successToast("Students added to Batch");
       return data;
     } catch (error: unknown) {
       return handleAPIError(error, thunkAPI);

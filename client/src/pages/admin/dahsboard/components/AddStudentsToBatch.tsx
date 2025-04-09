@@ -16,9 +16,14 @@ import { User, UsersData } from "@/types/data";
 type AddStudentsPropTypes = {
   close: () => void;
   open: boolean;
+  batchId: string;
 };
 
-const AddStudentsToBatch = ({ open = false, close }: AddStudentsPropTypes) => {
+const AddStudentsToBatch = ({
+  open = false,
+  close,
+  batchId,
+}: AddStudentsPropTypes) => {
   const dispatch = useDispatch<AppDispatch>();
   const studentsData = useSelector(getUserData) as UsersData;
   const { users: students } = studentsData;
@@ -33,16 +38,16 @@ const AddStudentsToBatch = ({ open = false, close }: AddStudentsPropTypes) => {
     formState: { errors },
   } = form;
 
-  const addStudents = async (data: unknown) => {
-    console.log({ data });
+  const addStudents = async (data: Record<string, unknown>) => {
     const response = await dispatch(
       addStudentsToBatch({
-        params: { batchId: "batchId" },
-        requestBody: { studentIds: data },
+        params: { batchId: batchId },
+        requestBody: { studentIds: data?.students },
       })
     );
     if (addStudentsToBatch.fulfilled.match(response)) {
-      dispatch(fetchBatches());
+        dispatch(fetchBatches());
+        close()
     }
   };
 

@@ -89,8 +89,8 @@ export function SelectDropdown<T extends FieldValues>({
             <CommandGroup>
               {options?.map((data) => (
                 <CommandItem
-                  key={data?.[optionKey]}
-                  value={data?.[optionKey]}
+                  key={String(data?.[optionKey])}
+                  value={String(data?.[optionKey])}
                   onSelect={(currentValue) => {
                   
 
@@ -98,7 +98,7 @@ export function SelectDropdown<T extends FieldValues>({
                       const currentArray = Array.isArray(field.value)
                         ? (field.value as string[])
                         : [];
-                      const exists = currentArray.includes(currentValue);
+                      const exists = currentArray?.includes(currentValue);
                       const newValue = exists
                         ? currentArray.filter((v: string) => v !== currentValue)
                         : [...currentArray, currentValue];
@@ -117,10 +117,10 @@ export function SelectDropdown<T extends FieldValues>({
                     className={cn(
                       "ml-auto",
                       isMultiSelect
-                        ? field.value.includes(data[optionKey])
+                        ? field?.value?.includes(data[optionKey])
                           ? "opacity-100"
                           : "opacity-0"
-                        : field.value === data[optionKey]
+                        : field?.value === data[optionKey]
                         ? "opacity-100"
                         : "opacity-0"
                     )}
