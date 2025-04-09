@@ -57,7 +57,7 @@ const CommonTable = ({
       return (
         <td
           key={col.header}
-          className="py-3 text-center first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]"
+          className="py-3 px-4 text-center first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]"
         >
           <Checkbox
             className="border-primary"
@@ -71,7 +71,7 @@ const CommonTable = ({
       return (
         <td
           key={col.header}
-          className="py-3 text-center first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]"
+          className="py-3 px-4 text-center first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]"
         >
           <p className="flex justify-center">
             <TableDropDown actions={col.actions} clickedRow={row} />
@@ -83,7 +83,7 @@ const CommonTable = ({
       return (
         <td
           key={col.header}
-          className="text-center py-3 first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]"
+          className="text-center py-3 px-4 first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]"
         >
           {col.cell({ row: row })}
         </td>
@@ -93,13 +93,13 @@ const CommonTable = ({
       return (
         <td
           key={col.header}
-          className="text-center py-3 first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]"
+          className="text-center py-3 px-4 first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]"
         >
           {row[col.field] || "No Data Available"}
         </td>
       );
     }
-    return <td className="text-center px-3 py-3">No Data Available</td>;
+    return <td className="text-center px-4 py-3">No Data Available</td>;
   };
 
   return (
@@ -124,7 +124,7 @@ const CommonTable = ({
               if (column?.type === "multi-select") {
                 return (
                   <th
-                    className="py-8 pl-0 first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]"
+                    className="py-8 px-4 first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px]"
                     key={column.header}
                   >
                     <Checkbox
@@ -136,7 +136,7 @@ const CommonTable = ({
               }
               return (
                 <th
-                  className="first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px] py-8 text-white"
+                  className="px-4 first:rounded-tl-[5px] first:rounded-bl-[5px] last:rounded-tr-[5px] last:rounded-br-[5px] py-8 text-white"
                   key={column?.header}
                 >
                   {column?.header}
@@ -146,7 +146,8 @@ const CommonTable = ({
           </tr>
         </thead>
         <tbody>
-          {isLoading ? (
+          {
+            isLoading ? (
             <tr>
               <td colSpan={100} className="py-20">
                 <div className="flex items-center justify-center">
