@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { ACTION_TYPES } from "./actions";
 import {
+  addStudentsToBatchAPI,
   createBatchAPI,
   createCourseAPI,
   deleteCourseAPI,
@@ -63,6 +64,18 @@ export const createBatch = createAsyncThunk(
   async (payload: APIPayloadType, thunkAPI) => {
     try {
       const { data } = await createBatchAPI(payload);
+      return data;
+    } catch (error: unknown) {
+      return handleAPIError(error, thunkAPI);
+    }
+  }
+);
+
+export const addStudentsToBatch = createAsyncThunk(
+  ACTION_TYPES.ADD_STUDENTS_TO_BATCH,
+  async (payload: APIPayloadType, thunkAPI) => {
+    try {
+      const { data } = await addStudentsToBatchAPI(payload);
       return data;
     } catch (error: unknown) {
       return handleAPIError(error, thunkAPI);

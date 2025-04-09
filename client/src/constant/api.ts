@@ -23,6 +23,7 @@ export const API_ENDPOINTS = {
   BATCH: {
     FETCH_BATCHES: "/batch",
     CREATE_BATCH: "/batch/:departmentId",
+    ADD_STUDENTS_TO_BATCH: "/batch/add-students/:batchId",
   },
   DEPARTMENT: {
     FETCH_DEPARTMENTS: "/department",
