@@ -41,6 +41,10 @@ const Courses = () => {
     }
   };
 
+  const addSemester = () => {
+    
+  }
+
   const columns: Column<TableRow>[] = [
     {
       header: "Title",
@@ -65,6 +69,10 @@ const Courses = () => {
         {
           name: "delete",
           handleClick: deleteCourseFn,
+        },
+          {
+          name: "Add Semester",
+          handleClick: addSemester,
         },
       ],
     },
