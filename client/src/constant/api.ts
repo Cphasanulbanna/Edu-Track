@@ -28,4 +28,10 @@ export const API_ENDPOINTS = {
   DEPARTMENT: {
     FETCH_DEPARTMENTS: "/department",
   },
+  BOOK: {
+    ADD_BOOK: "/book",
+    FETCH_BOOKS: "/books",
+    BORROW_BOOK: "/book/borrow/:bookId",
+    DOWNLOAD_EXCEL: "book/book-list/download-excel",
+  },
 };

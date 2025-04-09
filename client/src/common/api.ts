@@ -19,3 +19,31 @@ export const fetchCoursesAPI = async (data?: APIPayloadType) => {
 export const fetchDepartmentsAPI = async () => {
   return axiosInstance.get(API_ENDPOINTS.DEPARTMENT.FETCH_DEPARTMENTS);
 };
+
+export const addBookAPI = async (data?: APIPayloadType) => {
+  const { queryParams } = data || {};
+  return axiosInstance.get(API_ENDPOINTS.BOOK.ADD_BOOK, {
+    params: queryParams,
+  });
+};
+
+export const fetchAllBooksAPI = async (data?: APIPayloadType) => {
+  const { queryParams } = data || {};
+  return axiosInstance.get(API_ENDPOINTS.BOOK.FETCH_BOOKS, {
+    params: queryParams,
+  });
+};
+
+export const borrowBookAPI = async (data?: APIPayloadType) => {
+  const { queryParams } = data || {};
+  return axiosInstance.get(API_ENDPOINTS.BOOK.BORROW_BOOK, {
+    params: queryParams,
+  });
+};
+
+export const downloadBooksExcelAPI = async (data?: APIPayloadType) => {
+  const { queryParams } = data || {};
+  return axiosInstance.get(API_ENDPOINTS.BOOK.DOWNLOAD_EXCEL, {
+    params: queryParams,
+  });
+};

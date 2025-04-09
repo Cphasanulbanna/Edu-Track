@@ -1,7 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import _ from "lodash";
 import { SLICE_KEY } from "./constant";
-import { fetchCourses, fetchDepartments, fetchTransactions } from "./thunk";
+import {
+  fetchAllBooks,
+  fetchCourses,
+  fetchDepartments,
+  fetchTransactions,
+} from "./thunk";
 export const initialState = {
   sidebarData: {
     name: "",
@@ -11,6 +16,10 @@ export const initialState = {
     transactionData: false,
     courses: false,
     departments: false,
+    addBook: false,
+    fetchAllBooks: false,
+    borrowBook: false,
+    downloadBooksExcel: false,
   },
   transactionData: {
     transactions: [],
@@ -23,6 +32,7 @@ export const initialState = {
   },
   departments: [],
   openModal: false,
+  books: [],
 };
 
 const slice = createSlice({
@@ -78,6 +88,17 @@ const slice = createSlice({
       })
       .addCase(fetchDepartments.rejected, (state) => {
         _.set(state, "loading.departments", false);
+      })
+
+      .addCase(fetchAllBooks.pending, (state) => {
+        _.set(state, "loading.fetchAllBooks", true);
+      })
+      .addCase(fetchAllBooks.fulfilled, (state, { payload }) => {
+        _.set(state, "loading.fetchAllBooks", false);
+        _.set(state, "books", payload?.books);
+      })
+      .addCase(fetchAllBooks.rejected, (state) => {
+        _.set(state, "loading.fetchAllBooks", false);
       });
   },
 });

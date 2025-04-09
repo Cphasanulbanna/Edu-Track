@@ -23,3 +23,6 @@ export const getOpenModal = flow(getCommonSlice, openModal);
 
 const departments = (state: typeof initialState) => state.departments;
 export const getDepartments = flow(getCommonSlice, departments);
+
+const books = (state: typeof initialState) => state.books;
+export const getBooks = flow(getCommonSlice, books);

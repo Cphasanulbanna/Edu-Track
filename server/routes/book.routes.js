@@ -7,6 +7,6 @@ const router = express.Router();
 router.post("/", addBook)
 router.get("/", fetchBooks)
 router.post("/borrow/:bookId", borrowBook)
-router.get("/download-excel", downloadExcel)
+router.get("/book-list/download-excel", downloadExcel)
 
 export default router;
