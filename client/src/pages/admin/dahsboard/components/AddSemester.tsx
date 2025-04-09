@@ -7,14 +7,15 @@ import { useForm } from "react-hook-form";
 import { addSemesterSchema, AddSemesterType } from "../validate";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/app/store";
-import { addSemester } from "../thunk";
+import { addSemester, fetchSemesters } from "../thunk";
 
 type AddSemesterPropTypes = {
   close: () => void;
   open: boolean;
+  courseId: string
 };
 
-const AddSemester = ({ open = false, close }: AddSemesterPropTypes) => {
+const AddSemester = ({ open = false, close ,courseId}: AddSemesterPropTypes) => {
   const dispatch = useDispatch<AppDispatch>();
   const form = useForm<AddSemesterType>({
     mode: "all",
@@ -26,8 +27,18 @@ const AddSemester = ({ open = false, close }: AddSemesterPropTypes) => {
     formState: { errors },
   } = form;
 
-  const addSemesterFn = async () => {
-    const response = await dispatch(addSemester());
+  const addSemesterFn = async (data:AddSemesterType) => {
+    const response = await dispatch(addSemester({
+      requestBody: {
+        courseId: courseId,
+        semesterNumber: data?.semesterNumber,
+        feeAmount: data?.semesterFee
+      }
+    }));
+    if (addSemester.fulfilled.match(response)) {
+      close()
+      dispatch(fetchSemesters())
+    }
   };
   return (
     <CommonModal close={close} open={open} title="Add Students to Batch">

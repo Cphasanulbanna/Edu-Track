@@ -53,5 +53,5 @@ export const addSemesterAPI = async (data?: APIPayloadType) => {
 };
 
 export const fetchSemestersAPI = async () => {
-  return axiosInstance.post(API_ENDPOINTS.SEMESTER.FETCH_ALL_SEMESTERS);
+  return axiosInstance.get(API_ENDPOINTS.SEMESTER.FETCH_ALL_SEMESTERS);
 };

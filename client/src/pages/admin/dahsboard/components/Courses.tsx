@@ -8,6 +8,7 @@ import { getCoursesData, getLoading } from "@/common/selector";
 import { Button } from "@/components/ui/button";
 import CreateCourse from "./CreateCourse";
 import { deleteCourse } from "../thunk";
+import AddSemester from "./AddSemester";
 
 const Courses = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -15,7 +16,9 @@ const Courses = () => {
   const loading = useSelector(getLoading);
 
   const [openCourseModal, setOpenCourseModal] = useState<boolean>(false);
-  const [dataToEdit,setDataToEdit] = useState({})
+  const [openSemesterModal, setOpenSemesterModal] = useState<boolean>(false);
+  const [dataToEdit, setDataToEdit] = useState({})
+  const [courseId, setCourseId] = useState<string>("")
 
   const { courses } = coursesData;
 
@@ -41,8 +44,9 @@ const Courses = () => {
     }
   };
 
-  const addSemester = () => {
-    
+  const addSemester = (data: Record<string, unknown>) => {
+    setOpenSemesterModal(true)
+    setCourseId(data?._id as string)
   }
 
   const columns: Column<TableRow>[] = [
@@ -81,8 +85,13 @@ const Courses = () => {
   const closeCourseModal = () => {
     setOpenCourseModal(false);
   };
+
+    const closeSemesterModal = () => {
+    setOpenSemesterModal(false);
+  };
   return (
     <div className="flex-1  w-full h-full p-16">
+      <AddSemester close={closeSemesterModal} open={openSemesterModal} courseId={courseId} />
       <CreateCourse open={openCourseModal} close={closeCourseModal} dataToEdit={dataToEdit} />
       <CommonTable
         data={courses}

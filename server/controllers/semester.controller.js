@@ -2,7 +2,7 @@ import Course from "../models/course.model.js";
 import Semester from "../models/semester.model.js";
 
 export const createSemester = async (req, res) => {
-  const { semesterNumber, courseId, feeAmount } = req.query;
+  const { semesterNumber, courseId, feeAmount } = req.body;
   try {
     if (!courseId || !semesterNumber || !feeAmount) {
       return res.status(400).json({
