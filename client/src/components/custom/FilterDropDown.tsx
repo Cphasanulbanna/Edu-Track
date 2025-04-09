@@ -17,6 +17,7 @@ const FilterDropDown = ({
   clearSelectedFilters = () => {},
 }: FilterDropDownProps) => {
   const [selectedValue, setSelectedValue] = useState<string>("");
+    const [isOpen, setIsOpen] = useState<boolean>(false); 
   const FilterIcon = iconMap?.filter;
 
   const clearFilters = (e: React.MouseEvent) => {
@@ -24,8 +25,13 @@ const FilterDropDown = ({
     setSelectedValue("");
     clearSelectedFilters();
   };
+
+    const handleFilterSelect = (itemName: string) => {
+    filterOnClick(itemName);
+    setSelectedValue(itemName);
+  };
   return (
-    <DropdownMenu>
+    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       {selectedValue ? (
         <button
           type="button"
@@ -42,25 +48,23 @@ const FilterDropDown = ({
           </div>
         </DropdownMenuTrigger>
       )}
-      <DropdownMenuContent>
-        {filterDropDownData?.map((item) => {
-          return (
-            <DropdownMenuItem key={item?.name}>
-              <Button
-                onClick={() => {
-                  filterOnClick(item?.name);
-                  setSelectedValue(item?.name);
-                }}
-                variant={"ghost"}
-              >
-                <p className="flex items-center gap-1 capitalize">
-                  {item?.name}
-                </p>
-              </Button>
-            </DropdownMenuItem>
-          );
-        })}
-      </DropdownMenuContent>
+      {isOpen &&
+        <DropdownMenuContent>
+          {filterDropDownData?.map((item) => {
+            return (
+              <DropdownMenuItem key={item?.name}>
+                <Button
+                  onClick={() => handleFilterSelect(item?.name)}
+                  variant={"ghost"}
+                >
+                  <p className="flex items-center gap-1 capitalize">
+                    {item?.name}
+                  </p>
+                </Button>
+              </DropdownMenuItem>
+            );
+          })}
+        </DropdownMenuContent>}
     </DropdownMenu>
   );
 };
