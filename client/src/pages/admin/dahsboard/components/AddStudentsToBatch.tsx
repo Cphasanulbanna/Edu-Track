@@ -11,6 +11,7 @@ import { fetchUsers } from "../thunk";
 import { ROLES } from "@/common/constant";
 import { getUserData } from "../selector";
 import { Form } from "@/components/ui/form";
+import { User, UsersData } from "@/types/data";
 
 type AddStudentsPropTypes = {
   close: () => void;
@@ -19,7 +20,7 @@ type AddStudentsPropTypes = {
 
 const AddStudentsToBatch = ({ open = false, close }: AddStudentsPropTypes) => {
   const dispatch = useDispatch<AppDispatch>();
-  const studentsData = useSelector(getUserData);
+  const studentsData = useSelector(getUserData) as UsersData;
   const { users: students } = studentsData;
 
   const form = useForm<AddStudentsToBatchType>({
@@ -42,7 +43,7 @@ const AddStudentsToBatch = ({ open = false, close }: AddStudentsPropTypes) => {
 
   console.log({ students });
 
-  const formattedStudents = students?.map((obj) => ({
+  const formattedStudents = students?.map((obj: User) => ({
     ...obj,
     label: `${obj?.profile?.first_name} ${obj?.profile?.last_name}`,
   }));

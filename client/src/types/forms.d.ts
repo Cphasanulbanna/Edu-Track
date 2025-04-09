@@ -3,7 +3,7 @@ import { Control, FieldValues, Path } from "react-hook-form";
 
 export type Option = {
   label: string;
-  [key: string]: string;
+  [key: string]: string | number | object;
 };
 
 type CustomProps<T extends FieldValues> = {
