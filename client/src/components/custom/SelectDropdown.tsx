@@ -46,6 +46,7 @@ export function SelectDropdown<T extends FieldValues>({
     field.onChange(isMultiSelect ? [] : "");
   };
 
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -64,8 +65,17 @@ export function SelectDropdown<T extends FieldValues>({
                       ?.filter((data) =>
                         field?.value?.includes(data[optionKey])
                       )
-                    .map((d) => <span className={isMultiSelect ? "px-1 rounded-sm overflow-hidden bg-slate-300 py-0.5 cursor-pointer hover:opacity-75" : ""}>{d.label}</span>)
-                     || "Select..."
+                      .map((d) => (
+                        <span
+                          className={
+                            isMultiSelect
+                              ? "px-1 rounded-sm overflow-hidden bg-slate-300 py-0.5 cursor-pointer hover:opacity-75"
+                              : ""
+                          }
+                        >
+                          {d.label}
+                        </span>
+                      )) || "Select..."
                   : options.find((data) => data[optionKey] === field.value)
                       ?.label || "Select..."}
               </span>
@@ -92,8 +102,6 @@ export function SelectDropdown<T extends FieldValues>({
                   key={String(data?.[optionKey])}
                   value={String(data?.[optionKey])}
                   onSelect={(currentValue) => {
-                  
-
                     if (isMultiSelect) {
                       const currentArray = Array.isArray(field.value)
                         ? (field.value as string[])
