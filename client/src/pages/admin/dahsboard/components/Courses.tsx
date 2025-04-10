@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import CreateCourse from "./CreateCourse";
 import { deleteCourse } from "../thunk";
 import AddSemester from "./AddSemester";
+import { ArrowRightIcon } from "lucide-react";
 
 const Courses = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -29,6 +30,13 @@ const Courses = () => {
   const renderTableField = (value: string) => {
     return <p>{value || "Not Available"}</p>;
   };
+
+  const renderSemesterDetails = (data: any) => {
+    return <div className="flex justify-center items-center gap-1.5">
+      <p>{data?.length ?? 0}</p>
+      <Button className="px-0" variant={"ghost"}><p className="flex items-center gap-x-1">Manage <ArrowRightIcon className="w-5 h-5"/></p></Button>
+    </div>
+  }
 
   const editCourse = (data: TableRow) => {
     setDataToEdit(data)
@@ -61,6 +69,10 @@ const Courses = () => {
     {
       header: "Duration",
       cell: (field) => renderTableField(field?.row?.duration),
+    },
+      {
+      header: "Semesters",
+      cell: (field) => renderSemesterDetails(field?.row?.semesters),
     },
     {
       header: "Actions",

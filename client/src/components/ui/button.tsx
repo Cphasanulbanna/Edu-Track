@@ -68,8 +68,8 @@ function Button({
     >
       <div
         className={cn(
-          { hidden: loading },
-          "flex justify-between items-center w-full relative px-6"
+          { hidden: loading, "px-6": variant !== "ghost", "px-2": variant === "ghost" },
+          "flex justify-between items-center w-full relative"
         )}
       >
         {props.children}
