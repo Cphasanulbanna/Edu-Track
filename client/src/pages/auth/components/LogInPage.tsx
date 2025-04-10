@@ -74,7 +74,7 @@ const LogInPage = () => {
             <Button
               disabled={!isValid}
               className="mt-5"
-              loading={loading.logIn}
+            loading={loading.logIn}
             >
               LogIn
             </Button>
