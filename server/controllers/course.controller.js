@@ -19,49 +19,48 @@ export const fetchCourses = async (req, res) => {
 export const fetchCourse = async (req, res) => {
   const { id } = req.params;
   try {
-   const course = await Course.aggregate([
-  {
-    $match: { _id:  mongoose.Types.ObjectId.createFromHexString(id) },
-  },
-  {
-    $lookup: {
-      from: "semesters",
-      localField: "semesters",
-      foreignField: "_id",
-      as: "semesters",
-    },
-  },
-  {
-    $addFields: {
-      semesters: {
-        $map: {
-          input: "$semesters",
-          as: "sem",
-          in: {
-            _id: "$$sem._id",
-            feeAmount: "$$sem.feeAmount",
-            semesterNumber: "$$sem.semesterNumber",
-          },
+    const course = await Course.aggregate([
+      {
+        $match: { _id: mongoose.Types.ObjectId.createFromHexString(id) },
+      },
+      {
+        $lookup: {
+          from: "semesters",
+          localField: "semesters",
+          foreignField: "_id",
+          as: "semesters",
         },
       },
-      totalSemesters: { $size: "$semesters" },
-      totalCourseFee: { $sum: "$semesters.feeAmount" },
-    },
-  },
-  {
-    $project: {
-      __v: 0,
-      createdAt: 0,
-      updatedAt: 0,
-    },
-  },
-]);
+      {
+        $addFields: {
+          semesters: {
+            $map: {
+              input: "$semesters",
+              as: "sem",
+              in: {
+                _id: "$$sem._id",
+                feeAmount: "$$sem.feeAmount",
+                semesterNumber: "$$sem.semesterNumber",
+              },
+            },
+          },
+          totalSemesters: { $size: "$semesters" },
+          totalCourseFee: { $sum: "$semesters.feeAmount" },
+        },
+      },
+      {
+        $project: {
+          __v: 0,
+          createdAt: 0,
+          updatedAt: 0,
+        },
+      },
+    ]);
 
-
-    if (!course) {
+    if (!course.length) {
       return res.status(404).json({ message: "No course found" });
     }
-    return res.status(200).json({ data: course });
+    return res.status(200).json({ data: course?.[0] });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
