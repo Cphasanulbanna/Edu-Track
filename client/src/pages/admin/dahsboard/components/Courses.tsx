@@ -10,6 +10,7 @@ import CreateCourse from "./CreateCourse";
 import { deleteCourse } from "../thunk";
 import AddSemester from "./AddSemester";
 import { ArrowRightIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Courses = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -32,9 +33,11 @@ const Courses = () => {
   };
 
   const renderSemesterDetails = (data: any) => {
+    console.log({data});
+    
     return <div className="flex justify-center items-center gap-1.5">
-      <p>{data?.length ?? 0}</p>
-      <Button className="px-0" variant={"ghost"}><p className="flex items-center gap-x-1">Manage <ArrowRightIcon className="w-5 h-5"/></p></Button>
+      <p>{data?.semester?.length ?? 0}</p>
+      <Button className="px-0" variant={"ghost"}><Link to={data?._id} className="flex items-center gap-x-1">Manage <ArrowRightIcon className="w-5 h-5"/></Link></Button>
     </div>
   }
 
@@ -72,7 +75,7 @@ const Courses = () => {
     },
       {
       header: "Semesters",
-      cell: (field) => renderSemesterDetails(field?.row?.semesters),
+      cell: (field) => renderSemesterDetails(field?.row),
     },
     {
       header: "Actions",

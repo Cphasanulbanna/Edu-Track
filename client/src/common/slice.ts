@@ -3,6 +3,7 @@ import _ from "lodash";
 import { SLICE_KEY } from "./constant";
 import {
   fetchAllBooks,
+  fetchCourseDetails,
   fetchCourses,
   fetchDepartments,
   fetchTransactions,
@@ -20,6 +21,7 @@ export const initialState = {
     fetchAllBooks: false,
     borrowBook: false,
     downloadBooksExcel: false,
+    fetchCourseDetails: false,
   },
   transactionData: {
     transactions: [],
@@ -33,6 +35,7 @@ export const initialState = {
   departments: [],
   openModal: false,
   books: [],
+  courseDetails: {},
 };
 
 const slice = createSlice({
@@ -99,6 +102,17 @@ const slice = createSlice({
       })
       .addCase(fetchAllBooks.rejected, (state) => {
         _.set(state, "loading.fetchAllBooks", false);
+      })
+
+      .addCase(fetchCourseDetails.pending, (state) => {
+        _.set(state, "loading.fetchCourseDetails", true);
+      })
+      .addCase(fetchCourseDetails.fulfilled, (state, { payload }) => {
+        _.set(state, "loading.fetchCourseDetails", false);
+        _.set(state, "courseDetails", payload?.data);
+      })
+      .addCase(fetchCourseDetails.rejected, (state) => {
+        _.set(state, "loading.fetchCourseDetails", false);
       });
   },
 });

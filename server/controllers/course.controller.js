@@ -4,7 +4,9 @@ import User from "../models/user.model.js";
 
 export const fetchCourses = async (req, res) => {
   try {
-    const courses = await Course.find({}).populate({path:"semesters", select: "semesterNumber"}).sort({ title: 1 }).select("-__v -updatedAt -createdAt")
+    const courses = await Course.find({})
+      .sort({ title: 1 })
+      .select("-__v -updatedAt -createdAt");
     if (!courses.length) {
       return res.status(404).json({ message: "No courses found" });
     }
@@ -15,9 +17,47 @@ export const fetchCourses = async (req, res) => {
 };
 
 export const fetchCourse = async (req, res) => {
-  const {id} = req.params
+  const { id } = req.params;
   try {
-    const course = await Course.findById(id).populate({path:"semesters", select: "feeAmount semesterNumber"}).sort({ title: 1 }).select("-__v -updatedAt -createdAt")
+   const course = await Course.aggregate([
+  {
+    $match: { _id:  mongoose.Types.ObjectId.createFromHexString(id) },
+  },
+  {
+    $lookup: {
+      from: "semesters",
+      localField: "semesters",
+      foreignField: "_id",
+      as: "semesters",
+    },
+  },
+  {
+    $addFields: {
+      semesters: {
+        $map: {
+          input: "$semesters",
+          as: "sem",
+          in: {
+            _id: "$$sem._id",
+            feeAmount: "$$sem.feeAmount",
+            semesterNumber: "$$sem.semesterNumber",
+          },
+        },
+      },
+      totalSemesters: { $size: "$semesters" },
+      totalCourseFee: { $sum: "$semesters.feeAmount" },
+    },
+  },
+  {
+    $project: {
+      __v: 0,
+      createdAt: 0,
+      updatedAt: 0,
+    },
+  },
+]);
+
+
     if (!course) {
       return res.status(404).json({ message: "No course found" });
     }
@@ -73,9 +113,8 @@ export const enrollCourse = async (req, res) => {
 
 export const deleteCourse = async (req, res) => {
   const { id } = req.params;
-  const courseId = mongoose.Types.ObjectId.createFromHexString(id)
+  const courseId = mongoose.Types.ObjectId.createFromHexString(id);
   try {
-
     const course = await Course.findById(courseId);
     if (!course) {
       return res.status(404).json({ message: "No courses found" });

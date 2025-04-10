@@ -26,3 +26,6 @@ export const getDepartments = flow(getCommonSlice, departments);
 
 const books = (state: typeof initialState) => state.books;
 export const getBooks = flow(getCommonSlice, books);
+
+const courseDetails = (state: typeof initialState) => state.courseDetails;
+export const getCourseDetails = flow(getCommonSlice, courseDetails);

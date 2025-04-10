@@ -47,3 +47,10 @@ export const downloadBooksExcelAPI = async (data?: APIPayloadType) => {
     params: queryParams,
   });
 };
+
+export const fetchCourseDetailsAPI = async (data?: APIPayloadType) => {
+  const { params = {} } = data || {};
+  return axiosInstance.get(
+    API_ENDPOINTS.COURSES.FETCH_COURSE_DETAILS?.replace(":id", params?.id)
+  );
+};

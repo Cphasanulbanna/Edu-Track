@@ -5,6 +5,7 @@ import {
   borrowBookAPI,
   downloadBooksExcelAPI,
   fetchAllBooksAPI,
+  fetchCourseDetailsAPI,
   fetchCoursesAPI,
   fetchDepartmentsAPI,
   fetchTransactionsAPI,
@@ -89,6 +90,18 @@ export const downloadBooksExcel = createAsyncThunk(
   async (payload: APIPayloadType, thunkAPI) => {
     try {
       const { data } = await downloadBooksExcelAPI(payload);
+      return data;
+    } catch (error: unknown) {
+      return handleAPIError(error, thunkAPI);
+    }
+  }
+);
+
+export const fetchCourseDetails = createAsyncThunk(
+  ACTION_TYPES.FETCH_COURSE_DETAILS,
+  async (payload: APIPayloadType, thunkAPI) => {
+    try {
+      const { data } = await fetchCourseDetailsAPI(payload);
       return data;
     } catch (error: unknown) {
       return handleAPIError(error, thunkAPI);
