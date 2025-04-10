@@ -21,12 +21,12 @@ const courseSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
-    // semesterFees: [
-    //   {
-    //     semesterNumber: { type: Number, required: true },
-    //     feeAmount: { type: Number, required: true },
-    //   },
-    // ],
+    semesters: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Semester",
+      },
+    ],
   },
   { timestamps: true }
 );
@@ -35,7 +35,7 @@ const Course = mongoose.model("Course", courseSchema);
 
 courseSchema.pre("findOneAndDelete", async function (next) {
   const courseId = this.getQuery()._id;
-  await Semester.deleteMany({ course: courseId }); 
+  await Semester.deleteMany({ course: courseId });
   next();
 });
 

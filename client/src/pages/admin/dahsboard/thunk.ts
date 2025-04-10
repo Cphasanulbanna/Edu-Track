@@ -105,9 +105,9 @@ export const addSemester = createAsyncThunk(
 
 export const fetchSemesters = createAsyncThunk(
   ACTION_TYPES.FETCH_SEMESTERS,
-  async (_, thunkAPI) => {
+  async (payload: APIPayloadType, thunkAPI) => {
     try {
-      const { data } = await fetchSemestersAPI();
+      const { data } = await fetchSemestersAPI(payload);
       return data;
     } catch (error: unknown) {
       return handleAPIError(error, thunkAPI);

@@ -22,7 +22,7 @@ export const API_ENDPOINTS = {
   },
   SEMESTER: {
     ADD_SEMESTER: "/semester",
-    FETCH_ALL_SEMESTERS: "/semester",
+    FETCH_ALL_SEMESTERS_BY_COURSE: "/semester/course",
   },
   BATCH: {
     FETCH_BATCHES: "/batch",

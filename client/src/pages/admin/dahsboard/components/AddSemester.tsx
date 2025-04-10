@@ -12,10 +12,14 @@ import { addSemester, fetchSemesters } from "../thunk";
 type AddSemesterPropTypes = {
   close: () => void;
   open: boolean;
-  courseId: string
+  courseId: string;
 };
 
-const AddSemester = ({ open = false, close ,courseId}: AddSemesterPropTypes) => {
+const AddSemester = ({
+  open = false,
+  close,
+  courseId,
+}: AddSemesterPropTypes) => {
   const dispatch = useDispatch<AppDispatch>();
   const form = useForm<AddSemesterType>({
     mode: "all",
@@ -27,17 +31,19 @@ const AddSemester = ({ open = false, close ,courseId}: AddSemesterPropTypes) => 
     formState: { errors },
   } = form;
 
-  const addSemesterFn = async (data:AddSemesterType) => {
-    const response = await dispatch(addSemester({
-      requestBody: {
-        courseId: courseId,
-        semesterNumber: data?.semesterNumber,
-        feeAmount: data?.semesterFee
-      }
-    }));
+  const addSemesterFn = async (data: AddSemesterType) => {
+    const response = await dispatch(
+      addSemester({
+        requestBody: {
+          courseId: courseId,
+          semesterNumber: data?.semesterNumber,
+          feeAmount: data?.semesterFee,
+        },
+      })
+    );
     if (addSemester.fulfilled.match(response)) {
-      close()
-      dispatch(fetchSemesters())
+      close();
+      dispatch(fetchSemesters({ queryParams: { courseId } }));
     }
   };
   return (
