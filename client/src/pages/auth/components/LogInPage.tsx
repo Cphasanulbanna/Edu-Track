@@ -80,7 +80,7 @@ const LogInPage = () => {
             </Button>
 
             <p className="col-span-5 mt-2">
-              Don't have an account? <Link to={"/signup"}>Signup</Link>
+              Don't have an account? <Link className="text-sky-500 hover:opacity-65" to={"/auth/signup"}>Signup</Link>
             </p>
 
             <div className="col-span-5 mt-1.5">
