@@ -33,7 +33,11 @@ export const createSemester = async (req, res) => {
       semesterNumber,
       feeAmount,
     });
+
     await newSemester.save();
+    course.semesters.push(newSemester._id);
+    await course.save();
+
     return res.status(201).json({ message: "New semester created" });
   } catch (error) {
     return res.status(500).json({ message: error.message });

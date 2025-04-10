@@ -5,7 +5,7 @@ import { createSemester, fetchSemesterByCourse } from "../controllers/semester.c
 
 const router = express.Router();
 
-router.get("/", fetchSemesterByCourse)
+router.get("/course", fetchSemesterByCourse)
 router.post("/", createSemester)
 
 
