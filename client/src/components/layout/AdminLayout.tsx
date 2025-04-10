@@ -49,7 +49,7 @@ const AdminLayout = () => {
       <div className="fixed top-0 left-0 z-40 right-0">
         <Header />
       </div>
-      <div className="w-screen h-screen flex justify-between gap-5">
+      <div className="w-screen h-screen flex justify-between gap-5 pt-[70px]">
         <SidebarComponent />
         <Outlet />
       </div>
