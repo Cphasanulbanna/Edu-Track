@@ -4,11 +4,24 @@ import User from "../models/user.model.js";
 
 export const fetchCourses = async (req, res) => {
   try {
-    const courses = await Course.find({}).populate({path:"semesters", select: "feeAmount semesterNumber"}).sort({ title: 1 }).select("-__v -updatedAt -createdAt")
+    const courses = await Course.find({}).populate({path:"semesters", select: "semesterNumber"}).sort({ title: 1 }).select("-__v -updatedAt -createdAt")
     if (!courses.length) {
       return res.status(404).json({ message: "No courses found" });
     }
     return res.status(200).json({ courses });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const fetchCourse = async (req, res) => {
+  const {id} = req.params
+  try {
+    const course = await Course.findById(id).populate({path:"semesters", select: "feeAmount semesterNumber"}).sort({ title: 1 }).select("-__v -updatedAt -createdAt")
+    if (!course) {
+      return res.status(404).json({ message: "No course found" });
+    }
+    return res.status(200).json({ data: course });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
