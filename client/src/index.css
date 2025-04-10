@@ -120,6 +120,10 @@
   }
 }
 
+body {
+  overflow-x: hidden;
+}
+
 img, button, a {
   user-select: none;
 }

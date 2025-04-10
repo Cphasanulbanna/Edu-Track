@@ -33,11 +33,9 @@ const Courses = () => {
   };
 
   const renderSemesterDetails = (data: any) => {
-    console.log({data});
-    
-    return <div className="flex justify-center items-center gap-1.5">
-      <p>{data?.semester?.length ?? 0}</p>
-      <Button className="px-0" variant={"ghost"}><Link to={data?._id} className="flex items-center gap-x-1">Manage <ArrowRightIcon className="w-5 h-5"/></Link></Button>
+    return <div className="flex items-center justify-center gap-1.5">
+      <p >{data?.semesters?.length ?? 0}</p>
+      <Button className="px-0 flex items-center" variant={"ghost"}><Link to={data?._id} className="flex items-center gap-x-1 text-sky-500 hover:opacity-65">Manage <ArrowRightIcon className="w-5 h-5"/></Link></Button>
     </div>
   }
 
