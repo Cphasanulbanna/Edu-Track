@@ -4,7 +4,7 @@ import User from "../models/user.model.js";
 
 export const fetchCourses = async (req, res) => {
   try {
-    const courses = await Course.find({}).sort({ title: 1 });
+    const courses = await Course.find({}).populate({path:"semesters", select: "feeAmount semesterNumber"}).sort({ title: 1 }).select("-__v -updatedAt -createdAt")
     if (!courses.length) {
       return res.status(404).json({ message: "No courses found" });
     }
