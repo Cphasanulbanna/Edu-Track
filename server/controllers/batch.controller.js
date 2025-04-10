@@ -39,6 +39,7 @@ export const createBatch = async (req, res) => {
     const newBatch = new Batch({
       title: batchName,
       year: year,
+      course: department.course
     });
     await newBatch.save();
     return res
