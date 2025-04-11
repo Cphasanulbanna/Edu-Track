@@ -1,9 +1,11 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
+import { File } from "lucide-react"
 
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
+    <div className="relative">
     <input
       type={type}
       data-slot="input"
@@ -14,7 +16,10 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
         className
       )}
       {...props}
-    />
+      />
+      {type === "file" && <File className="w-5 h-5 absolute z-30 top-[50%] translate-y-[-50%] right-1.5"/>}
+    </div>
+
   )
 }
 
