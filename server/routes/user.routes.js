@@ -10,6 +10,6 @@ router.get("/", authMiddleware(["admin","student", "teacher"]), fetchUsers);
 router.post("/update-profile", upload.single("image"), updateProfile)
 router.get("/students", fetchStudents)
 router.get("/books/:userId", fetchBorrowedBooks)
-router.get("/profile/:id", fetchProfile)
+router.get("/profile/:userId", fetchProfile)
 
 export default router;

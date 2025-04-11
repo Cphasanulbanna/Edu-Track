@@ -12,6 +12,8 @@ export const API_ENDPOINTS = {
   },
   USERS: {
     FETCH_USERS: "/users/",
+    UPDATE_PROFILE: "/users/update-profile",
+    FETCH_PROFILE: "/users/profile/:id",
   },
   PAYMENT: {
     TRANSACTIONS: "/payment/history",

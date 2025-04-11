@@ -10,3 +10,6 @@ export const getLoading = flow(getAuthSlice, loading);
 
 const isAuthenticated = (state: typeof initialState) => state.isAuthenticated;
 export const getIsAuthenticated = flow(getAuthSlice, isAuthenticated);
+
+const profileDetails = (state: typeof initialState) => state.profileDetails;
+export const getProfileDetails = flow(getAuthSlice, profileDetails);

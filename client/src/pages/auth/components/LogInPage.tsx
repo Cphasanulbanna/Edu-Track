@@ -32,7 +32,7 @@ const LogInPage = () => {
   } = form;
 
   const LogIn = async (data: LogIn) => {
-    const result = await dispatch(logIn(data))
+    const result = await dispatch(logIn({requestBody: data}))
     if (logIn.fulfilled.match(result)) {
       navigate("/");
     }

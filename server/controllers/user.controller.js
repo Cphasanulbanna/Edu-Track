@@ -417,23 +417,24 @@ export const fetchProfile = async (req, res) => {
       return res.status(400).json({ message: "User Id is required" });
     }
     const user = await User.findById(userId)
-      .populate({ path: role, select: "name -__v -createdAt -updatedAt" })
-      .populate({ path: "course", select: "title -__v -createdAt -updatedAt" })
-      .populate({ path: "department", select: "name -__v -createdAt -updatedAt" })
-      .populate({ path: "profile", select: "-__v -createdAt -updatedAt" })
+      .populate({ path: "role", select: "name" })
+      .populate({ path: "course", select: "title" })
+      .populate({ path: "department", select: "name" })
+      .populate({ path: "profile", select: "first_name last_name dob mobile_number avatar" })
     if (!user) {
       return res.status(404).json({ message: "User Not found" });
     }
+    
     const userDetails = {
-      email: user.email,
-      role: user.role?.map((item) => item?.name),
-      first_name: user.profile.fiirst_name,
-      last_name: user.profile.last_name,
-      dob: user.profile.dob,
-      mobile_number: user.profile.mobile_number,
+      email: user?.email,
+      role: user?.role?.map((item) => item?.name),
+      first_name: user?.profile?.first_name,
+      last_name: user?.profile?.last_name,
+      dob: user?.profile?.dob,
+      mobile_number: user?.profile?.mobile_number,
       avatar: user.profile.avatar,
-      course: user.course.title,
-      department: user.department.name,
+      course: user?.course?.title,
+      department: user?.department?.name,
       
     };
     return res.status(200).json({ data:userDetails });

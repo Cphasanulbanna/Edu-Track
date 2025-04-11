@@ -1,7 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { SLICE_KEY } from "./constant";
 import _ from "lodash";
-import { forgetPassword, logIn, logOut, resetPassword, signUp } from "./thunk";
+import {
+  fetchProfile,
+  forgetPassword,
+  logIn,
+  logOut,
+  resetPassword,
+  signUp,
+  updateProfile,
+} from "./thunk";
 
 export const initialState = {
   isAuthenticated: !!localStorage.getItem("access-token"),
@@ -11,6 +19,8 @@ export const initialState = {
     logIn: false,
     forgetPassword: false,
     resetPassword: false,
+    updateProfile: false,
+    fetchProfile: false,
   },
 };
 
@@ -27,9 +37,8 @@ const slice = createSlice({
       .addCase(signUp.pending, (state) => {
         _.set(state, "loading.signUp", true);
       })
-      .addCase(signUp.fulfilled, (state, { payload }) => {
+      .addCase(signUp.fulfilled, (state) => {
         _.set(state, "loading.signUp", false);
-        _.set(state, "profileDetails", payload?.data?.profile);
       })
       .addCase(signUp.rejected, (state) => {
         _.set(state, "loading.signUp", false);
@@ -38,9 +47,8 @@ const slice = createSlice({
       .addCase(logIn.pending, (state) => {
         _.set(state, "loading.logIn", true);
       })
-      .addCase(logIn.fulfilled, (state, { payload }) => {
+      .addCase(logIn.fulfilled, (state) => {
         _.set(state, "loading.logIn", false);
-        _.set(state, "profileDetails", payload?.data?.profile);
       })
       .addCase(logIn.rejected, (state) => {
         _.set(state, "loading.logIn", false);
@@ -68,6 +76,27 @@ const slice = createSlice({
 
       .addCase(logOut.fulfilled, (state) => {
         _.set(state, "profileDetails", null);
+      })
+
+      .addCase(updateProfile.pending, (state) => {
+        _.set(state, "loading.updateProfile", true);
+      })
+      .addCase(updateProfile.fulfilled, (state) => {
+        _.set(state, "loading.updateProfile", false);
+      })
+      .addCase(updateProfile.rejected, (state) => {
+        _.set(state, "loading.updateProfile", false);
+      })
+
+      .addCase(fetchProfile.pending, (state) => {
+        _.set(state, "loading.fetchProfile", true);
+      })
+      .addCase(fetchProfile.fulfilled, (state, { payload }) => {
+        _.set(state, "loading.fetchProfile", false);
+        _.set(state, "profileDetails", payload?.data);
+      })
+      .addCase(fetchProfile.rejected, (state) => {
+        _.set(state, "loading.fetchProfile", false);
       });
   },
 });
