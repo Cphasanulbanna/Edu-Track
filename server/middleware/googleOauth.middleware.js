@@ -11,7 +11,6 @@ import Role from "../models/role.model.js";
 dotenv.config();
 
 passport.serializeUser((user, done) => {
-  // console.log({ user });
   done(null, user);
 });
 
@@ -28,17 +27,16 @@ passport.use(
       passReqToCallback: true,
     },
     async function (request, accessToken, refreshToken, profile, done) {
-
       try {
         let user = await User.findOne({ email: profile?._json?.email });
         const role = await Role.findOne({ name: "student" });
+        await user.populate({ path: "role", select: "name -_id" });
         const roleNames = user?.role?.map((obj) => obj?.name) ?? ["student"];
-
+        
         if (user) {
           const accessToken = generateAccessToken(user._id, roleNames);
           const refreshToken = generateRefreshToken(user._id);
-
-          await user.populate("role", "-__v");
+          
           await user.populate("profile", "-__v");
           request.res.cookie("refresh-token", refreshToken, {
             httpOnly: true,
@@ -48,6 +46,16 @@ passport.use(
             httpOnly: false,
             secure: false, //true in prod
           });
+          request.res.cookie("googleAuth", true, {
+            httpOnly: false,
+            secure: false, //true in prod
+          });
+          request.res.cookie("role", roleNames, {
+            httpOnly: false,
+            secure: false, //true in prod
+          });
+
+           console.log({user: user, roleNames: roleNames});
           if (!user.password) {
             return done(null, {
               user,
@@ -86,8 +94,11 @@ passport.use(
           await savedUser.save(); // Re-save user with the profile reference
 
           // Populate the user with the role and profile data
-          await savedUser.populate("role", "-__v");
+          await savedUser.populate({ path: "role", select: "name -_id" });
           await savedUser.populate("profile", "-__v");
+
+         
+          
 
           // Step 5: Generate access/refresh tokens for the user
           const roleNames = savedUser?.role?.map((obj) => obj?.name) ?? [
@@ -96,13 +107,20 @@ passport.use(
           const accessToken = generateAccessToken(savedUser._id, roleNames);
           const refreshToken = generateRefreshToken(savedUser._id);
 
-          console.log({ accessToken, refreshToken });
           request.res.cookie("refresh-token", refreshToken, {
             httpOnly: true,
             secure: false, //true in prod
           });
           request.res.cookie("access-token", accessToken, {
             httpOnly: true,
+            secure: false, //true in prod
+          });
+          request.res.cookie("googleAuth", true, {
+            httpOnly: false,
+            secure: false, //true in prod
+          });
+          request.res.cookie("role", roleNames, {
+            httpOnly: false,
             secure: false, //true in prod
           });
 

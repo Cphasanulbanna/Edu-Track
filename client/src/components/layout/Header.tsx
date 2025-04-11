@@ -17,7 +17,6 @@ const Header = () => {
   const navigate = useNavigate()
 
   const authenticated = useSelector(getIsAuthenticated);
-  console.log({authenticated});
   
   const logoutFn = async () => {
     const response = await dispatch(logOut())
