@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { SLICE_KEY } from "./constant";
 import _ from "lodash";
-import { forgetPassword, logIn, resetPassword, signUp } from "./thunk";
+import { forgetPassword, logIn, logOut, resetPassword, signUp } from "./thunk";
 
 export const initialState = {
   profileDetails: null,
@@ -59,6 +59,10 @@ const slice = createSlice({
       })
       .addCase(resetPassword.rejected, (state) => {
         _.set(state, "loading.resetPassword", false);
+      })
+
+      .addCase(logOut.fulfilled, (state) => {
+        _.set(state, "profileDetails", null);
       });
   },
 });

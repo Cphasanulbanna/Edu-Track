@@ -20,3 +20,7 @@ export const forgetPasswordAPI = async (data: unknown) => {
 export const resetPasswordAPI = async (data: unknown) => {
   return axiosInstance.post(API_ENDPOINTS.AUTH.RESET_PASSWORD, data);
 };
+
+export const logoutAPI = async () => {
+  return axiosInstance.post(API_ENDPOINTS.AUTH.LOGOUT);
+};

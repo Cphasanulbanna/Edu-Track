@@ -4,6 +4,7 @@ export const API_ENDPOINTS = {
   AUTH: {
     SIGNUP: "/auth/signup",
     LOGIN: "/auth/login",
+    LOGOUT: "/auth/logout",
     REFRESH_ACCESS_TOKEN: "/auth/refresh-access-token",
     INITIATE_GOOGLE_AUTH: "/auth/google",
     FORGET_PASSWORD: "/auth/reset-password-mail",

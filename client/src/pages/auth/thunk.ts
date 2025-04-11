@@ -3,6 +3,7 @@ import { ACTION_TYPES } from "./actions";
 import {
   forgetPasswordAPI,
   logInAPI,
+  logoutAPI,
   refreshTokenAPI,
   resetPasswordAPI,
   signUpAPI,
@@ -68,6 +69,18 @@ export const resetPassword = createAsyncThunk(
     try {
       const { data } = await resetPasswordAPI(payload);
       successToast(data?.message);
+      return data;
+    } catch (error: unknown) {
+      return handleAPIError(error, thunkAPI);
+    }
+  }
+);
+
+export const logOut = createAsyncThunk(
+  ACTION_TYPES.LOGOUT,
+  async (_, thunkAPI) => {
+    try {
+      const { data } = await logoutAPI();
       return data;
     } catch (error: unknown) {
       return handleAPIError(error, thunkAPI);

@@ -120,6 +120,10 @@
   }
 }
 
+* {
+  outline: none;
+}
+
 body {
   overflow-x: hidden;
 }

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,16 +7,44 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { isAuthenticated } from "@/utils/auth.token";
+import { UserCircle } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/app/store";
+import { logOut } from "@/pages/auth/thunk";
 
 const Header = () => {
+  const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
+
   const authenticated = isAuthenticated();
+  const logoutFn = async () => {
+    const response = await dispatch(logOut())
+    if (logOut.fulfilled.match(response)) {
+      localStorage.clear()
+      navigate("/")
+    }
+  }
   return (
     <header className="px-10 py-4 flex justify-between items-center gap-5 bg-accent">
       <div className="font-bold text-lg cursor-pointer hover:opacity-75">
         <Link to="/">logo</Link>
       </div>
       <nav className="flex items-center gap-3">
-        {!authenticated && (
+        {authenticated ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger className="cursor-pointer font-semibold">
+              <UserCircle className="w10" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" alignOffset={-40}>
+              <DropdownMenuItem className="flex flex-col">
+                <Link to="/auth/signup" state={{ role: "student" }}>
+                  <Button variant={"outline"}>Profile</Button>
+                </Link>
+                <Button onClick={logoutFn} variant={"outline"}>Logout</Button>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
           <>
             <DropdownMenu>
               <DropdownMenuTrigger className="cursor-pointer font-semibold">
@@ -26,10 +54,14 @@ const Header = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem>
-                  <Link to="/auth/signup" state={{role: "student"}}>Student</Link>
+                  <Link to="/auth/signup" state={{ role: "student" }}>
+                    Student
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/auth/signup" state={{role: "teacher"}}>Teacher</Link>
+                  <Link to="/auth/signup" state={{ role: "teacher" }}>
+                    Teacher
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Link to="/auth/signup">Admin</Link>
