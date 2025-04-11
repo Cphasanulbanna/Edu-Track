@@ -7,12 +7,14 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import ForgetPasswordPage from "./components/ForgetPasswordPage";
 import ResetPasswordPage from "./components/ResetPassword";
 import AuthGuard from "./components/AuthGuard";
+import NotFound from "@/components/custom/NotFound";
 
 const AuthRoutes = () => {
   return (
     <>
       <Header />
       <Routes>
+        <Route path="*" element={<NotFound />} />
         <Route path="/" element={<Navigate to="/auth/login" replace />} />
         <Route element={<AuthLayout />}>
           <Route path="/forget-password" element={<ForgetPasswordPage />} />

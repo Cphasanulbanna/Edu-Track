@@ -6,17 +6,19 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
-import { isAuthenticated } from "@/utils/auth.token";
 import { UserCircle } from "lucide-react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/app/store";
 import { logOut } from "@/pages/auth/thunk";
+import { getIsAuthenticated } from "@/pages/auth/selector";
 
 const Header = () => {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
 
-  const authenticated = isAuthenticated();
+  const authenticated = useSelector(getIsAuthenticated);
+  console.log({authenticated});
+  
   const logoutFn = async () => {
     const response = await dispatch(logOut())
     if (logOut.fulfilled.match(response)) {
@@ -37,7 +39,7 @@ const Header = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" alignOffset={-40}>
               <DropdownMenuItem className="flex flex-col">
-                <Link to="/auth/signup" state={{ role: "student" }}>
+                <Link to="/profile" state={{ role: "student" }}>
                   <Button variant={"outline"}>Profile</Button>
                 </Link>
                 <Button onClick={logoutFn} variant={"outline"}>Logout</Button>
@@ -62,9 +64,6 @@ const Header = () => {
                   <Link to="/auth/signup" state={{ role: "teacher" }}>
                     Teacher
                   </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/auth/signup">Admin</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

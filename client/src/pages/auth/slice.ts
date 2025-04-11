@@ -4,6 +4,7 @@ import _ from "lodash";
 import { forgetPassword, logIn, logOut, resetPassword, signUp } from "./thunk";
 
 export const initialState = {
+  isAuthenticated: !!localStorage.getItem("access-token"),
   profileDetails: null,
   loading: {
     signUp: false,
@@ -16,7 +17,11 @@ export const initialState = {
 const slice = createSlice({
   name: SLICE_KEY,
   initialState,
-  reducers: {},
+  reducers: {
+    setAuth(state, action) {
+      state.isAuthenticated = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(signUp.pending, (state) => {

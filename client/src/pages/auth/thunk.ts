@@ -11,6 +11,7 @@ import {
 import { handleAPIError } from "@/utils/error";
 import { successToast } from "@/components/custom/Toasts";
 import { ForgetPassword, LogIn, SignUp } from "./validate";
+import { actions } from "./slice";
 
 export const signUp = createAsyncThunk(
   ACTION_TYPES.SIGNUP,
@@ -31,6 +32,7 @@ export const logIn = createAsyncThunk(
     try {
       const { data } = await logInAPI(payload);
       localStorage.setItem("access-token", data?.accessToken);
+      thunkAPI.dispatch(actions.setAuth(true));
       return data;
     } catch (error: unknown) {
       return handleAPIError(error, thunkAPI);
@@ -81,6 +83,7 @@ export const logOut = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const { data } = await logoutAPI();
+      thunkAPI.dispatch(actions.setAuth(false));
       return data;
     } catch (error: unknown) {
       return handleAPIError(error, thunkAPI);
