@@ -102,7 +102,7 @@ export const fetchUsers = async (req, res) => {
             {
               $match: {
                 $or: [
-                  { "profile.first_name": { $regex: search, $options: "i" } },
+                  { "profile.last_name": { $regex: search, $options: "i" } },
                   { "profile.last_name": { $regex: search, $options: "i" } },
                 ],
               },
@@ -405,6 +405,38 @@ export const fetchBorrowedBooks = async (req, res) => {
       return res.status(404).json({ message: "No borrowed books found" });
     }
     return res.status(404).json({ books });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const fetchProfile = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    if (!userId) {
+      return res.status(400).json({ message: "User Id is required" });
+    }
+    const user = await User.findById(userId)
+      .populate({ path: role, select: "name -__v -createdAt -updatedAt" })
+      .populate({ path: "course", select: "title -__v -createdAt -updatedAt" })
+      .populate({ path: "department", select: "name -__v -createdAt -updatedAt" })
+      .populate({ path: "profile", select: "-__v -createdAt -updatedAt" })
+    if (!user) {
+      return res.status(404).json({ message: "User Not found" });
+    }
+    const userDetails = {
+      email: user.email,
+      role: user.role?.map((item) => item?.name),
+      first_name: user.profile.fiirst_name,
+      last_name: user.profile.last_name,
+      dob: user.profile.dob,
+      mobile_number: user.profile.mobile_number,
+      avatar: user.profile.avatar,
+      course: user.course.title,
+      department: user.department.name,
+      
+    };
+    return res.status(200).json({ data:userDetails });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
