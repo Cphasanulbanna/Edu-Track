@@ -56,7 +56,6 @@ export const signup = async (req, res) => {
   try {
     if (
       !first_name ||
-      !last_name ||
       !email ||
       !mobile_number ||
       !password ||
