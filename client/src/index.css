@@ -14,6 +14,7 @@
   --primary: #b342ff;
   --primary-foreground: #f2f2ff;
   --secondary: #f1e8ff;
+  --tertiary: #E83A7A;
   --secondary-foreground: #2a1d3c;
   --muted: #f1e8ff;
   --muted-foreground: #8e84aa;
@@ -49,6 +50,7 @@
   --primary: #6922e3;
   --primary-foreground: #f2f2ff;
   --secondary: #1a132b;
+  --tertiary: #E83A7A;
   --secondary-foreground: #f2f2ff;
   --muted: #1a132b;
   --muted-foreground: #b3a9e6;
@@ -88,6 +90,7 @@
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
+  --color-tertiary: var(--tertiary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
