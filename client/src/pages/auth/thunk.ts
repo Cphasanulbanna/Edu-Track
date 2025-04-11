@@ -32,6 +32,7 @@ export const logIn = createAsyncThunk(
     try {
       const { data } = await logInAPI(payload);
       localStorage.setItem("access-token", data?.accessToken);
+      localStorage.setItem("role", JSON.stringify(data?.userData?.role));
       thunkAPI.dispatch(actions.setAuth(true));
       return data;
     } catch (error: unknown) {

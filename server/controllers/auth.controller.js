@@ -54,13 +54,7 @@ export const signup = async (req, res) => {
     role = "student",
   } = req.body;
   try {
-    if (
-      !first_name ||
-      !email ||
-      !mobile_number ||
-      !password ||
-      !role
-    ) {
+    if (!first_name || !email || !mobile_number || !password || !role) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -90,10 +84,11 @@ export const signup = async (req, res) => {
     await newProfile.save();
     newUser.profile = newProfile._id;
     await newUser.save();
-    await newUser.populate("role", "-__v");
+    await newUser.populate("role", "-__v -_id");
     await newUser.populate("profile", "-__v");
 
     const roleNames = newUser.role?.map((obj) => obj?.name);
+    
 
     const accessToken = generateAccessToken(newUser?._id, roleNames);
     const refreshToken = generateRefreshToken(newUser?._id);
@@ -101,7 +96,7 @@ export const signup = async (req, res) => {
     const userData = {
       _id: newUser._id,
       email: newUser.email,
-      role: newUser.role,
+      role: roleNames,
       profile: {
         first_name: newProfile.first_name,
         last_name: newProfile.last_name,
@@ -157,13 +152,17 @@ export const login = async (req, res) => {
     const userData = {
       _id: user._id,
       email: user.email,
-      role: user.role,
+      role: roleNames,
       first_name: profile.first_name,
       last_name: profile.last_name,
       mobile_number: profile.mobile_number,
     };
 
     res.cookie("refresh-token", refreshToken, { httpOnly: true, secure: true });
+    res.cookie("role", roleNames, {
+      httpOnly: false,
+      secure: false,
+    });
 
     return res.status(200).json({ accessToken, userData });
   } catch (error) {
