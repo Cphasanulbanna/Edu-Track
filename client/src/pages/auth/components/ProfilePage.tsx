@@ -2,12 +2,13 @@ import { useEffect } from "react";
 // import { Edit, Mail, Phone, Check, X, User } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/app/store";
-import { fetchProfile } from "../thunk";
+import { fetchProfile, updateProfile } from "../thunk";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UpdateProfile, updateProfileSchema } from "../validate";
 import { Form } from "@/components/ui/form";
 import FormController from "@/components/custom/FormController";
+import { Button } from "@/components/ui/button";
 
 const ProfileDetailsPage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -21,6 +22,7 @@ const ProfileDetailsPage = () => {
   const {
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = form;
 
@@ -30,14 +32,21 @@ const ProfileDetailsPage = () => {
     }
   }, [dispatch, userId]);
 
-  const updateProfile = () => {
-    //
+  const updateProfileFn = (data: unknown) => {
+    const formData = new FormData()
+    formData.append("file", data)
+    dispatch(updateProfile({ requestBody: { file: formData } }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    setValue("avatar", file);
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Form {...form}>
-        <form onSubmit={handleSubmit(updateProfile)}>
+        <form onSubmit={handleSubmit(updateProfileFn)}>
           <FormController
             type="file"
             control={control}
@@ -45,7 +54,9 @@ const ProfileDetailsPage = () => {
             placeholder="Upload Profile Pic"
             name="avatar"
             label="Profile Picture"
+            handleChange={handleFileChange}
           />
+        <Button>Update</Button>
         </form>
       </Form>
     </div>

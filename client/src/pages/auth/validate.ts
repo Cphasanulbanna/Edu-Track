@@ -66,7 +66,7 @@ export const resetPasswordSchema = z
   });
 
 export const updateProfileSchema = z.object({
-  avatar: z.string().optional(),
+  avatar: z.instanceof(File).optional(),
 });
 
 export type SignUp = z.infer<typeof signUpSchema>;

@@ -10,7 +10,6 @@ import { Input } from "../ui/input";
 import { FormControllerProps } from "@/types/forms";
 import { SelectDropdown } from "./SelectDropdown";
 
-
 const FormController = <T extends FieldValues>({
   type = "text",
   control,
@@ -71,12 +70,13 @@ const FormController = <T extends FieldValues>({
               </FormLabel>
               <FormControl className="relative">
                 <Input
-                    type="file"
-                    placeholder={placeholder}
-                    {...field}
-                    {...inputProps}
-                    className={""}
-                  />
+                  type="file"
+                  placeholder={placeholder}
+                  { ...type !== "file" && {...field}}
+                  {...inputProps}
+                  className={""}
+                  onChange={handleChange}
+                />
               </FormControl>
               <FormMessage
                 className="absolute bottom-[-18px] text-xs"
