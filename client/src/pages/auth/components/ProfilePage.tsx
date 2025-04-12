@@ -32,13 +32,14 @@ const ProfileDetailsPage = () => {
     }
   }, [dispatch, userId]);
 
-  const updateProfileFn = (data: unknown) => {
+  const updateProfileFn = (data: UpdateProfile) => {
+     if (!data.avatar) return;
     const formData = new FormData()
-    formData.append("file", data)
+    formData.append("file", data.avatar)
     dispatch(updateProfile({ requestBody: { file: formData } }));
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     setValue("avatar", file);
   };
