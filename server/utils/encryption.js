@@ -36,3 +36,11 @@ export const generateResetPasswordToken = (email) => {
 export const validateResetPasswordToken = (token) => {
     return jwt.verify(token, process.env.RESET_PASSWORD_TOKEN_SECRET)
 }
+
+
+export const getUserIdFromRequest = (req) => {
+  const token = req.headers.authorization.split(" ")?.[1];
+  const decoded = jwt.decode(token);
+  return decoded.userId
+}
+
