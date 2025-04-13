@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 // import { Edit, Mail, Phone, Check, X, User } from "lucide-react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/app/store";
 import { fetchProfile, updateProfile } from "../thunk";
 import { useForm } from "react-hook-form";
@@ -9,16 +9,18 @@ import { UpdateProfile, updateProfileSchema } from "../validate";
 import { Form } from "@/components/ui/form";
 import FormController from "@/components/custom/FormController";
 import { Button } from "@/components/ui/button";
+import { getProfileDetails } from "../selector";
 
 const ProfileDetailsPage = () => {
   const dispatch = useDispatch<AppDispatch>();
-
   const userId = JSON.parse(localStorage.getItem("userId") as string);
+  const profileDetails = useSelector(getProfileDetails)
 
   const form = useForm<UpdateProfile>({
     mode: "all",
     resolver: zodResolver(updateProfileSchema),
   });
+
   const {
     handleSubmit,
     control,
@@ -33,13 +35,13 @@ const ProfileDetailsPage = () => {
   }, [dispatch, userId]);
 
   const updateProfileFn = (data: UpdateProfile) => {
-     if (!data.avatar) return;
-    const formData = new FormData()
-    formData.append("file", data.avatar)
-    dispatch(updateProfile({ requestBody: { file: formData } }));
+    if (!data.avatar) return;
+    const formData = new FormData();
+    formData.append("image", data.avatar);
+    dispatch(updateProfile({ formData }));
   };
 
-  const handleFileChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     setValue("avatar", file);
   };
@@ -57,9 +59,12 @@ const ProfileDetailsPage = () => {
             label="Profile Picture"
             handleChange={handleFileChange}
           />
-        <Button>Update</Button>
+          <Button>Update</Button>
         </form>
       </Form>
+      <div>
+        <img src={profileDetails?.avatar} alt="" className="w-10 h-40 overflow-hidden rounded-full"   />
+      </div>
     </div>
   );
 };
