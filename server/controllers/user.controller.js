@@ -1,20 +1,20 @@
 import User from "../models/user.model.js";
 import path from "path";
-import fs from "fs";
+import fs from "fs/promises";
 import s3 from "../config/s3.config.js";
 import { fileURLToPath } from "url";
+import { v4 as uuidv4 } from "uuid";
 import { PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 
 import dotenv from "dotenv";
 import Book from "../models/book.model.js";
+import { getUserIdFromRequest } from "../utils/encryption.js";
 dotenv.config();
 
 export const fetchUsers = async (req, res) => {
   const { role, page = 1, limit = 7, search = "", batch = "" } = req.query;
   const elementsToSkip = (page - 1) * limit;
   const decodedBatch = decodeURIComponent(batch);
-
-  console.log({ decodedBatch });
 
   try {
     const pipeline = [
@@ -225,40 +225,55 @@ export const fetchUsers = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    if (!req.file) {
+    const avatar = req.file;
+
+    if (!avatar) {
       return res.status(400).send("No file uploaded");
     }
+
+    const userId = getUserIdFromRequest(req)
+    
+    
+    const user = await User.findById(userId).populate("profile")
+    
+    if (!user) {
+      return res.status(404).send("User not Found");
+    }
+
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
-    const fileContent = fs.readFileSync(
-      path.join(__dirname, "../uploads", req.file.filename)
-    );
+    const filePath = path.join(__dirname, "../uploads", avatar.filename);
+    const fileContent = await fs.readFile(filePath);
+
+    const fileUuid = uuidv4();
+    const fileExtension = path.extname(avatar.originalname);
+    const s3Folder = "avatar";
+    const s3key = `${s3Folder}/${fileUuid}${fileExtension}`;
 
     const deleteParams = {
-      Bucket: process.env.AWS_BUCKET_NAME, // Your bucket name
-      Key: `avatar/${req.file.filename}`, // Same file name as the previous upload
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: s3key,
     };
 
-    // Delete the existing file from S3 if it exists
     await s3.send(new DeleteObjectCommand(deleteParams));
 
     const uploadParams = {
-      Bucket: process.env.AWS_BUCKET_NAME, // Your bucket name
-      Key: `avatar/${req.file.filename}`, // File name in the bucket
-      Body: fileContent, // File content
-      ContentType: req.file.mimetype,
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: s3key,
+      Body: fileContent,
+      ContentType: avatar.mimetype,
       ACL: "public-read",
     };
 
-    const command = new PutObjectCommand(uploadParams);
-
-    // Upload the file to S3 using the send() method of the S3 client
-    await s3.send(command);
-    fs.unlinkSync(path.join(__dirname, "../uploads", req.file.filename));
-
+    await s3.send(new PutObjectCommand(uploadParams));
+    await fs.unlink(filePath);
+    const avatarUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${s3key}`;
+    user.profile.avatar = avatarUrl
+    await user.profile.save()
+    
     res.status(200).json({
       message: "File uploaded successfully",
-      url: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/avatar/${req.file.filename}`,
+      url: avatarUrl,
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -420,11 +435,13 @@ export const fetchProfile = async (req, res) => {
       .populate({ path: "role", select: "name" })
       .populate({ path: "course", select: "title" })
       .populate({ path: "department", select: "name" })
-      .populate({ path: "profile", select: "first_name last_name dob mobile_number avatar" })
+      .populate({
+        path: "profile",
+        select: "first_name last_name dob mobile_number avatar",
+      });
     if (!user) {
       return res.status(404).json({ message: "User Not found" });
     }
-    
     const userDetails = {
       email: user?.email,
       role: user?.role?.map((item) => item?.name),
@@ -432,12 +449,11 @@ export const fetchProfile = async (req, res) => {
       last_name: user?.profile?.last_name,
       dob: user?.profile?.dob,
       mobile_number: user?.profile?.mobile_number,
-      avatar: user.profile.avatar,
+      avatar: user?.profile?.avatar,
       course: user?.course?.title,
       department: user?.department?.name,
-      
     };
-    return res.status(200).json({ data:userDetails });
+    return res.status(200).json({ data: userDetails });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

@@ -1,3 +1,4 @@
+import { API_CONFIG } from "./../../common/constant";
 import { axiosInstance } from "@/config/apiClient";
 import { API_ENDPOINTS } from "@/constant/api";
 import { APIPayloadType } from "@/types/redux";
@@ -28,7 +29,10 @@ export const logoutAPI = async () => {
 };
 
 export const updateProfileAPI = async (data: APIPayloadType) => {
-  return axiosInstance.post(API_ENDPOINTS.USERS.UPDATE_PROFILE, data);
+  const { formData = {} } = data || {};
+  return axiosInstance.post(API_ENDPOINTS.USERS.UPDATE_PROFILE, formData, {
+    headers: API_CONFIG.FORM_DATA,
+  });
 };
 
 export const fetchProfileAPI = async (data: APIPayloadType) => {

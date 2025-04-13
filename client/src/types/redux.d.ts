@@ -26,5 +26,6 @@ type APIPayloadType =
             string | number | boolean | object | string[] | number[]
           >;
       params?: Record<string, string> | undefined;
+      formData?: FormData | undefined;
     }
   | undefined;
