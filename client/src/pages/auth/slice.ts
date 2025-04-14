@@ -13,7 +13,7 @@ import {
 
 export const initialState = {
   isAuthenticated: !!localStorage.getItem("access-token"),
-  profileDetails: null,
+  profileDetails: {},
   loading: {
     signUp: false,
     logIn: false,
