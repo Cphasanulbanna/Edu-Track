@@ -17,12 +17,15 @@ type ProfileDetails = {
 
 const ProfileDetailsPage = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const userId = JSON.parse(localStorage.getItem("userId") as string);
   const profileDetails = useSelector(getProfileDetails) as ProfileDetails;
   const avatarUploadProgress = useSelector(getAvatarUploadProgress);
+
   const [profilePic, setProfilePic] = useState<string>("");
+  const [profilePreview, setProfilePreview] = useState<string>("");
   const [showUploadProgress, setShowUploadProgress] = useState<boolean>(false);
 
+  const userId = JSON.parse(localStorage.getItem("userId") as string);
+  const profileImageUrl = profilePreview || profilePic;
 
   const form = useForm<UpdateProfile>({
     mode: "all",
@@ -53,8 +56,9 @@ const ProfileDetailsPage = () => {
 
     if (updateProfile.fulfilled.match(response)) {
       setProfilePic(profileDetails?.avatar as string);
-      setShowUploadProgress(false)
-      setValue("avatar", undefined)
+      setProfilePreview("");
+      setShowUploadProgress(false);
+      setValue("avatar", undefined);
     }
   };
 
@@ -62,14 +66,20 @@ const ProfileDetailsPage = () => {
     const file = e.target.files?.[0];
     if (file) {
       setValue("avatar", file);
-      setProfilePic(URL.createObjectURL(file));
+      setProfilePreview(URL.createObjectURL(file));
     }
   };
 
   const clearImagePreview = () => {
     setValue("avatar", undefined);
-    setProfilePic("");
+    setProfilePreview("");
   };
+
+  useEffect(() => {
+    if (profileDetails?.avatar) {
+      setProfilePic(profileDetails?.avatar);
+    }
+  }, [profileDetails]);
 
   return (
     <div className="min-h-screen bg-gray-50 w-screen px-40 mt-10">
@@ -92,26 +102,30 @@ const ProfileDetailsPage = () => {
             />
           </div>
           <div className="col-span-12">
-            {profilePic && (
+            {profileImageUrl && (
               <div className="mt-3">
-                <button
-                  onClick={clearImagePreview}
-                  className="cursor-pointer hover:opacity-65"
-                >
-                  <X />
-                </button>
+                {profilePreview && (
+                  <button
+                    onClick={clearImagePreview}
+                    className="cursor-pointer hover:opacity-65"
+                  >
+                    <X />
+                  </button>
+                )}
 
                 <img
-                  src={profilePic}
+                  src={profileImageUrl}
                   alt="avatar"
                   className="w-32 overflow-hidden rounded-full object-cover aspect-square shadow-lg"
                 />
               </div>
             )}
           </div>
-          <div className="col-span-12">
-            <Button disabled={!getValues()?.avatar}>Update</Button>
-          </div>
+          {profilePreview && (
+            <div className="col-span-12">
+              <Button disabled={!getValues()?.avatar}>Update</Button>
+            </div>
+          )}
         </form>
       </Form>
     </div>
