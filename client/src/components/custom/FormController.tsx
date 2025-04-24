@@ -26,6 +26,7 @@ const FormController = <T extends FieldValues>({
   handleChange,
   uploadProgress,
   showUploadProgress,
+  isDisabled,
   ...inputProps
 }: FormControllerProps<T>) => {
   switch (type) {
@@ -80,6 +81,7 @@ const FormController = <T extends FieldValues>({
                   onChange={handleChange}
                   uploadProgress={uploadProgress}
                   showUploadProgress={showUploadProgress}
+                  isDisabled={isDisabled}
                 />
               </FormControl>
               <FormMessage
@@ -108,6 +110,7 @@ const FormController = <T extends FieldValues>({
                   {...field}
                   {...inputProps}
                   className={leftContent ? "pl-7" : ""}
+                  isDisabled={isDisabled}
                 />
               </FormControl>
               {rightContent && (

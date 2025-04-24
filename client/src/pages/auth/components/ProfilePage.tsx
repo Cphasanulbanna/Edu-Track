@@ -9,10 +9,15 @@ import { Form } from "@/components/ui/form";
 import FormController from "@/components/custom/FormController";
 import { Button } from "@/components/ui/button";
 import { getAvatarUploadProgress, getProfileDetails } from "../selector";
-import { X } from "lucide-react";
+import { Edit, X } from "lucide-react";
+import { formatUpdateProfileData } from "../helper";
 
 type ProfileDetails = {
   avatar?: string;
+  first_name?: string;
+  last_name?: string;
+  dob?: string;
+  mobile_number?: string;
 };
 
 const ProfileDetailsPage = () => {
@@ -23,6 +28,7 @@ const ProfileDetailsPage = () => {
   const [profilePic, setProfilePic] = useState<string>("");
   const [profilePreview, setProfilePreview] = useState<string>("");
   const [showUploadProgress, setShowUploadProgress] = useState<boolean>(false);
+  const [edit, setEdit] = useState<boolean>(false);
 
   const userId = JSON.parse(localStorage.getItem("userId") as string);
   const profileImageUrl = profilePreview || profilePic;
@@ -36,8 +42,8 @@ const ProfileDetailsPage = () => {
     handleSubmit,
     control,
     setValue,
-    getValues,
-    formState: { errors },
+    reset,
+    formState: { errors, isDirty, isValid },
   } = form;
 
   useEffect(() => {
@@ -47,18 +53,19 @@ const ProfileDetailsPage = () => {
   }, [dispatch, userId]);
 
   const updateProfileFn = async (data: UpdateProfile) => {
-    if (!data.avatar) return;
-    const formData = new FormData();
-    formData.append("image", data.avatar);
+    if (!data) return;
+    const formData = formatUpdateProfileData(data)
 
     setShowUploadProgress(true);
     const response = await dispatch(updateProfile({ formData }));
 
     if (updateProfile.fulfilled.match(response)) {
-      setProfilePic(profileDetails?.avatar as string);
+      dispatch(fetchProfile({ params: { id: userId } }));
+      setProfilePic("");
       setProfilePreview("");
       setShowUploadProgress(false);
       setValue("avatar", undefined);
+      setEdit(false)
     }
   };
 
@@ -79,16 +86,40 @@ const ProfileDetailsPage = () => {
     if (profileDetails?.avatar) {
       setProfilePic(profileDetails?.avatar);
     }
-  }, [profileDetails]);
+    if (profileDetails) {
+      reset({
+        firstName: profileDetails?.first_name,
+        lastName: profileDetails?.last_name,
+        mobileNumber: profileDetails?.mobile_number,
+      });
+    }
+  }, [profileDetails, reset]);
 
   return (
-    <div className="min-h-screen bg-gray-50 w-screen px-40 mt-10">
+    <div className="min-h-screen bg-gray-50 w-screen px-40">
       <Form {...form}>
         <form
-          className="grid grid-cols-12 gap-y-3"
+          className="grid grid-cols-12 gap-y-3 max-w-[500px]"
           onSubmit={handleSubmit(updateProfileFn)}
         >
-          <div className="col-span-4">
+          <div className="col-span-12">
+            <div className="flex justify-end items-center">
+              <button
+                type="button"
+                onClick={() => setEdit((prev) => !prev)}
+                className="cursor-pointer hover:opacity-75"
+              >
+                {edit ? (
+                  <span className="border-2 border-slate-300 rounded-md px-2 py-1">
+                    Cancel
+                  </span>
+                ) : (
+                  <Edit className="w-5 h-5" />
+                )}
+              </button>
+            </div>
+          </div>
+          <div className="col-span-12">
             <FormController
               type="file"
               control={control}
@@ -99,6 +130,39 @@ const ProfileDetailsPage = () => {
               handleChange={handleFileChange}
               uploadProgress={avatarUploadProgress}
               showUploadProgress={showUploadProgress}
+              isDisabled={!edit}
+            />
+          </div>
+          <div className="col-span-12">
+            <FormController
+              control={control}
+              errors={errors}
+              placeholder="Enter First Name"
+              name="firstName"
+              label="First Name"
+              isDisabled={!edit}
+            />
+          </div>
+
+          <div className="col-span-12">
+            <FormController
+              control={control}
+              errors={errors}
+              placeholder="Enter Last Name"
+              name="lastName"
+              label="Last Name"
+              isDisabled={!edit}
+            />
+          </div>
+
+          <div className="col-span-12">
+            <FormController
+              control={control}
+              errors={errors}
+              placeholder="Enter Mobile Number"
+              name="mobileNumber"
+              label="Mobile Number"
+              isDisabled={!edit}
             />
           </div>
           <div className="col-span-12">
@@ -121,9 +185,9 @@ const ProfileDetailsPage = () => {
               </div>
             )}
           </div>
-          {profilePreview && (
+          {isDirty && (
             <div className="col-span-12">
-              <Button disabled={!getValues()?.avatar}>Update</Button>
+              <Button disabled={!isValid}>Update</Button>
             </div>
           )}
         </form>

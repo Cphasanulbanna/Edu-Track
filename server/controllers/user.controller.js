@@ -288,8 +288,7 @@ export const updateProfile = async (req, res) => {
     await user.profile.save();
 
     res.status(200).json({
-      message: "File uploaded successfully",
-      url: avatarUrl,
+      message: "Profile updated successfully"
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
