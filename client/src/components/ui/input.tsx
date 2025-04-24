@@ -53,7 +53,7 @@ const Input = React.forwardRef<HTMLInputElement, FileUploadInputProps>(
           <>
             <File className="w-5 h-5 absolute z-30 bottom-[50%] top-[50%] translate-y-[-50%] right-1.5" />
             {showUploadProgress && (
-              <div className="mt-2">
+              <div>
                 <CustomProgressBar value={uploadProgress} />
               </div>
             )}

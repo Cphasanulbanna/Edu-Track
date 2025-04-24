@@ -43,6 +43,7 @@ const ProfileDetailsPage = () => {
     control,
     setValue,
     reset,
+    getValues,
     formState: { errors, isDirty, isValid },
   } = form;
 
@@ -72,7 +73,7 @@ const ProfileDetailsPage = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setValue("avatar", file);
+      setValue("avatar", file,{shouldDirty: true});
       setProfilePreview(URL.createObjectURL(file));
     }
   };
@@ -95,18 +96,28 @@ const ProfileDetailsPage = () => {
     }
   }, [profileDetails, reset]);
 
+  const handleEdit = () => {
+    if (edit) {
+      setEdit(false)
+      reset(getValues())
+    }
+    else {
+      setEdit(true)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 w-screen px-40">
       <Form {...form}>
         <form
-          className="grid grid-cols-12 gap-y-3 max-w-[500px]"
+          className="grid grid-cols-12 gap-y-4 max-w-[500px]"
           onSubmit={handleSubmit(updateProfileFn)}
         >
           <div className="col-span-12">
             <div className="flex justify-end items-center">
               <button
                 type="button"
-                onClick={() => setEdit((prev) => !prev)}
+                onClick={handleEdit}
                 className="cursor-pointer hover:opacity-75"
               >
                 {edit ? (

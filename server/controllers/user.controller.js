@@ -228,10 +228,6 @@ export const updateProfile = async (req, res) => {
     const avatar = req.file;
     const { first_name, last_name, dob, mobile_number } = req.body;
 
-    // if (!avatar) {
-    //   return res.status(400).send("No file uploaded");
-    // }
-
     const userId = getUserIdFromRequest(req);
 
     const user = await User.findById(userId).populate("profile");
