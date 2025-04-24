@@ -226,51 +226,67 @@ export const fetchUsers = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const avatar = req.file;
+    const { first_name, last_name, dob, mobile_number } = req.body;
 
-    if (!avatar) {
-      return res.status(400).send("No file uploaded");
-    }
+    // if (!avatar) {
+    //   return res.status(400).send("No file uploaded");
+    // }
 
-    const userId = getUserIdFromRequest(req)
-    
-    
-    const user = await User.findById(userId).populate("profile")
-    
+    const userId = getUserIdFromRequest(req);
+
+    const user = await User.findById(userId).populate("profile");
+
     if (!user) {
       return res.status(404).send("User not Found");
     }
 
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-    const filePath = path.join(__dirname, "../uploads", avatar.filename);
-    const fileContent = await fs.readFile(filePath);
+    if (avatar) {
+      const __filename = fileURLToPath(import.meta.url);
+      const __dirname = path.dirname(__filename);
+      const filePath = path.join(__dirname, "../uploads", avatar.filename);
+      const fileContent = await fs.readFile(filePath);
 
-    const fileUuid = uuidv4();
-    const fileExtension = path.extname(avatar.originalname);
-    const s3Folder = "avatar";
-    const s3key = `${s3Folder}/${fileUuid}${fileExtension}`;
+      const fileUuid = uuidv4();
+      const fileExtension = path.extname(avatar.originalname);
+      const s3Folder = "avatar";
+      const s3key = `${s3Folder}/${fileUuid}${fileExtension}`;
 
-    const deleteParams = {
-      Bucket: process.env.AWS_BUCKET_NAME,
-      Key: s3key,
-    };
+      const deleteParams = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: s3key,
+      };
 
-    await s3.send(new DeleteObjectCommand(deleteParams));
+      await s3.send(new DeleteObjectCommand(deleteParams));
 
-    const uploadParams = {
-      Bucket: process.env.AWS_BUCKET_NAME,
-      Key: s3key,
-      Body: fileContent,
-      ContentType: avatar.mimetype,
-      ACL: "public-read",
-    };
+      const uploadParams = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: s3key,
+        Body: fileContent,
+        ContentType: avatar.mimetype,
+        ACL: "public-read",
+      };
 
-    await s3.send(new PutObjectCommand(uploadParams));
-    await fs.unlink(filePath);
-    const avatarUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${s3key}`;
-    user.profile.avatar = avatarUrl
-    await user.profile.save()
-    
+      await s3.send(new PutObjectCommand(uploadParams));
+      await fs.unlink(filePath);
+      const avatarUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${s3key}`;
+      user.profile.avatar = avatarUrl;
+    }
+
+    if (mobile_number) {
+      user.profile.mobile_number = mobile_number
+    }
+    if (dob) {
+      user.profile.dob = dob
+    }
+    if (first_name) {
+      user.profile.first_name = first_name
+    }
+    if (last_name) {
+      user.profile.last_name = last_name
+    }
+
+    await user.profile.save();
+
     res.status(200).json({
       message: "File uploaded successfully",
       url: avatarUrl,
