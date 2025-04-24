@@ -2,6 +2,12 @@ export interface ThunkAPI {
   rejectWithValue: (value: string) => unknown;
 }
 
+export type ThunkApiConfig = {
+  dispatch: AppDispatch;
+  state: RootState;
+  rejectValue: any;
+};
+
 export interface SidebarItem {
   title: string;
   url: string;
@@ -27,5 +33,6 @@ type APIPayloadType =
           >;
       params?: Record<string, string> | undefined;
       formData?: FormData | undefined;
+      onUploadProgress?: (percentage: number) => number;
     }
   | undefined;

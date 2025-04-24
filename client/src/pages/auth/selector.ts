@@ -13,3 +13,7 @@ export const getIsAuthenticated = flow(getAuthSlice, isAuthenticated);
 
 const profileDetails = (state: typeof initialState) => state.profileDetails;
 export const getProfileDetails = flow(getAuthSlice, profileDetails);
+
+const avatarUploadProgress = (state: typeof initialState) =>
+  state.avatarUploadProgress;
+export const getAvatarUploadProgress = flow(getAuthSlice, avatarUploadProgress);

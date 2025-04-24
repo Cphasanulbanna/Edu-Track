@@ -1,7 +1,9 @@
 import { API_CONFIG } from "./../../common/constant";
 import { axiosInstance } from "@/config/apiClient";
 import { API_ENDPOINTS } from "@/constant/api";
-import { APIPayloadType } from "@/types/redux";
+import { APIPayloadType, ThunkApiConfig } from "@/types/redux";
+import { actions } from "./slice";
+import { GetThunkAPI } from "@reduxjs/toolkit";
 
 export const signUpAPI = async (data: APIPayloadType) => {
   return axiosInstance.post(API_ENDPOINTS.AUTH.SIGNUP, data);
@@ -28,10 +30,28 @@ export const logoutAPI = async () => {
   return axiosInstance.post(API_ENDPOINTS.AUTH.LOGOUT);
 };
 
-export const updateProfileAPI = async (data: APIPayloadType) => {
+export const updateProfileAPI = async (
+  data: APIPayloadType,
+  thunkAPI: GetThunkAPI<ThunkApiConfig>
+) => {
   const { formData = {} } = data || {};
   return axiosInstance.post(API_ENDPOINTS.USERS.UPDATE_PROFILE, formData, {
     headers: API_CONFIG.FORM_DATA,
+    onUploadProgress: (progressEvent) => {
+      const { loaded, total } = progressEvent;
+      if (total) {
+        const progress = Math.round((loaded / total) * 50);
+        thunkAPI.dispatch(actions.setAvatarUploadProgress(progress));
+      }
+    },
+
+    onDownloadProgress: (progressEvent) => {
+      const { loaded, total } = progressEvent;
+      if (total) {
+        const progress = Math.round(50 + (loaded / total) * 50);
+        thunkAPI.dispatch(actions.setAvatarUploadProgress(progress));
+      }
+    },
   });
 };
 

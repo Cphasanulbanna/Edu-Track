@@ -14,6 +14,7 @@ import {
 export const initialState = {
   isAuthenticated: !!localStorage.getItem("access-token"),
   profileDetails: {},
+  avatarUploadProgress: 0,
   loading: {
     signUp: false,
     logIn: false,
@@ -30,6 +31,9 @@ const slice = createSlice({
   reducers: {
     setAuth(state, action) {
       state.isAuthenticated = action.payload;
+    },
+    setAvatarUploadProgress(state, { payload }) {
+      _.set(state, "avatarUploadProgress", payload);
     },
   },
   extraReducers: (builder) => {

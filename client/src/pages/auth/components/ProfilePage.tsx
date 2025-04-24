@@ -8,21 +8,22 @@ import { UpdateProfile, updateProfileSchema } from "../validate";
 import { Form } from "@/components/ui/form";
 import FormController from "@/components/custom/FormController";
 import { Button } from "@/components/ui/button";
-import { getProfileDetails } from "../selector";
+import { getAvatarUploadProgress, getProfileDetails } from "../selector";
 import { X } from "lucide-react";
 
 type ProfileDetails = {
-  avatar?: string
-}
+  avatar?: string;
+};
 
 const ProfileDetailsPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const userId = JSON.parse(localStorage.getItem("userId") as string);
-  const profileDetails = useSelector(getProfileDetails) as ProfileDetails
+  const profileDetails = useSelector(getProfileDetails) as ProfileDetails;
+  const avatarUploadProgress = useSelector(getAvatarUploadProgress);
   const [profilePic, setProfilePic] = useState<string>("");
+  const [showUploadProgress, setShowUploadProgress] = useState<boolean>(false);
 
-  console.log({profileDetails});
-  
+
   const form = useForm<UpdateProfile>({
     mode: "all",
     resolver: zodResolver(updateProfileSchema),
@@ -46,9 +47,14 @@ const ProfileDetailsPage = () => {
     if (!data.avatar) return;
     const formData = new FormData();
     formData.append("image", data.avatar);
+
+    setShowUploadProgress(true);
     const response = await dispatch(updateProfile({ formData }));
+
     if (updateProfile.fulfilled.match(response)) {
       setProfilePic(profileDetails?.avatar as string);
+      setShowUploadProgress(false)
+      setValue("avatar", undefined)
     }
   };
 
@@ -81,11 +87,13 @@ const ProfileDetailsPage = () => {
               name="avatar"
               label="Profile Picture"
               handleChange={handleFileChange}
+              uploadProgress={avatarUploadProgress}
+              showUploadProgress={showUploadProgress}
             />
           </div>
           <div className="col-span-12">
             {profilePic && (
-              <div className="">
+              <div className="mt-3">
                 <button
                   onClick={clearImagePreview}
                   className="cursor-pointer hover:opacity-65"
@@ -96,15 +104,13 @@ const ProfileDetailsPage = () => {
                 <img
                   src={profilePic}
                   alt="avatar"
-                  className="w-32 overflow-hidden rounded-full object-cover aspect-square"
+                  className="w-32 overflow-hidden rounded-full object-cover aspect-square shadow-lg"
                 />
               </div>
             )}
           </div>
           <div className="col-span-12">
-            <Button disabled={!getValues()?.avatar}>
-              Update
-            </Button>
+            <Button disabled={!getValues()?.avatar}>Update</Button>
           </div>
         </form>
       </Form>

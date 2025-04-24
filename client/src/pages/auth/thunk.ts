@@ -99,7 +99,7 @@ export const updateProfile = createAsyncThunk(
   ACTION_TYPES.UPDATE_PROFILE,
   async (payload: APIPayloadType, thunkAPI) => {
     try {
-      const { data } = await updateProfileAPI(payload);
+      const { data } = await updateProfileAPI(payload, thunkAPI);
       return data;
     } catch (error: unknown) {
       return handleAPIError(error, thunkAPI);

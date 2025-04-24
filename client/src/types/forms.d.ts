@@ -18,6 +18,8 @@ type CustomProps<T extends FieldValues> = {
   options?: Option[];
   optionKey?: string;
   isMultiSelect?: boolean;
+  uploadProgress?: number;
+  showUploadProgress?: boolean;
 };
 
 export type FormControllerProps<T extends FieldValues> = CustomProps<T> &

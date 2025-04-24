@@ -24,6 +24,8 @@ const FormController = <T extends FieldValues>({
   optionKey = "_id",
   isMultiSelect = false,
   handleChange,
+  uploadProgress,
+  showUploadProgress,
   ...inputProps
 }: FormControllerProps<T>) => {
   switch (type) {
@@ -76,6 +78,8 @@ const FormController = <T extends FieldValues>({
                   {...inputProps}
                   className={""}
                   onChange={handleChange}
+                  uploadProgress={uploadProgress}
+                  showUploadProgress={showUploadProgress}
                 />
               </FormControl>
               <FormMessage
