@@ -9,24 +9,34 @@ import { Button } from "../ui/button";
 import { UserCircle } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/app/store";
-import { logOut } from "@/pages/auth/thunk";
-import { getIsAuthenticated } from "@/pages/auth/selector";
+import { fetchProfile, logOut } from "@/pages/auth/thunk";
+import { getIsAuthenticated, getProfileDetails } from "@/pages/auth/selector";
+import { useEffect } from "react";
+import { ProfileDetails } from "@/types/data";
 
 const Header = () => {
-  const dispatch = useDispatch<AppDispatch>()
-  const navigate = useNavigate()
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   const authenticated = useSelector(getIsAuthenticated);
-  
-  const logoutFn = async () => {
-    const response = await dispatch(logOut())
-    if (logOut.fulfilled.match(response)) {
-      localStorage.clear()
-      navigate("/")
+  const profileDetails = useSelector(getProfileDetails) as ProfileDetails;
+  const userId = JSON.parse(localStorage.getItem("userId") as string);
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchProfile({ params: { id: userId } }));
     }
-  }
+  }, [dispatch, userId]);
+
+  const logoutFn = async () => {
+    const response = await dispatch(logOut());
+    if (logOut.fulfilled.match(response)) {
+      localStorage.clear();
+      navigate("/");
+    }
+  };
   return (
-    <header className="px-10 py-4 flex justify-between items-center gap-5 bg-accent">
+    <header className="px-10 py-4 flex justify-between items-center gap-5 bg-accent mb-[72px]">
       <div className="font-bold text-lg cursor-pointer hover:opacity-75">
         <Link to="/">logo</Link>
       </div>
@@ -34,14 +44,22 @@ const Header = () => {
         {authenticated ? (
           <DropdownMenu>
             <DropdownMenuTrigger className="cursor-pointer font-semibold">
-              <UserCircle className="w10" />
+              {profileDetails?.avatar ? (
+                <img src={profileDetails?.avatar} className="w-10 h-10 object-cover rounded-full overflow-hidden" alt="profile-pic"/>
+              ) : (
+                <UserCircle className="w-10" />
+              )}
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" alignOffset={-40}>
-              <DropdownMenuItem className="flex flex-col">
-                <Link to="/profile" state={{ role: "student" }}>
-                  <Button variant={"outline"}>Profile</Button>
+            <DropdownMenuContent className="flex flex-col gap-y-1" align="end" alignOffset={-40}>
+              <DropdownMenuItem asChild className="w-full">
+                <Link className="!p-0" to="/profile" state={{ role: "student" }}>
+                  <Button className="w-full" variant={"outline"}>Profile</Button>
                 </Link>
-                <Button onClick={logoutFn} variant={"outline"}>Logout</Button>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="w-full">
+                <Button onClick={logoutFn} variant={"outline"}>
+                  Logout
+                </Button>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

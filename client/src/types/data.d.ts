@@ -11,3 +11,11 @@ export type UsersData = {
   totalPages: number;
   totalElements: number;
 };
+
+export type ProfileDetails = {
+  avatar?: string;
+  first_name?: string;
+  last_name?: string;
+  dob?: string;
+  mobile_number?: string;
+};

@@ -11,14 +11,9 @@ import { Button } from "@/components/ui/button";
 import { getAvatarUploadProgress, getProfileDetails } from "../selector";
 import { Edit, X } from "lucide-react";
 import { formatUpdateProfileData } from "../helper";
+import { ProfileDetails } from "@/types/data";
 
-type ProfileDetails = {
-  avatar?: string;
-  first_name?: string;
-  last_name?: string;
-  dob?: string;
-  mobile_number?: string;
-};
+
 
 const ProfileDetailsPage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -47,11 +42,6 @@ const ProfileDetailsPage = () => {
     formState: { errors, isDirty, isValid },
   } = form;
 
-  useEffect(() => {
-    if (userId) {
-      dispatch(fetchProfile({ params: { id: userId } }));
-    }
-  }, [dispatch, userId]);
 
   const updateProfileFn = async (data: UpdateProfile) => {
     if (!data) return;
