@@ -109,44 +109,48 @@ export function SelectDropdown<T extends FieldValues>({
               <CommandEmpty>Not found.</CommandEmpty>
             )}
             <CommandGroup forceMount>
-              {filteredOptions?.map((data) => (
-                <CommandItem
-                  key={String(data?.[optionKey])}
-                  value={String(data?.[optionKey])}
-                  onSelect={(currentValue) => {
-                    if (isMultiSelect) {
-                      const currentArray = Array.isArray(field.value)
-                        ? (field.value as string[])
-                        : [];
-                      const exists = currentArray?.includes(currentValue);
-                      const newValue = exists
-                        ? currentArray.filter((v: string) => v !== currentValue)
-                        : [...currentArray, currentValue];
+              <div className="max-h-[200px] overflow-y-scroll">
+                {filteredOptions?.map((data) => (
+                  <CommandItem
+                    key={String(data?.[optionKey])}
+                    value={String(data?.[optionKey])}
+                    onSelect={(currentValue) => {
+                      if (isMultiSelect) {
+                        const currentArray = Array.isArray(field.value)
+                          ? (field.value as string[])
+                          : [];
+                        const exists = currentArray?.includes(currentValue);
+                        const newValue = exists
+                          ? currentArray.filter(
+                              (v: string) => v !== currentValue
+                            )
+                          : [...currentArray, currentValue];
 
-                      field.onChange(newValue);
-                      handleChange(newValue);
-                    } else {
-                      field.onChange(currentValue);
-                      handleChange(currentValue);
-                      setOpen(false);
-                    }
-                  }}
-                >
-                  {data?.label}
-                  <Check
-                    className={cn(
-                      "ml-auto",
-                      isMultiSelect
-                        ? field?.value?.includes(data[optionKey])
+                        field.onChange(newValue);
+                        handleChange(newValue);
+                      } else {
+                        field.onChange(currentValue);
+                        handleChange(currentValue);
+                        setOpen(false);
+                      }
+                    }}
+                  >
+                    {data?.label}
+                    <Check
+                      className={cn(
+                        "ml-auto",
+                        isMultiSelect
+                          ? field?.value?.includes(data[optionKey])
+                            ? "opacity-100"
+                            : "opacity-0"
+                          : field?.value === data[optionKey]
                           ? "opacity-100"
                           : "opacity-0"
-                        : field?.value === data[optionKey]
-                        ? "opacity-100"
-                        : "opacity-0"
-                    )}
-                  />
-                </CommandItem>
-              ))}
+                      )}
+                    />
+                  </CommandItem>
+                ))}
+              </div>
             </CommandGroup>
           </CommandList>
         </Command>

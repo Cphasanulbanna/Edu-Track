@@ -57,7 +57,7 @@ const AddStudentsToBatch = ({
 
   const formattedStudents = students?.map((obj: User) => ({
     ...obj,
-    label: `${obj?.profile?.first_name} ${obj?.profile?.last_name}`,
+    label: `${obj?.profile?.first_name} ${obj?.profile?.last_name || ""}`,
   }));
 
   return (
