@@ -102,7 +102,7 @@ export const fetchUsers = async (req, res) => {
             {
               $match: {
                 $or: [
-                  { "profile.last_name": { $regex: search, $options: "i" } },
+                  { "profile.first_name": { $regex: search, $options: "i" } },
                   { "profile.last_name": { $regex: search, $options: "i" } },
                 ],
               },

@@ -90,7 +90,7 @@ const CommonPagination = ({
           </>
         )}
         <PaginationItem>
-          <PaginationNext onClick={handleNext} />
+          <PaginationNext className={page === pageNumbers.length+1 ? "cursor-not-allowed": "cursor-pointer"} onClick={handleNext} />
         </PaginationItem>
       </PaginationContent>
     </Pagination>
