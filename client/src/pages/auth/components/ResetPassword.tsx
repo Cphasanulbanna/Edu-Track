@@ -33,7 +33,7 @@ const ResetPasswordPage = () => {
 
     const resetPasswordFn = async (data: ResetPassword) => {
       const payload = {token, newPassword: data?.newPassword}
-    const result = await dispatch(resetPassword(payload));
+    const result = await dispatch(resetPassword({requestBody: payload}));
     if (resetPassword.fulfilled.match(result)) {
       navigate("/login");
     }

@@ -30,7 +30,7 @@ const ForgetPasswordPage = () => {
   } = form;
 
   const forgetPasswordFn = async (data: ForgetPassword) => {
-    const result = await dispatch(forgetPassword(data))
+    const result = await dispatch(forgetPassword({requestBody: {data}}))
     if (forgetPassword.fulfilled.match(result)) {
       navigate("/login");
     }

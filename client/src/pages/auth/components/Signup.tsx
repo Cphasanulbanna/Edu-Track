@@ -35,7 +35,7 @@ const Signup = () => {
 
   const signup = (data: SignUp) => {
     const payload = { ...data, role: state?.role };
-    dispatch(signUp(payload));
+    dispatch(signUp({requestBody:payload}));
   };
 
   const googleAuth = () => {
