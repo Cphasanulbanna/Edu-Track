@@ -9,9 +9,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/app/store";
 import { addStudentsToBatch, fetchBatches, fetchUsers } from "../thunk";
 import { ROLES } from "@/common/constant";
-import { getUserData } from "../selector";
+import { getLoading, getUserData } from "../selector";
 import { Form } from "@/components/ui/form";
-import { User, UsersData } from "@/types/data";
+import { UsersData } from "@/types/data";
+import { formatUserOptions } from "../helper";
 
 type AddStudentsPropTypes = {
   close: () => void;
@@ -26,7 +27,9 @@ const AddStudentsToBatch = ({
 }: AddStudentsPropTypes) => {
   const dispatch = useDispatch<AppDispatch>();
   const studentsData = useSelector(getUserData) as UsersData;
-  const { users: students } = studentsData;
+  const loading = useSelector(getLoading);
+
+  const { users: students, hasMore, nextPage } = studentsData;
 
   const form = useForm<AddStudentsToBatchType>({
     mode: "all",
@@ -46,19 +49,35 @@ const AddStudentsToBatch = ({
       })
     );
     if (addStudentsToBatch.fulfilled.match(response)) {
-        dispatch(fetchBatches());
-        close()
+      dispatch(fetchBatches());
+      close();
     }
   };
 
   useEffect(() => {
-    dispatch(fetchUsers({ queryParams: { role: ROLES.STUDENT } }));
+    dispatch(
+      fetchUsers({
+        queryParams: { role: ROLES.STUDENT, limit: 5, page: 1 },
+      })
+    );
   }, [dispatch]);
 
-  const formattedStudents = students?.map((obj: User) => ({
-    ...obj,
-    label: `${obj?.profile?.first_name} ${obj?.profile?.last_name || ""}`,
-  }));
+  const fetchMoreUsers = async () => {
+    if (hasMore) {
+      await dispatch(
+        fetchUsers({
+          queryParams: {
+            role: ROLES.STUDENT,
+            limit: 5,
+            page: nextPage,
+          },
+        })
+      );
+    }
+  };
+
+  const formattedStudents = formatUserOptions(students);
+  
 
   return (
     <CommonModal close={close} open={open} title="Add Students to Batch">
@@ -76,6 +95,9 @@ const AddStudentsToBatch = ({
               optionKey="_id"
               options={formattedStudents}
               isMultiSelect
+              fetchMoreOptions={fetchMoreUsers}
+              loading={loading.userData}
+              hasMore={hasMore}
             />
           </div>
           <div className="flex justify-end">

@@ -17,6 +17,9 @@ export const initialState = {
     users: [],
     totalPages: 0,
     totalElements: 0,
+    hasMore: false,
+    page: 1,
+    nextPage: 0,
   },
   batches: [],
   semesters: [],
@@ -45,9 +48,15 @@ const slice = createSlice({
       })
       .addCase(fetchUsers.fulfilled, (state, { payload }) => {
         _.set(state, "loading.userData", false);
-        _.set(state, "userData.users", payload?.users);
+        _.set(state, "userData.users", [
+          ...state.userData.users,
+          ...payload.users,
+        ]);
         _.set(state, "userData.totalPages", payload?.totalPages);
         _.set(state, "userData.totalElements", payload?.totalUsers);
+        _.set(state, "userData.hasMore", payload?.hasMore);
+        _.set(state, "userData.page", Number(payload?.page));
+        _.set(state, "userData.nextPage", Number(payload?.nextPage));
       })
       .addCase(fetchUsers.rejected, (state) => {
         _.set(state, "loading.userData", false);

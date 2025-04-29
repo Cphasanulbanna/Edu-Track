@@ -8,7 +8,7 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { FormControllerProps } from "@/types/forms";
-import { SelectDropdown } from "./SelectDropdown";
+import SelectDropdown from "./SelectDropdown";
 
 const FormController = <T extends FieldValues>({
   type = "text",
@@ -27,6 +27,10 @@ const FormController = <T extends FieldValues>({
   uploadProgress,
   showUploadProgress,
   isDisabled,
+  optionsRef,
+  fetchMoreOptions = () => {},
+  loading,
+  hasMore,
   ...inputProps
 }: FormControllerProps<T>) => {
   switch (type) {
@@ -49,6 +53,10 @@ const FormController = <T extends FieldValues>({
                   optionKey={optionKey}
                   handleChange={handleChange}
                   field={field}
+                  ref={optionsRef}
+                  fetchMoreOptions={fetchMoreOptions}
+                  loading={loading}
+                  hasMore={hasMore}
                 />
               </FormControl>
               <FormMessage

@@ -10,6 +10,9 @@ export type UsersData = {
   users: Student[];
   totalPages: number;
   totalElements: number;
+  hasMore: boolean;
+  page: number;
+  nextPage: number;
 };
 
 export type ProfileDetails = {

@@ -21,6 +21,10 @@ type CustomProps<T extends FieldValues> = {
   uploadProgress?: number;
   showUploadProgress?: boolean;
   isDisabled?: boolean;
+  soptionsRef?: HTMLDivElement | null;
+  fetchMoreOptions?: () => void;
+  loading?: boolean;
+  hasMore?: boolean;
 };
 
 export type FormControllerProps<T extends FieldValues> = CustomProps<T> &

@@ -137,7 +137,7 @@ export const fetchUsers = async (req, res) => {
               $skip: elementsToSkip,
             },
             {
-              $limit: limit,
+              $limit: parseInt(limit),
             },
             {
               $sort: { email: 1 },
@@ -208,7 +208,7 @@ export const fetchUsers = async (req, res) => {
     }
     const { users, totalUsers } = results;
 
-    const totalPages = Math.ceil(totalUsers?.[0]?.count / limit);
+    const totalPages = Math.ceil(totalUsers?.[0]?.count / parseInt(limit));
 
     return res.status(200).json({
       users: users,
@@ -217,6 +217,8 @@ export const fetchUsers = async (req, res) => {
       page,
       limit,
       itemsInPage: users?.length,
+      hasMore: page < totalPages,
+      nextPage: page < totalPages ? Number(page) + 1 : Number(page)
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
