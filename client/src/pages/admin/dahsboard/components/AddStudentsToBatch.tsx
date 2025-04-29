@@ -57,7 +57,7 @@ const AddStudentsToBatch = ({
   useEffect(() => {
     dispatch(
       fetchUsers({
-        queryParams: { role: ROLES.STUDENT, limit: 5, page: 1 },
+        queryParams: { role: ROLES.STUDENT, limit: 10, page: 1 },
       })
     );
   }, [dispatch]);
@@ -68,7 +68,7 @@ const AddStudentsToBatch = ({
         fetchUsers({
           queryParams: {
             role: ROLES.STUDENT,
-            limit: 5,
+            limit: 10,
             page: nextPage,
           },
         })

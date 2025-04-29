@@ -47,7 +47,6 @@ const slice = createSlice({
         _.set(state, "loading.userData", true);
       })
       .addCase(fetchUsers.fulfilled, (state, { payload }) => {
-        _.set(state, "loading.userData", false);
         _.set(state, "userData.users", [
           ...state.userData.users,
           ...payload.users,
@@ -57,6 +56,7 @@ const slice = createSlice({
         _.set(state, "userData.hasMore", payload?.hasMore);
         _.set(state, "userData.page", Number(payload?.page));
         _.set(state, "userData.nextPage", Number(payload?.nextPage));
+        _.set(state, "loading.userData", false);
       })
       .addCase(fetchUsers.rejected, (state) => {
         _.set(state, "loading.userData", false);

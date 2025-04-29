@@ -20,6 +20,7 @@ import {
 import { Option } from "@/types/forms";
 import { ControllerRenderProps, FieldValues, Path } from "react-hook-form";
 import InfiniteScroll from "react-infinite-scroller";
+import Spinner from "./Spinner";
 
 interface SelectDropdownProps<T extends FieldValues> {
   readonly options: Option[];
@@ -106,7 +107,7 @@ const SelectDropdown = forwardRef<HTMLDivElement, SelectDropdownProps<any>>(
             <ChevronsUpDown className="opacity-50 mr-3 w-5 h-5" />
           </div>
         </PopoverTrigger>
-        <PopoverContent className="w-[200px] p-0">
+        <PopoverContent className="w-[200px] p-0 relative">
           <Command shouldFilter={true}>
             <CommandInput
               value={searchTerm}
@@ -115,14 +116,16 @@ const SelectDropdown = forwardRef<HTMLDivElement, SelectDropdownProps<any>>(
               className="h-9"
             />
             <CommandList>
-              {loading ? (
-                <div className="p-4 text-center text-sm text-muted-foreground">
-                  Loading...
+              {filteredOptions.length === 0 && !loading && (
+                <CommandEmpty>Not found.</CommandEmpty>
+              )}
+
+              {loading && (
+                <div className="p-2 absolute bottom-0 left-[50%] right-[50%] translate-x-[-50%] bg-white w-full  z-20">
+                  <div className="text-sm text-muted-foreground">
+                    <Spinner />
+                  </div>
                 </div>
-              ) : (
-                filteredOptions.length === 0 && (
-                  <CommandEmpty>Not found.</CommandEmpty>
-                )
               )}
               <CommandGroup forceMount>
                 <div ref={listRef} className="max-h-[200px] overflow-y-scroll">
@@ -135,14 +138,7 @@ const SelectDropdown = forwardRef<HTMLDivElement, SelectDropdownProps<any>>(
                       }
                     }}
                     hasMore={hasMore && !loading}
-                    loader={
-                      <div key="loader" className="flex justify-center p-2">
-                        <span className="text-sm text-muted-foreground">
-                          Loading...
-                        </span>
-                      </div>
-                    }
-                    useWindow={false} // <--- Very important! Scroll inside the div, not full page
+                    useWindow={false}
                     getScrollParent={() => listRef.current}
                   >
                     {filteredOptions?.map((data) => (
