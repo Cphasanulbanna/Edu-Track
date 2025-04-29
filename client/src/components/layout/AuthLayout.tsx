@@ -6,7 +6,7 @@ const AuthLayout = ({
   children,
 }: {
   permission?: boolean;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }) => {
   return (
     <div className="w-screen h-screen flex justify-center items-center py-7">
