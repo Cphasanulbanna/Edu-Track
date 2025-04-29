@@ -21,16 +21,16 @@ const SidebarComponent = () => {
   const sidebarData = useSelector(getSidebarData);
 
   const renderSidebarData = (item: SidebarItem) => {
-    const Icon = iconMap[item.icon];
+    const Icon = iconMap[item?.icon];
     return (
-      <SidebarMenuItem key={item.title}>
+      <SidebarMenuItem key={item?.title}>
         <SidebarMenuButton asChild>
           <NavLink
-            className={({ isActive }) =>isActive ? "active": "" }
-            to={item.url}
+            className={({ isActive }) => (isActive ? "active" : "")}
+            to={item?.url}
           >
             <Icon className="text-primary group-[.active]:text-white" />
-            <span className="text-black font-semibold">{item.title}</span>
+            <span className="text-black font-semibold">{item?.title}</span>
           </NavLink>
         </SidebarMenuButton>
       </SidebarMenuItem>

@@ -36,7 +36,7 @@ const Header = () => {
     }
   };
   return (
-    <header className="px-10 py-4 flex justify-between items-center gap-5 bg-accent mb-[72px]">
+    <header className="px-10 py-4 flex justify-between items-center gap-5 bg-accent">
       <div className="font-bold text-lg cursor-pointer hover:opacity-75">
         <Link to="/">logo</Link>
       </div>
