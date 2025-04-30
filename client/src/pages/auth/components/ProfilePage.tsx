@@ -13,8 +13,6 @@ import { Edit, X } from "lucide-react";
 import { formatUpdateProfileData } from "../helper";
 import { ProfileDetails } from "@/types/data";
 
-
-
 const ProfileDetailsPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const profileDetails = useSelector(getProfileDetails) as ProfileDetails;
@@ -42,10 +40,9 @@ const ProfileDetailsPage = () => {
     formState: { errors, isDirty, isValid },
   } = form;
 
-
   const updateProfileFn = async (data: UpdateProfile) => {
     if (!data) return;
-    const formData = formatUpdateProfileData(data)
+    const formData = formatUpdateProfileData(data);
 
     setShowUploadProgress(true);
     const response = await dispatch(updateProfile({ formData }));
@@ -56,14 +53,14 @@ const ProfileDetailsPage = () => {
       setProfilePreview("");
       setShowUploadProgress(false);
       setValue("avatar", undefined);
-      setEdit(false)
+      setEdit(false);
     }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setValue("avatar", file,{shouldDirty: true});
+      setValue("avatar", file, { shouldDirty: true });
       setProfilePreview(URL.createObjectURL(file));
     }
   };
@@ -88,13 +85,12 @@ const ProfileDetailsPage = () => {
 
   const handleEdit = () => {
     if (edit) {
-      setEdit(false)
-      reset(getValues())
+      setEdit(false);
+      reset(getValues());
+    } else {
+      setEdit(true);
     }
-    else {
-      setEdit(true)
-    }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 w-screen px-40">
