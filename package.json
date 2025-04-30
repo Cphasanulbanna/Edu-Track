@@ -1,0 +1,27 @@
+{
+  "name": "college-management",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install",
+    "eslint": "eslint ./client/src --ext .js,.jsx,.ts,.tsx --max-warnings=0"
+  },
+  "lint-staged": {
+    "client/src/**/*.{js,jsx,ts,tsx}": [
+     "npm run lint --prefix client"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com-personal:Cphasanulbanna/Edu-Track.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "husky": "^8.0.0",
+    "lint-staged": "^15.5.1"
+  }
+}
