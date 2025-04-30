@@ -15,7 +15,6 @@ import { forgetPassword } from "../thunk";
 const ForgetPasswordPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-
   const loading = useSelector(getLoading);
 
   const form = useForm<ForgetPassword>({
